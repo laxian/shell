@@ -1,9 +1,8 @@
 #!/bin/bash
 
 log() {
-	echo -e "LOG_TAG $1:\t$2"
+	echo -e "$1:\t$2"
 }
-
 
 # 判斷是否是http地址
 # if true return 1 else 0
@@ -42,7 +41,7 @@ if [ $isurl -eq 1 ]; then
 	curl_result=$?
 
 	if [ $curl_result != 0 ];then
-		log crul 下载apk失败
+		log I 下载apk失败
 		exit -5
 	fi
 else
@@ -52,6 +51,14 @@ else
 	fi
 	path=$1
 fi
+
+# handle resources
+apktool=$JD_HOME/apktool
+if [ ! -f $path ];then
+    log I FILE_NOT_FOUND
+fi
+java -jar $apktool d $path
+log I "Resources disassamble success!"
 
 # input your jd-gui full path here
 jdgui=$JD_HOME/jdgui
@@ -89,5 +96,4 @@ for jar in `ls *.jar`;do
     echo $jar
     java -jar $jdgui $jar &
 done
-
 
