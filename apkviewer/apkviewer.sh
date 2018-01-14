@@ -1,5 +1,9 @@
 #!/bin/bash
 
+log() {
+	echo -e "LOG_TAG $1:\t$2"
+}
+
 
 # 判斷是否是http地址
 # if true return 1 else 0
@@ -32,8 +36,15 @@ isurl=$?
 
 # 如果url，先下載
 if [ $isurl -eq 1 ]; then
-	curl $1 -o download.apk
-	path=download.apk
+	path=$2.apk
+	curl $1 -o $path
+
+	curl_result=$?
+
+	if [ $curl_result != 0 ];then
+		log crul 下载apk失败
+		exit -5
+	fi
 else
 	if [ ! -f $1 ]; then
 		echo apk路径不存在
@@ -41,9 +52,6 @@ else
 	fi
 	path=$1
 fi
-
-echo apk: $path
-echo output: $2
 
 # input your jd-gui full path here
 jdgui=$JD_HOME/jdgui
@@ -65,11 +73,6 @@ if [[ ! -f $dex2jar ]]; then
 else
 	echo $dex2jar
 fi
-
-
-echo ------------
-echo $path
-echo $2
 
 # unzip apk into output
 unzip -q $path -d $2
