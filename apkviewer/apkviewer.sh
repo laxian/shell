@@ -1,10 +1,24 @@
 #!/bin/bash
 
+# 反编译apk
+# 1、使用apktool反编译资源
+# 命令格式：apktool d <apk_file>
+# 2、使用unzip解压缩apk包
+# unzip -q <apk_file> -d <out_dir>
+# 3、使用dex2jar将dex转换成jar文件
+# dex2jar <dex_file>
+# 4、使用jadx-gui分别打开jar文件
+
+# 配置反编译工具路径
+# apktool=$JD_HOME/apktool
+dex2jar=$D2J_HOME/d2j-dex2jar.sh
+jdgui=$JD_HOME/jadx-gui
+
 log() {
 	echo -e "$1:\t$2"
 }
 
-# 判斷是否是http地址
+# 判断是否是http地址
 # if true return 1 else 0
 is_url() {
 	
@@ -53,15 +67,33 @@ else
 fi
 
 # handle resources
-apktool=$JD_HOME/apktool
 if [ ! -f $path ];then
     log I FILE_NOT_FOUND
 fi
-java -jar $apktool d $path
+apktool d $path
 log I "Resources disassamble success!"
 
+# unzip apk into output
+unzip -q $path -d $2
+cd $2
+
+# dex2jar dir
+# input your dex2jar full path here
+if [[ ! -f $dex2jar ]]; then
+	echo 请确定dex2jar路径正确
+	exit -3
+else
+	echo $dex2jar
+fi
+
+for dex in `ls *.dex`
+do
+    echo $dex
+    $dex2jar $dex
+    echo convert $dex success
+done
+
 # input your jd-gui full path here
-jdgui=$JD_HOME/jdgui
 echo $jdgui
 # jd-gui 路径
 if [[ ! -f $jdgui ]]; then
@@ -71,29 +103,8 @@ else
 	echo $jdgui
 fi
 
-# dex2jar dir
-# input your dex2jar full path here
-dex2jar=$D2J_HOME/dex2jar
-if [[ ! -f $dex2jar ]]; then
-	echo 请确定dex2jar路径正确
-	exit -3
-else
-	echo $dex2jar
-fi
-
-# unzip apk into output
-unzip -q $path -d $2
-cd $2
-
-for dex in `ls *.dex`
-do
-    echo $dex
-    $dex2jar $dex
-    echo convert $dex success
-done
-
 for jar in `ls *.jar`;do
     echo $jar
-    java -jar $jdgui $jar &
+    $jdgui $jar &
 done
 
