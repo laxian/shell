@@ -10,3 +10,8 @@
 ## view_key
 > 一键查看apk的签名信息
 用法 ./view_key xxx.apk
+
+## code_count.awk
+[转自这里](https://blog.csdn.net/starsionblog/article/details/75409867)
+> 统计git项目所有作者代码量
+用法 git log --stat | awk code_count.awk
