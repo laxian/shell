@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/v2_f3f6f8"
+    android:orientation="vertical">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_marginBottom="67.5dp"
+        android:layout_height="@dimen/fit_x75">
+
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/hint_task_message"
+            android:textColor="@color/v3_g7"
+            android:textSize="@dimen/fit_x24" />
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/page_container"
+        android:paddingLeft="@dimen/fit_x24"
+        android:paddingRight="@dimen/fit_x24"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.etiantian.im.frame.view.xlist.XListView
+            android:id="@+id/remind_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:divider="@null"
+            android:cacheColorHint="@color/transparent"
+            android:background="@color/transparent"
+            android:listSelector="@color/transparent"
+            android:fadingEdge="none"
+            android:overScrollMode="never"/>
+
+    </RelativeLayout>
+
+</LinearLayout>
