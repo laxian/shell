@@ -1,3 +1,6 @@
 private/
 toutiao/
 *.apk
+tempCodeRunnerFile.sh
+.DS_Store
+.history/
