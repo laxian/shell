@@ -1,58 +1,94 @@
+#!/bin/sh
 
+set -e
 
-# flutter clean
-# flutter packages get
 flutter build ios --release
 
-# Mock jenkins env. Remove when commit.
-export JOB_NAME=online-live-ios
-export WORKSPACE=.
-export BUILD_NUMBER=21
+# Mock jenkins env.
+JOB_NAME=${JOB_NAME-online-wangxiao-ios}
+WORKSPACE=${WORKSPACE-.}
+BUILD_NUMBER=${BUILD_NUMBER-99}
+# DEFAULT VALUE: `git rev-parse --short HEAD`, if in jenkins, GIT_COMMIT is a buildin variant
+GIT_COMMIT=${GIT_COMMIT-$(git rev-parse --short HEAD)}
+echo $GIT_COMMIT
+SERVER_IP="192.168.10.98"
+LOCAL_IP=$(ipconfig getifaddr en0)
 
-cd ./ios
+#APP BASIC INFO
+APP_NAME=wangxiao
+APP_SCHEME=Runner
+WORKSPACE_NAME=Runner
+#  VERSION_NAME=`/usr/bin/agvtool mvers -terse1`
+VERSION_NAME=$(cat ios/Runner.xcodeproj/project.pbxproj | grep FLUTTER_BUILD_NAME | cut -d' ' -f3 | cut -d';' -f 1 | uniq)
+# like 1.0.4.1
+BUILD_VERSION=$(cat ios/Runner.xcodeproj/project.pbxproj | grep "FLUTTER_BUILD_NUMBER =" | cut -d' ' -f3 | cut -d';' -f 1 | uniq)
 
-export ETT_APP_NAME=wangxiao
-# export ETT_VERSION_PRO=`/usr/bin/agvtool mvers -terse1`
-export ETT_VERSION_PRO=V1.0.2
-export ETT_WORKSPACE_NAME=Runner
-export ETT_SCHEME=Runner
-export ETT_BUILD_TYPE=.Release
-export ETT_CONFIGURATION=Release
+# NEXUS INFO
+NEXUS_JENKINS_NAME=jenkins
+NEXUS_JENKINS_PASSWD=jenkins20100328
+NEXUS_HOST=http://192.168.10.8:18080
+NEXUS_DIR=$NEXUS_HOST/nexus/service/local/repositories/EttAppReleases/content/com/online/$APP_NAME/ios/$VERSION_NAME
 
-###############################################################################################################
-export ETT_JENKINS_TIME=$(date +%m%d) 
-export ETT_GIT_COMMIT=${GIT_COMMIT:0:7}
-export ETT_GIT_REV=`git rev-list HEAD | wc -l | awk '{print $1}'`
-export ETT_VERSION_NUMBER=$ETT_VERSION_PRO$ETT_BUILD_TYPE
-export ETT_BUILD_ID=$ETT_VERSION_NUMBER-$ETT_JENKINS_TIME-$BUILD_NUMBER-$ETT_GIT_COMMIT-$ETT_GIT_REV
+#DING DING
+DING_TOKEN=d7fb2719a1655eb9e067dd549a86385cc7f57e14a056fe52187da85c1adf3159
 
-export NEXUS_JENKINS_NAME=jenkins
-export NEXUS_JENKINS_PASSWD=jenkins20100328
+MAN_TO_NOTIFY='["18612696105","18612167007","18310511388"]'
+# build type testflight or adhoc. default: testflight
+[[ $1 == adhoc ]] && BUILD_TYPE=adhoc || BUILD_TYPE=testflight
 
-# export IPA_Folder=/Users/xxx/Documents/$JOB_NAME/$BUILD_NUMBER
-export ExportOptionsPlistPath=./ExportOptions.plist
-export XCODE=/usr/bin
-export ETT_DIST_ROOT_PATH=../build/ios/$JOB_NAME
-export ETT_EXPORT_PATH=$ETT_DIST_ROOT_PATH/$BUILD_NUMBER
-export ETT_ARCHIVE_PATH=$ETT_EXPORT_PATH/$ETT_APP_NAME.xcarchive
-export ETT_WORK_SPACE=$WORKSPACE/$ETT_WORKSPACE_NAME.xcworkspace
+# FILE PATH AND FILE NAME
+JENKINS_TIME=$(date +%m%d)
+GIT_COMMIT_HASH=${GIT_COMMIT:0:7}
+GIT_REV=$(git rev-list HEAD | wc -l | awk '{print $1}')
 
-export ETT_FILE_NAME=$ETT_APP_NAME-$ETT_BUILD_ID
-export ETT_IPA_NAME=$ETT_FILE_NAME.ipa
+# like wangxiao-1.0.4.1.adhoc-0531-99-a0efd23-234.ipa
+IPA_NAME=$APP_NAME-$BUILD_VERSION-$BUILD_TYPE-$JENKINS_TIME-$BUILD_NUMBER-$GIT_COMMIT_HASH-$GIT_REV.ipa
+# like build/ios/online-wangxiao-ios/99
+EXPORT_PATH=./build/ios/$JOB_NAME/$BUILD_NUMBER
+# make sure "./build/ios/online-wangxiao-ios/99" exists
+mkdir -p $EXPORT_PATH
+ARCHIVE_PATH=$EXPORT_PATH/$APP_NAME.xcarchive
 
+XCWORKSPACE_PATH=$WORKSPACE/ios/$WORKSPACE_NAME.xcworkspace
+
+# ad-hoc or testflight
+if [ $BUILD_TYPE = adhoc ]; then
+    echo "adhoc"
+    ExportOptionsPlistPath=ios/adhoc-ExportOptions.plist
+else
+    echo "testflight"
+    ExportOptionsPlistPath=ios/ExportOptions.plist
+fi
 echo "============== archive =================="
-xcodebuild archive  -workspace $ETT_WORK_SPACE \
-                    -scheme $ETT_SCHEME \
-                    -configuration "$ETT_CONFIGURATION" \
-                    -archivePath $ETT_ARCHIVE_PATH
+xcodebuild archive -workspace $XCWORKSPACE_PATH \
+    -scheme $APP_SCHEME \
+    -configuration Release \
+    -archivePath $ARCHIVE_PATH
 
-# export ipa
-echo "============== export =================="
-xcodebuild -exportArchive -archivePath $ETT_ARCHIVE_PATH \
-                          -exportPath $ETT_EXPORT_PATH \
-                          -exportOptionsPlist $ExportOptionsPlistPath
+#  ipa
+echo "==============  =================="
+xcodebuild -exportArchive -archivePath $ARCHIVE_PATH \
+    -exportPath $EXPORT_PATH \
+    -exportOptionsPlist $ExportOptionsPlistPath
 
+echo 'EXPORT PATH: ------>'
+echo $EXPORT_PATH
+curl -v -u $NEXUS_JENKINS_NAME:$NEXUS_JENKINS_PASSWD --upload-file $EXPORT_PATH/Runner.ipa $NEXUS_DIR/$IPA_NAME
 
-echo 'ETT EXPORT PATH: ------>'
-echo $ETT_EXPORT_PATH
-curl -v -u $NEXUS_JENKINS_NAME:$NEXUS_JENKINS_PASSWD --upload-file $ETT_EXPORT_PATH/Runner.ipa  http://192.168.10.x:xxxx/nexus/service/local/repositories/EttAppReleases/content/com/xxx/$ETT_APP_NAME/ios/$ETT_IPA_NAME
+# post to dingtalk
+if [ $SERVER_IP = $LOCAL_IP ]; then
+    export WEB_DIR=/Users/hawk/Library/apache-tomcat-9.0.17/webapps/app/$VERSION_NAME
+    mkdir -p $WEB_DIR
+    host=http://$SERVER_IP:8081/app/$VERSION_NAME
+    cp $EXPORT_PATH/Runner.ipa $WEB_DIR/$IPA_NAME
+    title="iOS $VERSION_NAME 最新打包预览,点击下载\n"
+    content=$title$host/$IPA_NAME
+
+    # 钉钉机器人，手机号为钉钉群里你要@的人的手机号
+    pre='{"msgtype":"text","text":{"content":"'
+    post='"},"at":{"atMobiles":'$MAN_TO_NOTIFY',"isAtAll":false}}'
+    json=$pre$content$post
+    echo $json
+
+    curl "https://oapi.dingtalk.com/robot/send?access_token=$DING_TOKEN" -H 'Content-Type: application/json' -d $json
+fi

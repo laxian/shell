@@ -36,9 +36,14 @@ done
 set -- "${POSITIONAL[@]}" # restore positional params
 
 function dingtalk_notify() {
-    curl 'https://oapi.dingtalk.com/robot/send?access_token=d7fb2719a1655eb9e067dd549a86385cc7f57e14a056fe52187da85c1adf3159' \
+    curl 'https://oapi.dingtalk.com/robot/send?access_token=af365bb0adfef7090e853f4620a8d752ae32a5ea6b92b9af9270424f92625da3' \
         -H 'Content-Type: application/json' \
-        -d "{ \"msgtype\": \"text\", \"text\": { \"content\": \"您的任务已完成: $*\" }, \"at\": { \"atMobiles\": [ \"18310511388\" ], \"isAtAll\": false } }"
+        -d '{"msgtype": "text", 
+        "text": {
+             "content": "您的任务已完成: '$*'"
+        },
+        "at": { "atMobiles": [ "18310511388" ], "isAtAll": false }Z
+      }'
 }
 
 function pc_notify () {

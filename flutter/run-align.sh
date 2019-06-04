@@ -18,7 +18,7 @@ GRADLE_WRAPPER_FULLPATH=$PROJECT_ROOT/$GRADLE_WRAPPER_PATH
 /usr/bin/sed -i "" "s/gradle-4.4-all/gradle-4.10.2/g" $GRADLE_WRAPPER_FULLPATH
 
 #recorder_wav bugs
-RECORD_PATH=/Users/xxx/flutter/flutter-0.10.0/.pub-cache/hosted/pub.flutter-io.cn/recorder_wav-0.0.1/android/src/main/java/com/bilibili502/recorderwav/AudioUtil.java
+RECORD_PATH=/Users/etiantian/flutter/flutter-0.10.0/.pub-cache/hosted/pub.flutter-io.cn/recorder_wav-0.0.1/android/src/main/java/com/bilibili502/recorderwav/AudioUtil.java
 
 sig='recordData();'
 sig2='if (recorder.getState() == STATE_UNINITIALIZED) { recorder = new AudioRecord(audioSource, audioRate, audioChannel, audioFormat, bufferSize); }'
