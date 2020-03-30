@@ -15,3 +15,12 @@
 [转自这里](https://blog.csdn.net/starsionblog/article/details/75409867)
 > 统计git项目所有作者代码量
 用法 git log --stat | awk code_count.awk
+
+## traval.sh
+递归遍历文件
+```zsh
+# 扫描所有apk，复制到当前目录
+./travel.sh app/build/output 
+# 复制下载目录所有jpg到图库
+./travel.sh ~/Downloads/ ~/Pictures jpg
+```

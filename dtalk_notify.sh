@@ -1,4 +1,10 @@
 
+#!/bin/bash
+
+# 发送钉钉通知，和Mac桌面通知
+# sample：
+#   dtalk_notify.sh 买到票了 -d
+
 dingtalk=false
 pc=true
 name=""
@@ -36,13 +42,14 @@ done
 set -- "${POSITIONAL[@]}" # restore positional params
 
 function dingtalk_notify() {
-    curl 'https://oapi.dingtalk.com/robot/send?access_token=af365bb0adfef7090e853f4620a8d752ae32a5ea6b92b9af9270424f92625da3' \
+    # dingding 抢票消息群webhook url
+    curl 'https://oapi.dingtalk.com/robot/send?access_token=71a1ba2bf1be2f47e848c7a28ce981847f817b27dfdf102c0ebd9d2d39056aa4' \
         -H 'Content-Type: application/json' \
         -d '{"msgtype": "text", 
         "text": {
-             "content": "您的任务已完成: '$*'"
+             "content": "'$*'"
         },
-        "at": { "atMobiles": [ "18310511388" ], "isAtAll": false }Z
+        "at": { "atMobiles": [ "18310511388" ], "isAtAll": false }
       }'
 }
 
