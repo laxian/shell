@@ -14,7 +14,7 @@
 ## code_count.awk
 [转自这里](https://blog.csdn.net/starsionblog/article/details/75409867)
 > 统计git项目所有作者代码量
-用法 git log --stat | awk code_count.awk
+用法 git log --stat | awk -f code_count.awk
 
 ## traval.sh
 递归遍历文件
