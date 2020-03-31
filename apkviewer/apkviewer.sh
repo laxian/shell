@@ -11,8 +11,8 @@
 
 # 配置反编译工具路径
 # apktool=$JD_HOME/apktool
-dex2jar=$D2J_HOME/d2j-dex2jar.sh
-jdgui=$JD_HOME/jadx-gui
+dex2jar=/usr/local/bin/d2j-dex2jar
+jdgui=/usr/local/bin/jd-gui
 
 log() {
 	echo -e "$1:\t$2"

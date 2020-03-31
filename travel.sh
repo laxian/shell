@@ -11,24 +11,22 @@ suffix=${3-"apk"}
 echo $suffix
 
 # 扫描当前目录下以及子目录下的apk文件，并复制到当前目录
-function getdir(){
+function getdir() {
   echo "--->$1"
-  for file in $1/*
-  do
-    if test -f $file
-    then
+  for file in $1/*; do
+    if test -f $file; then
       # echo $file
       arr=(${arr[*]} $file)
 
-      if [ "${file##*.}"x = ${suffix}x ];then
+      if [ "${file##*.}"x = ${suffix}x ]; then
         echo "cp $file -> $dest"
         cp $file $dest
       fi
-    else
+    elif [ -d $file ]; then
       getdir $file
     fi
   done
-
 }
+
 getdir $1
 # echo  ${arr[@]}
