@@ -3,11 +3,10 @@
 #--------------------------------------------
 # 发送消息到wechat work机器人
 # 必须带两个参数，env和version
-#WlRZM1lqQTJZakV0TURobVppMDBNRFV6TFdJNFlqTXRORGsyWVRRd1l6WmlNell6
 #--------------------------------------------
 
 set -e
-token=xxxxxx
+token=`cat token`
 notify_url=https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=$token
 
 Usage() {

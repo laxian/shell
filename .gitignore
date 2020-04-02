@@ -4,3 +4,5 @@ toutiao/
 tempCodeRunnerFile.sh
 .DS_Store
 .history/
+token
+*.jar
