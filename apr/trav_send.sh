@@ -1,6 +1,6 @@
 #!/bin/bash
 
-upload_url=http://localhost:81/upload-summary
+upload_url=http://localhost:8082/upload-jenkins
 dir=hello4
 
 
