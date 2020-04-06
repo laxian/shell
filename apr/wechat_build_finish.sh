@@ -4,13 +4,13 @@ set -e
 
 token=`cat token`
 notify_url=https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=$token
-archive_url=http://192.168.1.68/share/
-nexus_url=http://192.168.1.68:8081/#browse/browse:rawrepo
-resty_url=http://192.168.1.68:8082/files/jenkins/
+archive_url=http://localhost/share/
+nexus_url=http://localhost:8081/#browse/browse:rawrepo
+resty_url=http://localhost:8082/files/jenkins/
 
 timestamp=$(date "+%Y%m%d%H%M%S")
 # mkdir -p /share/build-$BUILD_NUMBER/
-bash -x ./trav.sh app/build/outputs/apk/ /share/build-$BUILD_NUMBER/
+# bash -x ./trav.sh app/build/outputs/apk/ /share/build-$BUILD_NUMBER/
 
 env=alpha
 versionCode=`git rev-list HEAD --first-parent --count`
