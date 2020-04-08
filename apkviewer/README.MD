@@ -6,3 +6,19 @@
 
 ## apkviewer
 Shell脚本，一键执行上面步骤
+
+
+## jar_wrapper.sh
+
+```shell
+# before
+java -jar helloworld.jar
+
+# convert to shell
+cat jar_wrapper.sh helloworld.jar > hello.run && chmod +x hello.run 
+
+# after
+./hello.run
+```
+[How to make a JAR file Linux executable](https://coderwall.com/p/ssuaxa/how-to-make-a-jar-file-linux-executable)
+
