@@ -10,9 +10,9 @@
 # 4、使用jadx-gui分别打开jar文件
 
 # 配置反编译工具路径
-# apktool=$JD_HOME/apktool
-dex2jar=/usr/local/bin/d2j-dex2jar
-jdgui=/usr/local/bin/jd-gui
+apktool=`pwd`/tools/apktool.sh
+dex2jar=`pwd`/tools/dex2jar-2.0/d2j-dex2jar.sh
+jdgui=`pwd`/tools/jadx-1.1.0/bin/jadx-gui
 
 log() {
 	echo -e "$1:\t$2"

@@ -1,0 +1,5 @@
+
+
+env:
+	./setup.sh
+

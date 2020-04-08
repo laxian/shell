@@ -7,3 +7,7 @@ tempCodeRunnerFile.sh
 token
 *.jar
 *.tmp
+*.zip
+dex2jar-*
+jadx-*
+apktool.*
