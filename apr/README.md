@@ -10,7 +10,8 @@ getip_macos.sh
 jenkins_builtin_env.sh  // 打印JENKINS内置变量
 send_form.sh    // cURL模拟表单上传文件到openresty服务器示例
 send_nexus.sh   // cURL上传文件到nexus仓库示例
-setip.sh        // 将localhost替换成主机ip
+remove_ip.sh    // set_ip的逆过程
+set_ip.sh        // 将localhost替换成主机ip
 sign.sh         // apk签名示例
 
 trav_cp.sh      // 遍历文件复制到指定目录

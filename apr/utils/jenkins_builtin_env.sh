@@ -1,3 +1,5 @@
+#!/bin/bash
+
 # jsnkins buildin env
 
 echo BRANCH_NAME=$BRANCH_NAME

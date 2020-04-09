@@ -1,30 +1,30 @@
 
 
-push: setip wtoken trav_cp trav_send trav_nexus trav_group notify
+push: set_ip token env trav_cp trav_send trav_nexus trav_group wechat_build_finish remove_ip
 
-notify: 
-	docker cp wechat_build_finish.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
+wechat_build_finish: 
+	docker cp ./jenkins/wechat_build_finish.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
-wtoken:
-	docker cp token jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
+token:
+	docker cp ./jenkins/token jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
+
+env:
+	docker cp ./jenkins/env.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
 trav_cp:
-	docker cp trav_cp.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
+	docker cp ./jenkins/trav_cp.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
 trav_send:
-	docker cp trav_send.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
+	docker cp ./jenkins/trav_send.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
 trav_nexus:
-	docker cp trav_nexus.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
+	docker cp ./jenkins/trav_nexus.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
 trav_group:
-	docker cp trav_group.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
+	docker cp ./jenkins/trav_group.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
-setip:
-	./setip.sh
+set_ip:
+	./ip/set_ip.sh
 
 remove_ip:
-	sed -i "" s/192.168.1.68/localhost/g `grep "192.168.1.68" -rl ./apr`
-
-setip:
-	./setip.sh
+	./ip/remove_ip.sh
