@@ -5,7 +5,7 @@ short_dir=$BUILD_TAG/$version.$git_version
 upload_url=http://localhost:8082/upload-jenkins
 
 
-# 扫描当前目录下以及子目录下的apk文件，并上传到$upload_url/$dir
+# 扫描当前目录下以及子目录下的apk文件，并上传到nexus服务器
 getdir() {
     echo "--->$1"
     for file in $1/*; do

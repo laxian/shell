@@ -7,7 +7,7 @@ nexus_url=http://localhost:8081/repository/rawrepo
 dir=com/segway/robot/app/$BUILD_TAG/$version.$git_version
 
 
-# 扫描当前目录下以及子目录下的apk文件，并复制到当前目录
+# 扫描当前目录下以及子目录下的apk文件，并发送到nexus仓库
 getdir() {
     echo "--->$1"
     for file in $1/*; do

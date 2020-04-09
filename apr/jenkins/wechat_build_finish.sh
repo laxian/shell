@@ -9,8 +9,6 @@ nexus_url=http://localhost:8081/#browse/browse:rawrepo
 resty_url=http://localhost:8082/files/jenkins/
 
 timestamp=$(date "+%Y%m%d%H%M%S")
-# mkdir -p /share/build-$BUILD_NUMBER/
-# bash -x ./trav.sh app/build/outputs/apk/ /share/build-$BUILD_NUMBER/
 
 env=alpha
 versionCode=`git rev-list HEAD --first-parent --count`

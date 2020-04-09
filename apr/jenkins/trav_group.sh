@@ -9,7 +9,7 @@ upload_url=http://localhost:8082/upload-jenkins
 nexus_url=http://localhost:8081/repository/rawrepo
 
 
-# 扫描当前目录下以及子目录下的apk文件，并复制到当前目录
+# 扫描当前目录下以及子目录下的apk文件，复制到指定目录，然后发送到指定服务器
 getdir() {
     echo "--->$1"
     for file in $1/*; do
