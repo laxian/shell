@@ -179,3 +179,6 @@ package:/data/app/com.douban.frodo-3MPKjrePTfpmBRjP24ESnw==/base.apk
 ➜  ~
 ```
 
+参考
+
+[awesome-adb](https://github.com/mzlogin/awesome-adb/issues)

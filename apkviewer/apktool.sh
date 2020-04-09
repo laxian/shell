@@ -2,5 +2,5 @@
 
 path=$1
 
-apktool=$JD_HOME/apktool
+apktool=tools/apktool_2.4.1.jar
 java -jar $apktool d $path
