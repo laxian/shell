@@ -24,7 +24,7 @@ trav_group:
 	docker cp ./jenkins/trav_group.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
 set_ip:
-	./ip/set_ip.sh
+	./ip/set_ip.sh jenkins
 
 remove_ip:
-	./ip/remove_ip.sh
+	./ip/remove_ip.sh jenkins

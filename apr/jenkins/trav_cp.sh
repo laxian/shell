@@ -11,6 +11,9 @@ getdir() {
 
             if [ "${file##*.}"x = ${suffix}x ]; then
                 echo "cp $file -> $dest"
+                if [ ! -d "$dest" ]; then
+                    mkdir -p $dest
+                fi
                 cp $file $dest
             fi
         elif [ -d $file ]; then
