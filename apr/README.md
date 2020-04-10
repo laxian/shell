@@ -24,4 +24,19 @@ wechatwork_notify.sh    // 企业微信机器人通知示例
 ```
 
 ## 使用方法
-1. `make push`
+
+`make push`
+
+
+## nexus OSS 上传
+
+1. Raw repository
+
+`curl -v -u admin:admin --upload-file $file $nexus_url/$dir/$(basename $file)`
+
+2. Maven repository
+
+`curl -v -u admin:admin -F "maven2.version=1.0.1" -F "maven2.groupId=com.segway" -F "maven2.artifactId=delivery" -F "maven2.asset1=@jenkins.sh" -F "maven2.asset1.extension=apk" -F "maven2.asset1.classifier="unsigned"" "http://localhost:8081/service/rest/v1/components?repository=maven-releases"`
+
+详细参数参考
+[Components API](https://help.sonatype.com/repomanager3/rest-and-integration-api/components-api?_ga=2.252588809.1278989473.1586491809-667887869.1586017412#ComponentsAPI-Raw)
