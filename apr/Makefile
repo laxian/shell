@@ -1,6 +1,6 @@
 
 
-push: set_ip token env trav_cp trav_send trav_nexus trav_group wechat_build_finish remove_ip
+push: set_ip token env trav_cp trav_send trav_nexus trav_maven trav_group wechat_build_finish remove_ip
 
 wechat_build_finish: 
 	docker cp ./jenkins/wechat_build_finish.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
@@ -20,6 +20,9 @@ trav_send:
 trav_nexus:
 	docker cp ./jenkins/trav_nexus.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
+trav_maven:
+	docker cp ./jenkins/trav_maven.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
+
 trav_group:
 	docker cp ./jenkins/trav_group.sh jenkins:/var/jenkins_home/workspace/app-apr-food-delivery/
 
@@ -28,3 +31,6 @@ set_ip:
 
 remove_ip:
 	./ip/remove_ip.sh jenkins
+
+cd:
+	docker exec -it jenkins bash
