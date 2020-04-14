@@ -10,17 +10,34 @@ getip_macos.sh
 jenkins_builtin_env.sh  // 打印JENKINS内置变量
 send_form.sh    // cURL模拟表单上传文件到openresty服务器示例
 send_nexus.sh   // cURL上传文件到nexus仓库示例
-setip.sh        // 将localhost替换成主机ip
+remove_ip.sh    // set_ip的逆过程
+set_ip.sh        // 将localhost替换成主机ip
 sign.sh         // apk签名示例
 
 trav_cp.sh      // 遍历文件复制到指定目录
-trav_nexus.sh   // 遍历文件发送nexus
 trav_send.sh    // 遍历文件发送openresty
-trav_group.sh   // 遍历文件，三合一
+trav_nexus.sh   // 遍历文件发送nexus的raw仓库
+trav_maven.sh   // 遍历文件发送nexus的maven-release仓库
+trav_group.sh   // 遍历文件，四合一
 
 wechat_build_finish.sh  // 企业微信机器人通知
 wechatwork_notify.sh    // 企业微信机器人通知示例
 ```
 
 ## 使用方法
-1. `make push`
+
+`make push`
+
+
+## nexus OSS 上传
+
+1. Raw repository
+
+`curl -v -u admin:admin --upload-file $file $nexus_url/$dir/$(basename $file)`
+
+2. Maven repository
+
+`curl -v -u admin:admin -F "maven2.version=1.0.1" -F "maven2.groupId=com.segway" -F "maven2.artifactId=delivery" -F "maven2.asset1=@jenkins.sh" -F "maven2.asset1.extension=apk" -F "maven2.asset1.classifier="unsigned"" "http://localhost:8081/service/rest/v1/components?repository=maven-releases"`
+
+详细参数参考
+[Components API](https://help.sonatype.com/repomanager3/rest-and-integration-api/components-api?_ga=2.252588809.1278989473.1586491809-667887869.1586017412#ComponentsAPI-Raw)

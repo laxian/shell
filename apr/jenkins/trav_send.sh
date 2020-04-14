@@ -1,20 +1,17 @@
 #!/bin/bash
 
+. ./env.sh
+short_dir=$BUILD_TAG/$version.$git_version
 upload_url=http://localhost:8082/upload-jenkins
-dir=hello4
 
-
-# 扫描当前目录下以及子目录下的apk文件，并上传到$upload_url/$dir
+# 扫描当前目录下以及子目录下的apk文件，并上传到nexus服务器
 getdir() {
     echo "--->$1"
     for file in $1/*; do
         if test -f $file; then
-            # echo $file
-            # arr=(${arr[*]} $file)
-
             if [ "${file##*.}"x = ${suffix}x ]; then
                 # echo "cp $file -> $dest"
-                curl -u file:file -F "file=@$file" $upload_url/$dir
+                curl -u file:file -F "file=@$file" $upload_url/$short_dir
             fi
         elif [ -d $file ]; then
             getdir $file
