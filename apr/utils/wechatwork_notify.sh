@@ -6,7 +6,7 @@
 #--------------------------------------------
 
 set -e
-token=`cat token`
+token=`cat ../jenkins/token`
 notify_url=https://qyapi.weixin.qq.com/cgi-bin/webhook/send?key=$token
 
 Usage() {

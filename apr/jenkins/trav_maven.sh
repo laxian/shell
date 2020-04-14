@@ -34,4 +34,3 @@ cp2share() {
 cp2share $1 $2
 
 # curl -v -u admin:admin -F "maven2.version=1.0.1" -F "maven2.groupId=com.segway" -F "maven2.artifactId=delivery" -F "maven2.asset1=@jenkins.sh" -F "maven2.asset1.extension=apk" -F "maven2.asset1.classifier="unsigned"" "http://localhost:8081/service/rest/v1/components?repository=maven-releases"
-curl -v -u admin:admin -F maven2.groupId=com.segway -F maven2.artifactId=delivery maven2.version=3.0.88 -F maven2.asset1=@app/build/outputs/apk//alpha/segway-delivery-alpha.apk -F maven2.asset1.extension=apk -F maven2.asset1.classifier=alpha.apk 'http://localhost:8081/service/rest/v1/components?repository=maven-releases'

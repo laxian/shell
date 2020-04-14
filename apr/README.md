@@ -15,9 +15,10 @@ set_ip.sh        // 将localhost替换成主机ip
 sign.sh         // apk签名示例
 
 trav_cp.sh      // 遍历文件复制到指定目录
-trav_nexus.sh   // 遍历文件发送nexus
 trav_send.sh    // 遍历文件发送openresty
-trav_group.sh   // 遍历文件，三合一
+trav_nexus.sh   // 遍历文件发送nexus的raw仓库
+trav_maven.sh   // 遍历文件发送nexus的maven-release仓库
+trav_group.sh   // 遍历文件，四合一
 
 wechat_build_finish.sh  // 企业微信机器人通知
 wechatwork_notify.sh    // 企业微信机器人通知示例
