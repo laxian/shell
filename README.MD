@@ -24,3 +24,6 @@
 # 复制下载目录所有jpg到图库
 ./travel.sh ~/Downloads/ ~/Pictures jpg
 ```
+
+## sub.sh
+> 搜索字符串并替换
