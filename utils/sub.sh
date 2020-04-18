@@ -13,9 +13,8 @@ oldstr=$1
 newstr=$2
 ext=${4:-*}
 
-
 if [ -z $4 ]; then
-    sed -i s/$oldstr/$newstr/g `grep $oldstr -rl $dir`
+    sed -i s/$oldstr/$newstr/g $(grep $oldstr -rl $dir)
 else
-    sed -i s/$oldstr/$newstr/g `grep $oldstr -rl $dir --include "*.$ext"`
+    sed -i s/$oldstr/$newstr/g $(grep $oldstr -rl $dir --include "*.$ext")
 fi

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-script_name=get_timezone.sh
+script_name=`basename $BASH_SOURCE`
 
 isMain() {
     __main=false

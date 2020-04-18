@@ -11,3 +11,4 @@ token
 dex2jar-*
 jadx-*
 apktool.*
+cert/

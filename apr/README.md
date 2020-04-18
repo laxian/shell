@@ -1,4 +1,13 @@
-# 说明
+# Jenkins 无侵入打包方案
+
+## 1. 整体流程
+1. 将脚本和工具发送到jenkins构建项目根目录
+2. Docker+Jenkins打包
+3. signapk签名
+4. 检查配置的nginx、openresty、nexus仓库是否可以访问
+5. 将apk发送到可以放问的仓库
+6. wechat work 群机器人通知完成
+
 
 ```shell
 Makefile        // 调度

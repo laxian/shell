@@ -13,6 +13,7 @@ prefix=delivery
 extension=apk
 apk_raw_prefix=segway-delivery-
 
+. ./server_check.sh
 # 扫描当前目录下以及子目录下的apk文件，复制到指定目录，然后发送到指定服务器
 getdir() {
     echo "--->$1"
@@ -25,21 +26,30 @@ getdir() {
                 echo "cp $file -> $dest"
 
                 # move to nginx share folder
-                if [ ! -d "$dest" ]; then
-                    mkdir -p $dest
+                if [ $nginx ]; then
+                    if [ ! -d "$dest" ]; then
+                        mkdir -p $dest
+                    fi
+                    cp $file $dest
                 fi
-                cp $file $dest
 
                 # upload openresty server
-                curl -u file:file -F "file=@$file" $upload_url/$short_dir
+                if [ $resty ]; then
+                    curl -u file:file -F "file=@$file" $upload_url/$short_dir
+                fi
 
                 # upload nexus raw repo
-                curl -v -u admin:admin --upload-file $file $nexus_url/$dir/$(basename $file)
+                if [ $nexus ]; then
+                    curl -v -u admin:admin --upload-file $file $nexus_url/$dir/$(basename $file)
+                fi
 
                 # upload maven repo
-                name=$(basename $file)
-                classifier=$(echo $name | awk -F "$apk_raw_prefix" '{print $NF}')
-                curl -v -u admin:admin -F "maven2.groupId=$groupId" -F "maven2.artifactId=$prefix" -F "maven2.version=$version" -F "maven2.asset1=@$file" -F "maven2.asset1.extension=$extension" -F "maven2.asset1.classifier="$classifier"" $nexus_url
+                if [ $maven ]; then
+                    name=$(basename $file)
+                    classifier=$(echo $name | awk -F "$apk_raw_prefix" '{print $NF}')
+                    curl -v -u admin:admin -F "maven2.groupId=$groupId" -F "maven2.artifactId=$prefix" -F "maven2.version=$version" -F "maven2.asset1=@$file" -F "maven2.asset1.extension=$extension" -F "maven2.asset1.classifier="$classifier"" $nexus_url
+                fi
+
             fi
         elif [ -d $file ]; then
             getdir $file
