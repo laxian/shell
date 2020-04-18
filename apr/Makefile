@@ -3,7 +3,7 @@ JENKINS_HOME := /var/jenkins_home
 
 PROJECT_ROOT := jenkins:$(JENKINS_HOME)/workspace/app-apr-food-delivery/
 
-push: build
+push: set_ip build remove_ip
 
 build: sign trav wechat_build_finish
 	docker cp ./jenkins/jenkins.sh $(PROJECT_ROOT)
@@ -27,8 +27,11 @@ trav_nexus: env
 trav_maven: env
 	docker cp ./jenkins/trav_maven.sh $(PROJECT_ROOT)
 
-trav_group: env server_check
+trav_group: env server_check scan
 	docker cp ./jenkins/trav_group.sh $(PROJECT_ROOT)
+
+scan:
+	docker cp ./jenkins/scan.sh $(PROJECT_ROOT)
 
 wechat_build_finish: env token server_check notify
 	docker cp ./jenkins/wechat_build_finish.sh $(PROJECT_ROOT)
