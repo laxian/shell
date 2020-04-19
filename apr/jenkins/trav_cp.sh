@@ -1,6 +1,6 @@
 #!/bin/bash
 
-. ./scan.sh $1
+. ./utils/scan.sh $1
 dest=${2-.}
 
 for file in ${apk_array[@]}; do

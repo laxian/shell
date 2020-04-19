@@ -8,7 +8,7 @@ prefix=delivery
 extension=apk
 apk_raw_prefix=segway-delivery-
 
-. ./scan.sh $1
+. ./utils/scan.sh $1
 
 for file in ${apk_array[@]}; do
 

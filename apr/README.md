@@ -9,6 +9,7 @@
 6. wechat work 群机器人通知完成
 
 
+## 2. 脚本说明
 ```shell
 Makefile        // 调度
 
@@ -16,29 +17,35 @@ getip.sh        // 获取本机ip
 getip_linux.sh
 getip_macos.sh
 
+env.sh          // 通用的一些变量
+notify.sh       // 微信通知工具封装
+jenkins.sh      // 脚本总入口
 jenkins_builtin_env.sh  // 打印JENKINS内置变量
 send_form.sh    // cURL模拟表单上传文件到openresty服务器示例
 send_nexus.sh   // cURL上传文件到nexus仓库示例
 remove_ip.sh    // set_ip的逆过程
-set_ip.sh        // 将localhost替换成主机ip
+set_ip.sh       // 将localhost替换成主机ip
 sign.sh         // apk签名示例
+server_check.sh // 检查server是否可以访问
+scan.sh         // 遍历指定扩展名文件存数组
 
-trav_cp.sh      // 遍历文件复制到指定目录
-trav_send.sh    // 遍历文件发送openresty
-trav_nexus.sh   // 遍历文件发送nexus的raw仓库
-trav_maven.sh   // 遍历文件发送nexus的maven-release仓库
-trav_group.sh   // 遍历文件，四合一
+trav_cp.sh      // 将文件复制到指定目录
+trav_send.sh    // 将文件发送openresty
+trav_nexus.sh   // 将文件发送nexus的raw仓库
+trav_maven.sh   // 将文件发送nexus的maven-release仓库
+trav_group.sh   // 将文件，四合一
 
 wechat_build_finish.sh  // 企业微信机器人通知
-wechatwork_notify.sh    // 企业微信机器人通知示例
 ```
 
-## 使用方法
+## 3. 使用方法
 
-`make push`
+1. `make push`
+2. 在jenkins任务添加shell构建步骤，填入
+`./jenkins.sh`
 
 
-## nexus OSS 上传
+## 4. nexus OSS 上传
 
 1. Raw repository
 
