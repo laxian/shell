@@ -46,8 +46,11 @@ notify: md_utils
 md_utils: 
 	docker exec -it jenkins bash -c "[ -d $(JENKINS_HOME)/$(RELATIVE_PATH)/utils ] || mkdir -p $(JENKINS_HOME)/$(RELATIVE_PATH)/utils"
 
-server_check: 
+server_check: head
 	docker cp ./jenkins/server_check.sh $(PROJECT_ROOT)
+
+head: md_utils
+	docker cp ./jenkins/utils/head.sh $(PROJECT_ROOT)
 
 env:
 	docker cp ./jenkins/env.sh $(PROJECT_ROOT)
