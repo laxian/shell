@@ -50,7 +50,7 @@ server_check: head
 	docker cp ./jenkins/server_check.sh $(PROJECT_ROOT)
 
 head: md_utils
-	docker cp ./jenkins/utils/head.sh $(PROJECT_ROOT)
+	docker cp ./jenkins/utils/head.sh $(PROJECT_ROOT)/utils/
 
 env:
 	docker cp ./jenkins/env.sh $(PROJECT_ROOT)
