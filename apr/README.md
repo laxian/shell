@@ -5,8 +5,8 @@
 2. Docker+Jenkins打包
 3. signapk签名
 4. 检查配置的nginx、openresty、nexus仓库是否可以访问
-5. 将apk发送到可以放问的仓库
-6. wechat work 群机器人通知完成
+5. 将apk发送到可以访问的仓库
+6. wechat work 群机器人通知完成，显示可访问的链接
 
 
 ## 2. 脚本说明
@@ -18,6 +18,7 @@ getip_linux.sh
 getip_macos.sh
 
 env.sh          // 通用的一些变量
+head.sh         // 判断url是否可以访问
 notify.sh       // 微信通知工具封装
 jenkins.sh      // 脚本总入口
 jenkins_builtin_env.sh  // 打印JENKINS内置变量
