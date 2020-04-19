@@ -1,4 +1,3 @@
-
 #!/bin/bash
 
 # 发送钉钉通知，和Mac桌面通知
@@ -53,13 +52,9 @@ function dingtalk_notify() {
       }'
 }
 
-function pc_notify () {
+function pc_notify() {
     osascript -e "display notification \"${strPrompt}\" with title \"$* 完成\""
-
 }
-
 
 [ $pc = "true" ] && pc_notify $name
 [ $dingtalk = "true" ] && dingtalk_notify $name
-
-

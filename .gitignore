@@ -11,3 +11,5 @@ token
 dex2jar-*
 jadx-*
 apktool.*
+rk/
+private/

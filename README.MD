@@ -17,10 +17,19 @@
 用法 git log --stat | awk -f code_count.awk
 
 ## traval.sh
-递归遍历文件
+> 递归遍历文件
 ```zsh
 # 扫描所有apk，复制到当前目录
 ./travel.sh app/build/output 
 # 复制下载目录所有jpg到图库
 ./travel.sh ~/Downloads/ ~/Pictures jpg
 ```
+
+## sub.sh
+> 搜索字符串并替换
+
+## apr
+> 一套jenkins打包、上传、通知脚本
+
+## adb
+> adb 常用命令总结
