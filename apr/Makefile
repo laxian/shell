@@ -10,7 +10,7 @@ build: sign trav wechat_build_finish
 	docker cp ./jenkins/jenkins.sh $(PROJECT_ROOT)
 
 sign:
-	docker cp ./files/rk/ $(PROJECT_ROOT)
+	docker cp ./private/rk/ $(PROJECT_ROOT)
 	docker cp ./files/signapk.jar $(PROJECT_ROOT)
 	docker cp ./jenkins/sign.sh $(PROJECT_ROOT)
 
