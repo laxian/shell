@@ -1,6 +1,8 @@
 
 JENKINS_HOME := /var/jenkins_home
-RELATIVE_PATH=workspace/app-apr-food-delivery
+DELIVERY_PATH := workspace/app-apr-food-delivery
+CABINET_PATH := workspace/apr-cabinet-app-android/GxCabinetApp
+RELATIVE_PATH := NULL
 CONTAINER := jenkins
 PROJECT_ROOT := $(CONTAINER):$(JENKINS_HOME)/$(RELATIVE_PATH)
 
@@ -56,10 +58,10 @@ env:
 	docker cp ./jenkins/env.sh $(PROJECT_ROOT)
 
 set_ip:
-	./ip/set_ip.sh jenkins
+	-./ip/set_ip.sh jenkins
 
 remove_ip:
-	./ip/remove_ip.sh jenkins
+	-./ip/remove_ip.sh jenkins
 
 cd:
 	docker exec -it jenkins bash

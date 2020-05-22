@@ -13,3 +13,5 @@ jadx-*
 apktool.*
 rk/
 private/
+.gitignore
+.vscode/
