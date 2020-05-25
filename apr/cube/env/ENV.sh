@@ -6,11 +6,11 @@ DEVICE_ID=
 ROBOT_ID=
 ROBOT_KEY=
 
-PROJ_ROOT=/Users/leochou/app-apr-cabinet/GxCabinetApp
+PROJ_ROOT=.
 HOST_FILE=app/src/main/java/com/ssssss/robot/cabinet/http/RxHttp.java
 PKG_NAME=com.ssssss.robot.cabinet
 CONFIG_FILE='{"NavServicURL":"SSL_PATH","EnableLog":true}'
-HOST_PATTERN="https://[a-z-]\+\.lllll\.com"
+HOST_PATTERN="https\?://[a-z-]\+\.lllll\.com"
 CONFIG_PATH=/sdcard/GX/config.json
 
 HOST_ALPHA=http://alpha-cube.lllll.com

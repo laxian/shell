@@ -4,16 +4,15 @@ ENV :=
 DEVICE_ID := 
 ROBOT_ID := 
 ROBOT_KEY := 
-PROJ_ROOT := /Users/leochou/app-apr-cabinet/GxCabinetApp
+PROJ_ROOT := .
 
 WORKDIR := $(PROJ_ROOT)
 HOST_FILE := app/src/main/java/com/ssssss/robot/cabinet/http/RxHttp.java
 PKG_NAME := com.ssssss.robot.cabinet
 CONFIG_FILE := '{"NavServicURL":"SSL_PATH","EnableLog":true}'
-HOST_PATTERN := https://[a-z-]\+\.lllll\.com
+HOST_PATTERN := https\?://[a-z-]\+\.lllll\.com
 CONFIG_PATH := /sdcard/GX/config.json
 
-SEG1 := `cat .private`
 HOST_ALPHA := http://alpha-cube.lllll.com
 SSL_ALPHA := ssl://000.92.80.43:8884
 HOST_DEV := http://dev-cube.lllll.com
@@ -66,7 +65,7 @@ build: host clean
 	fi
 
 install: build
-	adb -s $(DEVICE_ID) uninstall $(PKG_NAME)
+	-adb -s $(DEVICE_ID) uninstall $(PKG_NAME)
 	adb -s $(DEVICE_ID) install -r $(PROJ_ROOT)/app/build/outputs/apk/$(APK_DIR)/*.apk
 
 mqtt:

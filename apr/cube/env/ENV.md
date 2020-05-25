@@ -65,7 +65,7 @@ host url，并没有在gradle配置，需要手动修改，在RxHttp.java中
 |-----|----------------------------------------------------|
 | alpha  | alpha                 |
 | dev  | debug                             |
-| internal  | internal |
+| internal  | release |
 | release  | release |
 
 	@if [ $(ENV) = "alpha" ]; \
@@ -120,13 +120,13 @@ ENV :=
 DEVICE_ID := 
 ROBOT_ID := 
 ROBOT_KEY := 
-PROJ_ROOT := /Users/leochou/app-apr-cabinet/GxCabinetApp
+PROJ_ROOT := .
 
 WORKDIR := $(PROJ_ROOT)
 HOST_FILE := app/src/main/java/com/ssssss/robot/cabinet/http/RxHttp.java
 PKG_NAME := com.ssssss.robot.cabinet
 CONFIG_FILE := '{"NavServicURL":"SSL_PATH","EnableLog":true}'
-HOST_PATTERN := https://[a-z-]\+\.lllll\.com
+HOST_PATTERN := https\?://[a-z-]\+\.lllll\.com
 CONFIG_PATH := /sdcard/GX/config.json
 
 SEG1 := `cat .private`
@@ -212,7 +212,7 @@ DEVICE_ID=
 ROBOT_ID=
 ROBOT_KEY=
 
-PROJ_ROOT=/Users/leochou/app-apr-cabinet/GxCabinetApp
+PROJ_ROOT=.
 HOST_FILE=app/src/main/java/com/ssssss/robot/cabinet/http/RxHttp.java
 PKG_NAME=com.ssssss.robot.cabinet
 CONFIG_FILE='{"NavServicURL":"SSL_PATH","EnableLog":true}'
