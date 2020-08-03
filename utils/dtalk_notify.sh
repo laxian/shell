@@ -56,5 +56,9 @@ function pc_notify() {
     osascript -e "display notification \"${strPrompt}\" with title \"$* 完成\""
 }
 
+function pc_notify2() {
+    osascript -e "display notification \"$3\" with title \"$1\" subtitle \"$2\""
+}
+
 [ $pc = "true" ] && pc_notify $name
 [ $dingtalk = "true" ] && dingtalk_notify $name
