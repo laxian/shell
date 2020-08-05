@@ -9,13 +9,12 @@ travel() {
     ad="$1"
     zip="$2"
     lines=$(echo "$ad" | tr -d '\n' | tr ',' '\n')
-    result=$(echo "$lines" | grep "$zip$" | while read line; do
+    filter=$(echo "$lines" | grep -w "$zip$" | while read line; do
         echo $line | awk -F" $zip" '{print $1}'
     done)
-    result=$(echo "$result" |tr '\n' ';')
-    IFS_OLD=$IFS
-    IFS=';'
-    for line in $result; do
+    filter=$(echo "$filter" | tr '\n' ';')
+    OLD_IFS=$IFS IFS=';'
+    for line in $filter; do
         if [ $miles ]; then
             mile=$(echo $line | cut -d' ' -f1)
             miles="$miles,$mile"
@@ -25,7 +24,7 @@ travel() {
             ads=${line#*$miles }
         fi
     done
-    IFS=$IFS_OLD
+    IFS=$OLD_IFS
     echo "$zip:$ads/$miles"
 }
 
