@@ -26,7 +26,7 @@ timestamp=$(date "+%Y-%m-%d %H:%M:%S")
 wiki="https://wiki.segwayrobotics.com/pages/viewpage.action?pageId=50280499"
 echo $env $version
 
-content="业务软件在<font color=\\\"info\\\">${env}</font>环境下发布, 请相关同学注意 \n >版本:${version} >更新日志:${wiki} >发布时间:${timestamp}"
+content="业务软件在<font color=\\\"info\\\">${env}</font>环境下发布, 请相关同学注意 \n >版本: <font color=\\\"info\\\">${version}~</font> \n>[更新日志](${wiki}) \n>发布时间: ${timestamp}"
 
 json="{
         \"msgtype\": \"markdown\",
