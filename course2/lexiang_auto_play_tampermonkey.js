@@ -55,7 +55,7 @@
         "https://lexiangla.com/classes/d99b54b2cd0b11ea8a0c5254002f1020?type=0&company_from=d05406eccd0b11ea8bac5254002f1020"]
 
     var index = course_list.indexOf(document.location.href);
-    var nextUrl = course_list[index];
+    var nextUrl = course_list[++index];
     console.log(`当前播放第${index}课`);
 
     var retryClick = ()=>{
