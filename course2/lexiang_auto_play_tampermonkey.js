@@ -5,9 +5,8 @@
 // @description  auto play lexiang.com course, course_list by xpath
 // @description  https://lexiangla.com/classes?category_id=&company_from=d05406eccd0b11ea8bac5254002f1020&page=2
 // @author       weixian.zhou@ninebot.com
-// @match        https://lexiangla.com/classes/79d62ba4008911eba6e152540005f435?type=0&company_from=d05406eccd0b11ea8bac5254002f1020
+// @match        https://lexiangla.com/*
 // @grant        none
-// @include      https://lexiangla.com/
 // ==/UserScript==
 
 (function () {
@@ -65,7 +64,25 @@
             document.getElementsByClassName("vjs-big-play-button")[0].click();console.log("click");
         }
     }
+
+    var playNext = function () {
+            console.log(`即将播放${nextUrl}`);
+            window.location.href = nextUrl;
+    }
+
+
+    // 延时两秒自动点击开始播放
     setTimeout(retryClick, 2000);
+
+    setInterval(function(){
+        var tips = document.getElementsByClassName("time-tip-container")[0].innerText.trim();
+        if(tips == "已学完本课程") {
+            playNext();
+        } else {
+            console.log(tips);
+        }
+    }, 5000);
+
     setTimeout(function () {
         //document.getElementsByTagName("video")[0].play();
         var video=document.getElementsByTagName("video")[0];
@@ -73,10 +90,7 @@
         video.oncanplay = function(){
             console.log("准备就绪");
         };
-        video.addEventListener("ended", function () {
-            console.log(`即将播放${nextUrl}`);
-            window.location.href = nextUrl;
-        });
+        video.addEventListener("ended", playNext);
         video.addEventListener("progress", function () {
             console.log(video.currentTime);
             cnt++;
