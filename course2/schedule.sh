@@ -5,6 +5,7 @@
 # 然后脚本sleep，sleep时长为课程时长多60秒
 #----------------------------------------------------------------
 
+source ./countdown.sh
 for l in $(cat course_id_time); do
     ./query_learned.sh
     id=$(echo $l | cut -d':' -f 1)
@@ -21,7 +22,7 @@ for l in $(cat course_id_time); do
     echo "课程时长: $time. 已学:$learned_time, 剩余：$remain_time"
     if [[ $remain_time != 0 ]]; then
         python -mwebbrowser $url
-        sleep $(($remain_time * 60 + 60))
+        count_down $(($remain_time * 60 + 60))
     fi
     
     echo "next course is coming"

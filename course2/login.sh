@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -x
+#!/usr/bin/env bash
 
 #----------------------------
 # 登录方式获取cookie，用于获取数据

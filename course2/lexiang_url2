@@ -1,0 +1,42 @@
+[
+    {
+        "companyId": "d05406eccd0b11ea8bac5254002f1020",
+        "staffId": "6bda4c14d6be11eaad0a0a58ac134369",
+        "method": "put",
+        "httpCode": 200,
+        "pageDomain": "lexiangla.com",
+        "url": "lexiangla.com/api/v1/classes/1e3e08b0dca411ea961452540005f435/courses/1e1886bcdca411ea8f8c52540005f435/study",
+        "path": "/classes/1e3e08b0dca411ea961452540005f435/courses/1e1886bcdca411ea8f8c52540005f435/study",
+        "time": 219,
+        "utime": 1601294318890,
+        "XRequestId": "41064167edca575a98d3da28eaa7fdc7",
+        "platform": "pc",
+        "isNew": true,
+        "isWafError": 0,
+        "code": 0,
+        "msg": "success",
+        "isAlpha": 0,
+        "params": "{\"learn_time\":300,\"is_ended\":false}"
+    }
+]
+[
+    {
+        "companyId": "d05406eccd0b11ea8bac5254002f1020",
+        "staffId": "6bda4c14d6be11eaad0a0a58ac134369",
+        "method": "put",
+        "httpCode": 200,
+        "pageDomain": "lexiangla.com",
+        "url": "lexiangla.com/api/v1/classes/1e3e08b0dca411ea961452540005f435/courses/1e1886bcdca411ea8f8c52540005f435/study",
+        "path": "/classes/1e3e08b0dca411ea961452540005f435/courses/1e1886bcdca411ea8f8c52540005f435/study",
+        "time": 257,
+        "utime": 1601294348885,
+        "XRequestId": "df580847f63e99de56f836818056675d",
+        "platform": "pc",
+        "isNew": true,
+        "isWafError": 0,
+        "code": 0,
+        "msg": "success",
+        "isAlpha": 0,
+        "params": "{\"learn_time\":330,\"is_ended\":false}"
+    }
+]
