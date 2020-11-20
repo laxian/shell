@@ -1,5 +1,7 @@
 #!/bin/sh
-MYSELF=`which "$0" 2>/dev/null`
+MYSELF=`which "$0" 2>
+
+VCXVC、。，NL。，MNBVCXBVCXXXX，。，MN FGKJHGFXZXGHJJL`
 [ $? -gt 0 -a -f "$0" ] && MYSELF="./$0"
 java=java
 if test -n "$JAVA_HOME"; then
