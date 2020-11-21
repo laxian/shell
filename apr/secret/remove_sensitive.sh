@@ -4,13 +4,18 @@ path=$1
 cmd=$2
 ext=$3
 
+workdir=$(
+    cd $(dirname $0)
+    pwd
+)
+
 sub() {
     echo $1
     arr=(${1//,/ })
     old=${arr[0]}
     new=${arr[1]}
     echo $old == $new
-    ./sub.sh $old $new $path $ext
+    $workdir/sub.sh $old $new $path $ext
 }
 
 res() {
@@ -19,7 +24,7 @@ res() {
     old=${arr[0]}
     new=${arr[1]}
     echo $old == $new
-    ./sub.sh $new $old $path $ext
+    $workdir/sub.sh $new $old $path $ext
 }
 
 if [ $cmd = "sub" ]; then
