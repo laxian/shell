@@ -3,11 +3,11 @@
 # ----------------------------
 # 快速下载日志
 # $1 robot id 关键字过滤
-# $2 指定拉取第$2行，默认0
+# $2 指定拉取第行，默认0
 # ----------------------------
 
 keyword=$1
-line=${2-1}
+line=${2-0}
 
 ordinal() {
   if [ $1 == 1 ]; then
@@ -20,8 +20,6 @@ ordinal() {
     echo ${1}th
   fi
 }
-
-echo pull log of $keyword, the `ordinal ${line}` line
 
 curl -s "http://${host_part_1}-api.${host_part_2}.com/robot/log/management?page=1&pageSize=10&startCreateTime=&endCreateTime=&robotId=$keyword&logPath=&logType=&environment=&mapName=&commandStatus=" \
   -H 'Connection: keep-alive' \
@@ -38,5 +36,5 @@ curl -s "http://${host_part_1}-api.${host_part_2}.com/robot/log/management?page=
   | head -n $(($line+1)) \
   | tail -n 1 \
   | sed 's/.*\(http.*\.zip\).*/\1/g' \
-  | xargs -I URL curl -LO URL
+  # | xargs -I URL curl -LO URL
 
