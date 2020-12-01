@@ -19,7 +19,7 @@ if [[ -n $result ]]; then
     file_name=${new_url##*/}
     mv $file_name ~/Downloads
     cd ~/Downloads
-    dir=$id$time_tag
+    dir=$id-$time_tag
     unzip $file_name -d $dir
     code $dir
     echo enjoy!!!
