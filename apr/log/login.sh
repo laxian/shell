@@ -28,7 +28,10 @@ curl -s 'http://${host_part_1}-api.${host_part_2}.com/user/login' \
   --insecure \
   | sed -n '/token/p' \
   | sed 's/.*token":"\(.*\)",/\1/g' \
-  | tee > $tmp && sleep 1 \
-  | grep $old_token -rl . \
-  | xargs -n 1 -I F sed -i "s/$old_token/`cat $tmp`/g" F
+  | tee \
+  > $tmp 
+
+# 这里如果不打破链式调用，文件写入不刷新，cat $tmp 获取不到值
+grep $old_token -rl . \
+| xargs -n 1 -I F sed -i "s/$old_token/`cat $tmp`/g" F
 #   | sed 's/,//g ; s/"token":"\(.*\)"/\1/' \
