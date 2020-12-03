@@ -2,17 +2,17 @@
 
 #----------------------------------------------------------------
 # login，更新本地token
-#----------------------------------------------------------------
-
-new_token
-tmp=`mktemp`
 # 读取旧token
 # 模拟登陆
 # 过滤token行
 # 匹配出token
-# 写入缓存，等待1s，IO是异步的，否则读取有可能为空
+# 写入缓存并等待写入完成（IO是异步的，否则读取有可能为空）
 # 递归搜索当前目录下有旧token的文件
 # 替换旧token
+#----------------------------------------------------------------
+
+new_token
+tmp=`mktemp`
 old_token=`cat ./private/sub| sed -n '/token/p' | awk -F"," '{print $1}'`
 curl -s 'http://${host_part_1}-api.${host_part_2}.com/user/login' \
   -H 'Connection: keep-alive' \
@@ -28,10 +28,7 @@ curl -s 'http://${host_part_1}-api.${host_part_2}.com/user/login' \
   --insecure \
   | sed -n '/token/p' \
   | sed 's/.*token":"\(.*\)",/\1/g' \
-  | tee \
-  > $tmp 
-
-# 这里如果不打破链式调用，文件写入不刷新，cat $tmp 获取不到值
-grep $old_token -rl . \
-| xargs -n 1 -I F sed -i "s/$old_token/`cat $tmp`/g" F
+  | tee >( xargs echo >$tmp ) && wait \
+  | grep $old_token -rl . \
+  | xargs -n 1 -I F sed -i "s/$old_token/`cat $tmp`/g" F
 #   | sed 's/,//g ; s/"token":"\(.*\)"/\1/' \
