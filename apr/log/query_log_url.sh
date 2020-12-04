@@ -35,6 +35,7 @@ curl -s "http://${host_part_1}-api.${host_part_2}.com/robot/log/management?page=
   | grep logUrl \
   | head -n $(($line+1)) \
   | tail -n 1 \
+  | grep "http.*\.zip" \
   | sed 's/.*\(http.*\.zip\).*/\1/g' \
-  # | xargs -I URL curl -LO URL
+  | grep zip || echo "NOT FOUND!!!"
 

@@ -20,3 +20,8 @@
 
 robot_id_key_word是指robot_id可以输入一部分，用于过滤
 index是指日志列表的index，可不传，默认是第一个，也就是index=0
+
+### login过期自动刷新token
+`login.sh`
+
+链式调用，自动读取旧token，获取新token，全面替换成新token
