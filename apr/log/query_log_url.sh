@@ -21,14 +21,14 @@ ordinal() {
   fi
 }
 
-curl -s "http://${host_part_1}-api.${host_part_2}.com/robot/log/management?page=1&pageSize=10&startCreateTime=&endCreateTime=&robotId=$keyword&logPath=&logType=&environment=&mapName=&commandStatus=" \
+curl -s "http://nav-center-api.loomo.com/robot/log/management?page=1&pageSize=10&startCreateTime=&endCreateTime=&robotId=$keyword&logPath=&logType=&environment=&mapName=&commandStatus=" \
   -H 'Connection: keep-alive' \
   -H 'Accept: application/json, text/plain, */*' \
   -H 'x-requested-with: XMLHttpRequest' \
   -H 'User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36' \
-  -H "authToken: ${token}" \
-  -H "Origin: http://${host_part_1}.${host_part_2}.com" \
-  -H "Referer: http://${host_part_1}.${host_part_2}.com/" \
+  -H "authToken: 1165a2f238cc4cf8babc367ab34ce77b" \
+  -H "Origin: http://nav-center.loomo.com" \
+  -H "Referer: http://nav-center.loomo.com/" \
   -H 'Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7' \
   --compressed \
   --insecure \
