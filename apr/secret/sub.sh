@@ -14,7 +14,7 @@ newstr=$2
 ext=${4:-*}
 
 if [ -z $4 ]; then
-    sed -i s/$oldstr/$newstr/g $(grep $oldstr -rl $dir --exclude-dir private)
+    sed -i s/$oldstr/$newstr/g $(grep $oldstr -rl $dir --exclude-dir private --exclude-dir "*/venv*")
 else
-    sed -i s/$oldstr/$newstr/g $(grep $oldstr -rl $dir --include "*.$ext" --exclude-dir private)
+    sed -i s/$oldstr/$newstr/g $(grep $oldstr -rl $dir --include "*.$ext" --exclude-dir private --exclude-dir "*/venv*")
 fi

@@ -2,12 +2,16 @@
 
 # -*- coding: UTF-8 -*-
 
-import requests
-import sys
 import json
+import sys
+
+import requests
+
+from api_login import login
+from config import Config
 
 
-def query(key, token, index=0):
+def query(key, token):
     headers = {
         'Connection': 'keep-alive',
         'Accept': 'application/json, text/plain, */*',
@@ -37,21 +41,38 @@ def query(key, token, index=0):
         'http://${host_part_1}-api.${host_part_2}.com/robot/log/management', headers=headers, params=params)
 
     if response.status_code == 200:
-        try:
-            j = json.loads(response.content)
-            list_part = j['data']['list']
-            urls = [data['logUrl'] for data in list_part if 'logUrl' in data]
-            return [urls[index]] if index > -1 else urls
-        except IOError:
-            print('json parse error')
+        return response.content.decode('utf-8')
     else:
         print(response.status_code)
     return None
 
 
+def query_with_retry(key, token, index=-1):
+    result = query(key, token)
+    if result:
+        j = json.loads(result)
+        result_code = j.get('resultCode')
+        print(j)
+        if j.get('resultCode') == 9000:
+            list_part = j['data']['list']
+            urls = [data['logUrl'] for data in list_part if 'logUrl' in data]
+            url_of_index = [urls[index]] if index > -1 else urls
+            return url_of_index
+        elif result_code == 9006:
+            print(j.get('resultDesc'))
+            print(u'尝试自动登录...')
+            config = Config('config.json').config
+            token = login(config['username'], config['password'])
+            if token:
+                return query_with_retry(key, token, index)
+        else:
+            print(j.get('resultDesc'))
+    else:
+        pass
+
+
 if __name__ == '__main__':
-    try:
-        keyword = sys.argv[1]
-        print(query(keyword, '${token}', 0)[0])
-    except IndexError:
-        print('input id pls')
+    key = sys.argv[1]
+    token = sys.argv[2] if len(sys.argv) > 2 else Config('config.json').config['token']
+    index = 0
+    query_with_retry(key, token, index)

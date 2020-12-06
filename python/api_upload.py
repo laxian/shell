@@ -1,8 +1,15 @@
 #!/usr/bin/env python
 
-import requests
-import time
+# -*- coding: UTF-8 -*-
+
+import json
 import sys
+import time
+
+import requests
+
+from api_login import login
+from config import Config
 
 
 def upload(robot_id, path, token, env='release'):
@@ -26,15 +33,32 @@ def upload(robot_id, path, token, env='release'):
     response = requests.post('http://${host_part_1}-api.${host_part_2}.com/robot/log/toUploadLog',
                              headers=headers, data=data, verify=False)
     if response.status_code == 200:
-        print(response.content)
-        return response.content
+        return response.content.decode('utf-8')
     else:
         print(response.status_code)
         return None
+
+
+def upload_with_retry(robot_id, path, token, env='release'):
+    content = upload(robot_id, path, token, env)
+    j = json.loads(content)
+    result_code = j.get('resultCode')
+    if result_code == 9006:
+        print(j['resultDesc'])
+        print(u'尝试自动登录...')
+        config = Config('config.json').config
+        token = login(config['username'], config['password'])
+        if token:
+            return upload_with_retry(robot_id, path, token, env)
+    elif result_code == 9000:
+        return content
+    else:
+        print(j['resultDesc'])
 
 
 if __name__ == '__main__':
     robot_id = sys.argv[1]
     path = sys.argv[2]
     env = 'release' if len(sys.argv) <= 3 else sys.argv[3]
-    print (upload(robot_id, path, '${token}', env))
+    token = sys.argv[4] if len(sys.argv) > 4 else Config('config.json').config['token']
+    upload_with_retry(robot_id, path, token, env)

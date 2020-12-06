@@ -3,8 +3,11 @@
 # -*- coding: UTF-8 -*-
 
 
-import requests
 import json
+
+import requests
+
+from config import Config
 
 
 def login(username, password):
@@ -22,19 +25,31 @@ def login(username, password):
 
     data = '{"username":"%s","password":"%s"}' % (username, password)
 
-    response = requests.post('http://${host_part_1}-api.${host_part_2}.com/user/login', headers=headers, data=data, verify=False)
+    response = requests.post(
+        'http://${host_part_1}-api.${host_part_2}.com/user/login', headers=headers, data=data, verify=False)
 
+    print(response)
     if response.status_code == 200:
-        try:
-            j = json.loads(response.content)
-            return j['data']['token']
-        except IOError:
-            print('json parse error')
-            return None
+        return response.content.decode('utf-8')
     else:
         print(response.status_code)
-        return None
+
+
+def login_and_save_token(username, password):
+    result = login(username, password)
+    if result:
+        j = json.loads(result)
+        result_code = j.get('resultCode')
+        if result_code == 9000:
+            token = j['data']['token']
+            config = Config('config.json').config
+            config['token'] = token
+            with open('config.json', 'w') as config_file:
+                config_file.write(json.dumps(config))
+            return token
+        else:
+            print(j.get('resultDesc'))
 
 
 if __name__ == '__main__':
-    print (login('${username}', '${password}'))
+    print(login_and_save_token('${username}', '${password}'))

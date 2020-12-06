@@ -4,10 +4,10 @@
 import sys
 import time
 
-from config import Config
 from api_login import login
-from api_query import query
-from api_upload import upload
+from api_query import query_with_retry
+from api_upload import upload_with_retry
+from config import Config
 from utils import *
 
 
@@ -48,20 +48,21 @@ def match_time(tick, tock):
 
 def schedule(robot_id, path):
     config = Config('config.json').config
-    token = login(config['username'], config['password'])
+    token = config['token'] if 'token' in config else login(
+        config['username'], config['password'])
     config['token'] = token
 
-    # upload
     retry_count = 1
     tick = time.time()
     print(tick)
     limit = config['retry_limit']
-    if upload(robot_id, path, token):
+    # upload
+    if upload_with_retry(robot_id, path, token):
         not_found = False
         while True:
             time.sleep(config['retry_interval'])
             print('try for %d times')
-            query_result = query(robot_id, token, 0)
+            query_result = query_with_retry(robot_id, token, 0)
             print(query_result)
             url = query_result[0]
             retry_count += 1

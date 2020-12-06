@@ -7,7 +7,7 @@ clean:
 
 sub:
 	../apr/secret/remove_sensitive.sh . sub
-sub:
+res:
 	../apr/secret/remove_sensitive.sh . res
 
 install:
@@ -29,3 +29,5 @@ config: env activate install
 
 test:
 	python test.py
+	python test_api.py
+	python test_api_wrapper.py

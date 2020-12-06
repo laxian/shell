@@ -14,7 +14,7 @@
 new_token=
 tmp=`mktemp`
 old_token=`cat ./private/sub| sed -n '/token/p' | awk -F"," '{print $1}'`
-curl -s 'http://${host_part_1}-api.${host_part_2}.com/user/login' \
+curl -s "http://${host_part_1}-api.${host_part_2}.com/user/login" \
   -H 'Connection: keep-alive' \
   -H 'Accept: application/json, text/plain, */*' \
   -H 'x-requested-with: XMLHttpRequest' \
