@@ -25,24 +25,28 @@ def fetch_and_open(url, app, log_dir='.'):
 
 
 def match_url(url, tick):
-    '''
+    """
     :param url: 下载链接
     :param tick: 开始时间
     :return: tick与url上的时间进行匹配，True if match
-    '''
+    """
     if not url:
         return False
     url_time_str = get_time_part(url, r'\d{4}-\d{2}-\d{2}_\d{2}-\d{2}-\d{2}')
     tok = time.strptime(url_time_str, '%Y-%m-%d_%H-%M-%S')
     tock = time.mktime(tok)
+    tick_time_str = time.strftime('%Y-%m-%d_%H-%M-%S', time.localtime(tick))
+    print('tick: %s' % tick_time_str)
+    print('tock: %s' % url_time_str)
     return match_time(tick, tock)
 
 
 def match_time(tick, tock):
-    return tick <= tock and tock - tick <= 5
+    print('tick: %s -> tock: %s' % (tick, tock))
+    return -1 < tock - tick <= 5
 
 
-def schedule(id, path):
+def schedule(robot_id, path):
     config = Config('config.json').config
     token = login(config['username'], config['password'])
     config['token'] = token
@@ -50,15 +54,14 @@ def schedule(id, path):
     # upload
     retry_count = 1
     tick = time.time()
-    interval = config['retry_interval']
+    print(tick)
     limit = config['retry_limit']
-    if upload(id, path, token):
-        url = None
+    if upload(robot_id, path, token):
         not_found = False
         while True:
             time.sleep(config['retry_interval'])
             print('try for %d times')
-            query_result = query(id, token, 0)
+            query_result = query(robot_id, token, 0)
             print(query_result)
             url = query_result[0]
             retry_count += 1
@@ -74,6 +77,6 @@ def schedule(id, path):
 
 
 if __name__ == '__main__':
-    id = sys.argv[1]
+    robot_id = sys.argv[1]
     path = sys.argv[2]
-    schedule(id, path)
+    schedule(robot_id, path)

@@ -1,10 +1,8 @@
 import os
+import time
 import unittest
 
-import time
-
 from api_login import login
-from api_query import query
 from api_upload import upload
 from config import Config
 from schedule import match_url, schedule, match_time
@@ -14,11 +12,11 @@ from utils import get_name, download, unzip, open_with_app, get_time_part
 class TestDict(unittest.TestCase):
     def setUp(self):
         print('setUp...')
-        self.url = 'http://robot-base.${host_part_2}.com/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX-${PREFIX}0036_2020-12-05_23-06-05-137_M.zip'
+        self.url = 'http://robot-base.${host_part_2}.com/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX' \
+                   '-${PREFIX}0036_2020-12-05_23-06-05-137_M.zip '
         self.name_expect = 'GXBOX-${PREFIX}0036_2020-12-05_23-06-05-137_M.zip'
         self.config = Config('config.json').config
         self.timestamp = 1607180765.0
-
 
     def tearDown(self):
         print('tearDown...')
@@ -32,31 +30,31 @@ class TestDict(unittest.TestCase):
         token = login(self.config['username'], self.config['password'])
         self.assertTrue(upload('GXBOX-${PREFIX}0036', '/sdcard/ex', token))
 
-    def test_query(self):
-        # token = login(self.config['username'], self.config['password'])
-        query_result = query('GXBOX-${PREFIX}0036', '78cf8dfc533e48369cc3c0a1bcdfb6ee')
-        self.assertTrue(isinstance(query_result, list))
-        self.assertEqual(len(query_result), 1)
-        self.assertTrue(query_result[0].endswith('.zip'))
+    # def test_query(self):
+    #     # token = login(self.config['username'], self.config['password'])
+    #     query_result = query('GXBOX-${PREFIX}0036', '78cf8dfc533e48369cc3c0a1bcdfb6ee')
+    #     self.assertTrue(isinstance(query_result, list))
+    #     self.assertEqual(len(query_result), 1)
+    #     self.assertTrue(query_result[0].endswith('.zip'))
 
     def test_config(self):
-        self.assertTrue(self.config.has_key('username'))
-        self.assertTrue(self.config.has_key('password'))
-        self.assertTrue(self.config.has_key('token'))
-        self.assertTrue(self.config.has_key('env'))
-        self.assertTrue(self.config.has_key('open_app'))
-        self.assertTrue(self.config.has_key('retry_limit'))
-        self.assertTrue(self.config.has_key('retry_interval'))
+        self.assertTrue('username' in self.config)
+        self.assertTrue('password' in self.config)
+        self.assertTrue('token' in self.config)
+        self.assertTrue('env' in self.config)
+        self.assertTrue('open_app' in self.config)
+        self.assertTrue('retry_limit' in self.config)
+        self.assertTrue('retry_interval' in self.config)
 
     def test_utils_get_name(self):
         name_result = get_name(self.url)
         self.assertEqual(name_result, self.name_expect)
 
-    def test_utils_download(self):
-        download(self.url)
-        exit_i = os.system('ls %s' % self.name_expect)
-        self.assertEqual(exit_i, 0)
-        os.remove(self.name_expect)
+    # def test_utils_download(self):
+    #     download(self.url)
+    #     exit_i = os.system('ls %s' % self.name_expect)
+    #     self.assertEqual(exit_i, 0)
+    #     os.remove(self.name_expect)
 
     def test_utils_unzip(self):
         download(self.url)
@@ -89,6 +87,12 @@ class TestDict(unittest.TestCase):
         self.assertTrue(match_url(url3, t1))
         self.assertFalse(match_url(url4, t1))
 
+        t2_s = '2020-12-06_14-45-46'
+        url5 = 'http://robot-base.${host_part_2}.com/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX' \
+               '-${PREFIX}0036_2020-12-06_14-45-46-941_M.zip '
+        t2 = time.mktime(time.strptime(t2_s, '%Y-%m-%d_%H-%M-%S'))
+        self.assertTrue(match_url(url5, t2))
+
     def test_schedule_match_time(self):
         t1 = time.mktime(time.strptime('2020-12-05_11-12-59', '%Y-%m-%d_%H-%M-%S'))
         t2 = time.mktime(time.strptime('2020-12-05_11-13-04', '%Y-%m-%d_%H-%M-%S'))
@@ -96,7 +100,6 @@ class TestDict(unittest.TestCase):
         self.assertTrue(match_time(t1, t2))
         self.assertTrue(match_time(t1, t1))
         self.assertFalse(match_time(t1, t3))
-
 
     def test_schedule_schedule(self):
         schedule('GXBOX-${PREFIX}0036', 'sdcard/ex')

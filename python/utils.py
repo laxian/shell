@@ -18,8 +18,8 @@ def download(url, name=None):
         code.write(r.content)
 
 
-def unzip(file, output):
-    os.system('unzip %s -d %s' % (file, output))
+def unzip(zip_file, output):
+    os.system('unzip %s -d %s' % (zip_file, output))
 
 
 def open_with_app(app, path):

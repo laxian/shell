@@ -7,12 +7,13 @@ import sys
 import json
 
 
-def query(filter, token, index=0):
+def query(key, token, index=0):
     headers = {
         'Connection': 'keep-alive',
         'Accept': 'application/json, text/plain, */*',
         'x-requested-with': 'XMLHttpRequest',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/86.0.4240.198 Safari/537.36',
         'authToken': token,
         'Origin': 'http://${host_part_1}.${host_part_2}.com',
         'Referer': 'http://${host_part_1}.${host_part_2}.com/',
@@ -24,7 +25,7 @@ def query(filter, token, index=0):
         ('pageSize', '10'),
         ('startCreateTime', ''),
         ('endCreateTime', ''),
-        ('robotId', filter),
+        ('robotId', key),
         ('logPath', ''),
         ('logType', ''),
         ('environment', ''),
@@ -38,8 +39,8 @@ def query(filter, token, index=0):
     if response.status_code == 200:
         try:
             j = json.loads(response.content)
-            l = j['data']['list']
-            urls = [data['logUrl'] for data in l if data.has_key('logUrl') ]
+            list_part = j['data']['list']
+            urls = [data['logUrl'] for data in list_part if 'logUrl' in data]
             return [urls[index]] if index > -1 else urls
         except IOError:
             print('json parse error')
@@ -51,6 +52,6 @@ def query(filter, token, index=0):
 if __name__ == '__main__':
     try:
         keyword = sys.argv[1]
-        print query(keyword, '${token}', 0)[0]
+        print(query(keyword, '${token}', 0)[0])
     except IndexError:
         print('input id pls')

@@ -5,7 +5,6 @@ import time
 import sys
 
 
-
 def upload(robot_id, path, token, env='release'):
     timestamp = time.time() * 1000
     headers = {
@@ -13,7 +12,8 @@ def upload(robot_id, path, token, env='release'):
         'Accept': 'application/json, text/plain, */*',
         'x-requested-with': 'XMLHttpRequest',
         'Content-Type': 'application/json;charset=UTF-8',
-        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) '
+                      'Chrome/86.0.4240.198 Safari/537.36',
         'authToken': token,
         'Origin': 'http://${host_part_1}.${host_part_2}.com',
         'Referer': 'http://${host_part_1}.${host_part_2}.com/',
