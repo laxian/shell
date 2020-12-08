@@ -7,8 +7,8 @@ import sys
 
 import requests
 
-from api_login import login
-from config import Config
+from .api_login import login
+from .config import Config
 
 
 def query(key, token):

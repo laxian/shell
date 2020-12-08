@@ -1,0 +1,8 @@
+[console_scripts]
+segway_auto = src.log.cli:segway_auto
+segway_config = src.log.cli:segway_config
+segway_login = src.log.cli:segway_login
+segway_query = src.log.cli:segway_query
+segway_showconfig = src.log.cli:segway_showconfig
+segway_upload = src.log.cli:segway_upload
+

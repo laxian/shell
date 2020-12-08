@@ -1,9 +1,12 @@
 import unittest
 
-from api_login import login
-from api_query import query
-from api_upload import upload
-from config import Config
+import sys
+sys.path.append('../')
+print(sys.path)
+from src.log.api_login import login
+from src.log.api_query import query_with_retry
+from src.log.api_upload import upload_with_retry
+from src.log.config import Config
 
 
 class TestDict(unittest.TestCase):
@@ -25,12 +28,13 @@ class TestDict(unittest.TestCase):
 
     def test_upload(self):
         token = login(self.config['username'], self.config['password'])
-        self.assertTrue(upload('GXBOX-${PREFIX}0036', '/sdcard/ex', token))
+        self.assertTrue(upload_with_retry('GXBOX-${PREFIX}0036', '/sdcard/ex', token))
 
     def test_query(self):
         # token = login(self.config['username'], self.config['password'])
-        query_result = query('GXBOX-${PREFIX}0036', '78cf8dfc533e48369cc3c0a1bcdfb6ee')
+        query_result = query_with_retry('GXBOX-${PREFIX}0036', '78cf8dfc533e48369cc3c0a1bcdfb6ee')
         self.assertTrue(isinstance(query_result, list))
+        query_result = query_with_retry('GXBOX-${PREFIX}0036', '78cf8dfc533e48369cc3c0a1bcdfb6ee', 0)
         self.assertEqual(len(query_result), 1)
         self.assertTrue(query_result[0].endswith('.zip'))
 

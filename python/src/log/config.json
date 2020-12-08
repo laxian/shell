@@ -1,7 +1,7 @@
 {
   "username": "${username}",
   "password": "${password}",
-  "token": "51c70af3ecfb44c6acf6a953fbf9bd28",
+  "token": "a1642db7d9884d699b339a23bb2e0b6b",
   "env": "release",
   "open_app": "code",
   "retry_limit": 20,

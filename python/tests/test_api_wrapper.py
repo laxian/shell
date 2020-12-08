@@ -1,9 +1,13 @@
+import sys
 import unittest
 
-from api_login import login_and_save_token
-from api_query import query_with_retry
-from api_upload import upload_with_retry
-from config import Config
+
+sys.path.append('../')
+print(sys.path)
+from src.log.api_upload import upload_with_retry
+from src.log.api_login import login_and_save_token
+from src.log.api_query import query_with_retry
+from src.log.config import Config
 
 
 class TestDict(unittest.TestCase):
@@ -16,8 +20,8 @@ class TestDict(unittest.TestCase):
 
     def test_login_and_save_token(self):
         result = login_and_save_token(self.config['username'], self.config['password'])
-        self.assertTrue(result)
         new_config = Config('config.json').config
+        self.assertTrue(result)
         self.assertTrue(new_config['token'] == result)
 
     def test_upload_with_retry(self):

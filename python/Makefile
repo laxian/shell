@@ -31,3 +31,9 @@ test:
 	python test.py
 	python test_api.py
 	python test_api_wrapper.py
+
+
+setup:
+	python setup.py build
+	python setup.py sdist
+	pip install dist/pull_log-0.0.1.tar.gz

@@ -8,8 +8,8 @@ import time
 
 import requests
 
-from api_login import login
-from config import Config
+from .api_login import login
+from .config import Config
 
 
 def upload(robot_id, path, token, env='release'):
@@ -39,7 +39,12 @@ def upload(robot_id, path, token, env='release'):
         return None
 
 
-def upload_with_retry(robot_id, path, token, env='release'):
+def upload_with_retry(robot_id, path, token=None, env=None):
+    config = Config('config.json').config
+    if not token:
+        token = login(config['username'], config['password'])
+    if not env:
+        env = config['env']
     content = upload(robot_id, path, token, env)
     j = json.loads(content)
     result_code = j.get('resultCode')

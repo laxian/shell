@@ -53,3 +53,4 @@ key | 作用 |
 
  ## issue
  - [x] 解压跨平台实现
+ - [x] setup.py

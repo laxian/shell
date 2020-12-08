@@ -7,7 +7,7 @@ import json
 
 import requests
 
-from config import Config
+from .config import Config
 
 
 def login(username, password):
