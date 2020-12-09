@@ -1,11 +1,13 @@
 # usr/bin/bash python
 import sys
 
+from src.log.adb_auth import adb_auth
 from src.log.api_login import login, login_and_save_token
 from src.log.api_query import query_with_retry, query_with_retry2
 from src.log.api_upload import upload_with_retry
 from src.log.config import Config
 from src.log.schedule import schedule
+from src.log.dumpnavLogs import local_log
 
 
 def segway_login(args=None):
@@ -84,3 +86,11 @@ def segway_auto(args=None):
         robot_id = sys.argv[1]
         path = sys.argv[2]
     schedule(robot_id, path)
+
+
+def segway_local(args=None):
+    local_log()
+
+
+def segway_adb(args=None):
+    adb_auth()

@@ -48,6 +48,8 @@ setup(
             "segway_upload=src.log.cli:segway_upload",
             "segway_query=src.log.cli:segway_query",
             "segway_auto=src.log.cli:segway_auto",
+            "segway_local=src.log.cli:segway_local",
+            "segway_adb=src.log.cli:segway_adb",
         ],
     },
 
