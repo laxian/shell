@@ -60,7 +60,7 @@ def schedule(robot_id, path):
     if upload_with_retry(robot_id, path, token):
         not_found = False
         while True:
-            time.sleep(config['retry_interval'])
+            time.sleep(int(config['retry_interval']))
             print('try for %d times')
             query_result = query_with_retry(robot_id, token, 0)
             print(query_result)

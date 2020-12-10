@@ -13,11 +13,17 @@ from src.log.dumpnavLogs import local_log
 def segway_login(args=None):
     if not args:
         args = sys.argv[1:]
-    username = args[0]
-    password = args[1]
+    if len(args) == 2:
+        username = args[0]
+        password = args[1]
+    else:
+        config = Config('config.json').config
+        username = config['username']
+        password = config['password']
     token = login_and_save_token(username, password)
     if token:
-        config = Config('config.json').config
+        if not config:
+            config = Config('config.json').config
         config['username'] = username
         config['password'] = password
         config['token'] = token
@@ -25,25 +31,19 @@ def segway_login(args=None):
         print(token)
 
 
-def segway_config(env='release', open_app='code', retry_limit=20, retry_interval=1, log_dir='Users/admin/Downloads'):
-    if len(sys.argv) == 6:
-        env = sys.argv[1]
-        open_app = sys.argv[2]
-        retry_limit = sys.argv[3]
-        retry_interval = sys.argv[4]
-        log_dir = sys.argv[5]
-    else:
-        print("""
-            segway_config env open_app retry_limit retry_interval log_dir
-            """)
-    config = Config('config.json').config
-    config['env'] = env
-    config['open_app'] = open_app
-    config['retry_limit'] = retry_limit
-    config['retry_interval'] = retry_interval
-    config['log_dir'] = log_dir
-    Config.dump(config)
-    print(config)
+def segway_config(args=None):
+    keys = ['env', 'open_app', 'retry_limit', 'retry_interval', 'log_dir', 'username', 'password', 'token']
+    hit = False
+    if len(sys.argv) > 1:
+        args= sys.argv[1:]
+        config = Config('config.json').config
+        for arg in args:
+            k, v = arg.split('=')
+            if k in keys:
+                hit = True
+                config[k] = v
+        if hit:
+            Config.dump(config)
 
 
 def segway_showconfig():

@@ -40,6 +40,13 @@ setup(
     package_data={
         "src.log": ["config.json"],
     },
+    install_requires=[
+        'certifi==2020.11.8',
+        'chardet==3.0.4',
+        'idna==2.10',
+        'requests==2.25.0',
+        'urllib3==1.26.2',
+    ],
     entry_points={
         "console_scripts": [
             "segway_login=src.log.cli:segway_login",

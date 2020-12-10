@@ -1,6 +1,6 @@
 {
   "username": "${username}",
-  "password": "${password}",
+  "password": "",
   "token": "a1642db7d9884d699b339a23bb2e0b6b",
   "env": "release",
   "open_app": "code",
