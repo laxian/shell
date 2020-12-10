@@ -2,13 +2,49 @@
 # -*- encoding: utf-8 -*-
 
 import subprocess
+import time
 from tkinter import *
 from tkinter import ttk
+import tkinter as tk
 
 # You can change logDir to the path that contains a list of files you want to dump
 logDir = "/sdcard/logs_folder/com.segway.robot.algo.${host_part_2}go_nav_app"
 
-display_column_count = 8  # start from 1,so 5 means 4 columns
+display_column_count = 5  # start from 1,so 5 means 4 columns
+
+
+class ScrollbarFrame(tk.Frame):
+    """
+    Extends class ttk.Frame to support a scrollable Frame 
+    This class is independent from the widgets to be scrolled and 
+    can be used to replace a standard ttk.Frame
+    """
+    def __init__(self, parent, **kwargs):
+        tk.Frame.__init__(self, parent, **kwargs)
+
+        # The Scrollbar, layout to the right
+        vsb = tk.Scrollbar(self, orient="vertical")
+        vsb.pack(side="right", fill="y")
+
+        # The Canvas which supports the Scrollbar Interface, layout to the left
+        self.canvas = tk.Canvas(self, borderwidth=0, background="#ffffff")
+        self.canvas.pack(side="left", fill="both", expand=True)
+
+        # Bind the Scrollbar to the self.canvas Scrollbar Interface
+        self.canvas.configure(yscrollcommand=vsb.set)
+        vsb.configure(command=self.canvas.yview)
+
+        # The Frame to be scrolled, layout into the canvas
+        # All widgets to be scrolled have to use this Frame as parent
+        self.scrolled_frame = tk.Frame(self.canvas, background=self.canvas.cget('bg'))
+        self.canvas.create_window((4, 4), window=self.scrolled_frame, anchor="nw")
+
+        # Configures the scrollregion of the Canvas dynamically
+        self.scrolled_frame.bind("<Configure>", self.on_configure)
+
+    def on_configure(self, event):
+        """Set the scroll region to encompass the scrolled frame"""
+        self.canvas.configure(scrollregion=self.canvas.bbox("all"))
 
 
 def getFileList():
@@ -22,7 +58,6 @@ def getFileList():
         print('raw_out lenght is 0')
         return []
     else:
-
         files_array = raw_out.split()
         return files_array
 
@@ -32,9 +67,11 @@ class DumpSomePathLog:
     def __init__(self, logDir, filesArray, root):
         self.logDir = logDir
         self.root = root
+        root.geometry("960x640")  
         self.root.title("get files in " + logDir)
-        mainframe = ttk.Frame(root, padding="3 3 12 12")
-        mainframe.grid(column=0, row=0, sticky=(N, W, E, S))
+        sbf = ScrollbarFrame(root)
+        sbf.grid(column=0, row=0, sticky=(N, W, E, S))
+        mainframe=sbf.scrolled_frame
         root.columnconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
         self.filesArray = filesArray
@@ -55,6 +92,23 @@ class DumpSomePathLog:
         print('unselect all items')
         for selectState in self.selectStates:
             selectState.set(0)
+
+
+    def isToday(self, tstr):
+        now = time.localtime()
+        lt = time.strptime(tstr, '%Y-%m-%d_%H-%M-%S_%f')
+        return now.tm_mday - 1 == lt.tm_mday and now.tm_mon == lt.tm_mon and now.tm_year == lt.tm_year
+
+    def selectToday(self):
+        print('select today')
+        file_index = 0
+        for selectState in self.selectStates:
+            fileName = self.filesArray[file_index]
+            if self.isToday(fileName):
+                selectState.set(1)
+            else:
+                selectState.set(0)
+            file_index = file_index + 1
 
     def dumpLogs(self):
         # print('dumpLogs')
@@ -95,9 +149,11 @@ class DumpSomePathLog:
             .grid(column=1, row=2, sticky=W)
         ttk.Button(mainframe, text="unselectAllItems", command=self.unselectAllItems) \
             .grid(column=2, row=2, sticky=W)
+        ttk.Button(mainframe, text="selectToday", command=self.selectToday) \
+            .grid(column=3, row=2, sticky=W)
         dump_button = ttk.Button(mainframe, text="dumpLogs", command=self.dumpLogs)
         self.root.bind('<Return>', lambda e: dump_button.invoke())
-        dump_button.grid(column=3, row=2, sticky=W)
+        dump_button.grid(column=4, row=2, sticky=W)
         self.root.bind('<Key-Escape>', lambda e: self.root.quit())
         self.root.bind('<KeyPress-d>', lambda e: self.delete_logs())
 
