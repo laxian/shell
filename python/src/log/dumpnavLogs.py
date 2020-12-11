@@ -24,6 +24,7 @@ class ScrollbarFrame(tk.Frame):
 
         # The Scrollbar, layout to the right
         vsb = tk.Scrollbar(self, orient="vertical")
+        vsb.config(troughcolor = 'red', bg = '#2b2b2b')
         vsb.pack(side="right", fill="y")
 
         # The Canvas which supports the Scrollbar Interface, layout to the left
@@ -97,7 +98,7 @@ class DumpSomePathLog:
     def isToday(self, tstr):
         now = time.localtime()
         lt = time.strptime(tstr, '%Y-%m-%d_%H-%M-%S_%f')
-        return now.tm_mday - 1 == lt.tm_mday and now.tm_mon == lt.tm_mon and now.tm_year == lt.tm_year
+        return now.tm_mday == lt.tm_mday and now.tm_mon == lt.tm_mon and now.tm_year == lt.tm_year
 
     def selectToday(self):
         print('select today')

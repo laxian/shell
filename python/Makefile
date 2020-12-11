@@ -4,6 +4,9 @@
 clean: 
 	-rm *.pyc
 	-rm *.zip
+	-rm -rf build
+	-rm -rf dist
+	-rm -rf *.egg-info
 
 sub:
 	../apr/secret/remove_sensitive.sh . sub
@@ -36,4 +39,4 @@ test:
 setup:
 	python setup.py build
 	python setup.py sdist
-	pip install dist/pull_log-0.0.1.tar.gz
+	pip install dist/*.tar.gz

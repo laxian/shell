@@ -58,7 +58,8 @@ def upload_with_retry(robot_id, path, token=None, env=None):
     elif result_code == 9000:
         return content
     else:
-        print(j['resultDesc'])
+        print('other')
+        # print(j['resultDesc'])
 
 
 if __name__ == '__main__':

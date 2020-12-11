@@ -1,9 +1,11 @@
+# -*- coding: UTF-8 -*-
+
 import os
 import requests
 
 
 def adb_auth():
-    WEB_URL = "http://10.10.80.25:8080/scooter_adb/adb_get?hashCode="
+    WEB_URL = "http://${adb_ip}:8080/scooter_adb/adb_get?hashCode="
     val = os.popen('adb reboot A55A')
     hashcode = val.readline()
     print(hashcode)
@@ -15,8 +17,13 @@ def adb_auth():
         print('已经解密')
     else:
         print('request hashCode %s' % hashcode)
-        output = requests.get("%s%s" % (WEB_URL, hashcode))
-        new_hash_key = '5AA5%s' % output
+        response = requests.get("%s%s" % (WEB_URL, hashcode))
+        if response.status_code == 200:
+            content = response.content
+        else:
+            print(response.status_code)
+        new_hash_key = '5AA5%s' % content
+        print(content)
         val = os.popen('adb reboot %s' % new_hash_key)
         print(val.readline())
 

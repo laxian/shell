@@ -1,3 +1,5 @@
+# coding=utf-8
+
 import zipfile
 
 import os
@@ -34,7 +36,7 @@ def unzip(file, unzip_dir="."):
         with zipfile.ZipFile(file) as zip_file:
             [zip_file.extract(name, unzip_dir) for name in zip_file.namelist()]
     except Exception as e:
-        raise RuntimeError(f"解压.zip文件出错, 原因:{e}")
+        raise RuntimeError("解压.zip文件出错, 原因:{e}")
 
 
 def open_with_app(app, path):

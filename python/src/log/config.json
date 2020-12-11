@@ -1,10 +1,10 @@
 {
   "username": "${username}",
-  "password": "",
+  "password": "${password}",
   "token": "a1642db7d9884d699b339a23bb2e0b6b",
   "env": "release",
   "open_app": "code",
   "retry_limit": 20,
   "retry_interval": 1,
-  "log_dir": "/Users/leochou/Downloads"
+  "log_dir": "/Users/admin/Downloads"
 }

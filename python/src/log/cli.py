@@ -1,4 +1,6 @@
 # usr/bin/bash python
+# -*- encoding: utf-8 -*-
+
 import sys
 
 from src.log.adb_auth import adb_auth
