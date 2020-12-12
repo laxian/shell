@@ -57,6 +57,12 @@ setup(
             "segway_auto=src.log.cli:segway_auto",
             "segway_local=src.log.cli:segway_local",
             "segway_adb=src.log.cli:segway_adb",
+            "segway_download=src.log.cli:segway_download",
+            "segway_fetch=src.log.cli:segway_fetch",
+            "segway_pull=src.log.cli:segway_pull",
+            "segway_pull_ex=src.log.cli:segway_pull_ex",
+            "segway_pull_sys=src.log.cli:segway_pull_sys",
+            "segway=src.log.cli:segway",
         ],
     },
 

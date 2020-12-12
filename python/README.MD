@@ -1,10 +1,11 @@
 # 拉取日志-Python版本
 
 > 使用Shell版本写了一套拉取日志的代码，实际使用中，可以在3s内将日志呈现在vscode窗口中，大大节省了查找线上问题
-的准备环节。但由于Shell糟糕的兼容性，所以我用Python实现一下。虽然自用还是倾向于Shell版
+的准备环节。但由于Shell糟糕的兼容性，所以我用Python实现一下。
 
 ## 配置环境
-推荐使用virtualenv。本项目同事支持Python2.x和Python3.x，推荐使用Python3.x
+推荐使用virtualenv。本项目使用Python3.9开发，通过Python2.7兼容测试
+Python3.0 ~ Python3.5 有部分语法不支持
 
 - 创建虚拟环境3.9到venv目录
 ```shell
@@ -51,6 +52,38 @@ key | 作用 |
  retry_interval | 重试时间间隔
  log_dir | 日志解压绝对路径
 
+ ## 使用
+
+ - 安装
+ ```
+ pip install pull-log-0.0.2
+ ```
+
+ - 显示命令列表
+ ```shell
+ $ segway
+Commands:
+    segway_adb adb 解密
+    segway_auto <robot_id> <log_path> 
+      (上传->查询->拉取->下载->打开)自动获取远程日志
+    segway_config 个性化配置，可配置项见配置部分
+    segway_showconfig 显示配置
+    segway_login 登录刷新token
+    segway_upload <robot_id> 上传指定robot_id的日志
+    segway_query <robot_id> [index] 查询日志url
+    segway_download <url> 下载日志
+    segway_fetch <url>  下载并打开日志
+    segway_nav GUI窗口，拉取nav日志，优化了窗口交互
+    segway_pull <path> 本地拉取指定path日志并打开
+    segway_pull_ex 本地拉取/sdcard/ex 日志并打开
+    segway_pull_sys 本地拉取/data/logs 日志并打开
+ ```
+
  ## issue
  - [x] 解压跨平台实现
  - [x] setup.py
+ - [x] 整合dumpnavLog.py
+ - [x] dumpnavLog.py界面优化，添加滚动条
+ - [x] python实现adb解密
+ - [x] 整合本地拉取log
+ - [ ] adb解密跳过未加密设备
