@@ -7,7 +7,7 @@ import sys
 
 import requests
 
-from .api_login import login
+from .api_login import login_and_save_token
 from .config import Config
 
 
@@ -58,17 +58,22 @@ def query_with_retry(key, token, index=-1):
     if result:
         j = json.loads(result)
         result_code = j.get('resultCode')
-        print(j)
         if j.get('resultCode') == 9000:
-            list_part = j['data']['list']
-            urls = [data['logUrl'] for data in list_part if 'logUrl' in data]
-            url_of_index = [urls[index]] if index > -1 else urls
-            return url_of_index
+            if 'list' in j['data']:
+                list_part = j['data']['list']
+                urls = [data['logUrl'] for data in list_part if 'logUrl' in data]
+                if urls:
+                    url = [urls[index]] if index > -1 else urls
+                else:
+                    return None
+                return url
+            else:
+                return None
         elif result_code == 9006:
             print(j.get('resultDesc'))
             print(u'尝试自动登录...')
             config = Config('config.json').config
-            token = login(config['username'], config['password'])
+            token = login_and_save_token(config['username'], config['password'])
             if token:
                 return query_with_retry(key, token, index)
         else:
@@ -82,30 +87,11 @@ def query_with_retry2(key, index=-1):
     token = config['token']
     if not token:
         if config['username'] and config['password']:
-            token = login(config['username'], config['password'])
+            token = login_and_save_token(config['username'], config['password'])
         else:
             print('未设置账户密码')
             return
-    result = _query(key, token)
-    if result:
-        j = json.loads(result)
-        result_code = j.get('resultCode')
-        if j.get('resultCode') == 9000:
-            list_part = j['data']['list']
-            urls = [data['logUrl'] for data in list_part if 'logUrl' in data]
-            url_of_index = [urls[index]] if index > -1 else urls
-            return url_of_index
-        elif result_code == 9006:
-            print(j.get('resultDesc'))
-            print(u'尝试自动登录...')
-            config = Config('config.json').config
-            token = login(config['username'], config['password'])
-            if token:
-                return query_with_retry(key, token, index)
-        else:
-            print(j.get('resultDesc'))
-    else:
-        pass
+    return query_with_retry(key, token, index)
 
 
 if __name__ == '__main__':

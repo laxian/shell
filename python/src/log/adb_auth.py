@@ -22,6 +22,7 @@ def adb_auth():
             content = response.content
         else:
             print(response.status_code)
+            return
         new_hash_key = '5AA5%s' % content
         print(content)
         val = os.popen('adb reboot %s' % new_hash_key)

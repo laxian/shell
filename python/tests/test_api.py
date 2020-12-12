@@ -1,8 +1,9 @@
 import unittest
 
 import sys
-sys.path.append('../')
-print(sys.path)
+PACKAGE_PARENT = '..'
+SCRIPT_DIR = os.path.dirname(os.path.realpath(os.path.join(os.getcwd(), os.path.expanduser(__file__))))
+sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 from src.log.api_login import login
 from src.log.api_query import query_with_retry
 from src.log.api_upload import upload_with_retry

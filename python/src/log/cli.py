@@ -3,6 +3,7 @@
 
 import sys
 
+from src.log.schedule import fetch_and_open
 from src.log.adb_auth import adb_auth
 from src.log.api_login import login, login_and_save_token
 from src.log.api_query import query_with_retry, query_with_retry2
@@ -10,6 +11,7 @@ from src.log.api_upload import upload_with_retry
 from src.log.config import Config
 from src.log.schedule import schedule
 from src.log.dumpnavLogs import local_log
+from src.log.utils import download
 
 
 def segway_login(args=None):
@@ -73,8 +75,11 @@ def segway_query():
         print('Usage: segway_query <robot_id> [index]')
         return
     result = query_with_retry2(robot_id, index)
-    for u in result:
-        print(u)
+    if result:
+        for u in result:
+            print(u)
+    else:
+        print('没有查询到url')
 
 
 def segway_auto(args=None):
@@ -96,3 +101,20 @@ def segway_local(args=None):
 
 def segway_adb(args=None):
     adb_auth()
+
+
+def segway_download(args=None):
+    if args is None:
+        print("Usage: %s %s" % ('segway_download', '<url>'))
+        return
+    url = args
+    download(url)
+
+def segway_fetch(args=None):
+    if args is None:
+        print("Usage: %s %s" % ('segway_fetch', '<url>'))
+        return
+    url = args
+    config = Config('config.json').config
+    fetch_and_open(url, config['open_app'], config['log_dir'])
+
