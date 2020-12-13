@@ -195,7 +195,7 @@ class DumpSomePathLog:
             file_index = file_index + 1
 
 
-def local_log():
+def nav_log_gui():
     files_array = getFileList()
     if len(files_array) == 0:
         print('No file found in ', logDir)
@@ -206,4 +206,4 @@ def local_log():
 
 
 if __name__ == '__main__':
-    local_log()
+    nav_log_gui()

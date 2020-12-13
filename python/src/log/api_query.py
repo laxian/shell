@@ -53,7 +53,7 @@ def _query(key, token):
     return None
 
 
-def query_with_retry(key, token, index=-1):
+def query_with_token_retry(key, token, index=-1):
     result = _query(key, token)
     if result:
         j = json.loads(result)
@@ -75,14 +75,14 @@ def query_with_retry(key, token, index=-1):
             config = Config('config.json').config
             token = login_and_save_token(config['username'], config['password'])
             if token:
-                return query_with_retry(key, token, index)
+                return query_with_token_retry(key, token, index)
         else:
             print(j.get('resultDesc'))
     else:
         pass
 
 
-def query_with_retry2(key, index=-1):
+def query_with_retry(key, index=-1):
     config = Config('config.json').config
     token = config['token']
     if not token:
@@ -91,11 +91,11 @@ def query_with_retry2(key, index=-1):
         else:
             print('未设置账户密码')
             return
-    return query_with_retry(key, token, index)
+    return query_with_token_retry(key, token, index)
 
 
 if __name__ == '__main__':
     key = sys.argv[1]
     token = sys.argv[2] if len(sys.argv) > 2 else Config('config.json').config['token']
     index = 0
-    query_with_retry(key, token, index)
+    query_with_token_retry(key, token, index)

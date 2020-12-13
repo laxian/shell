@@ -5,7 +5,7 @@ import sys
 import time
 
 from .api_login import login
-from .api_query import query_with_retry
+from .api_query import query_with_token_retry
 from .api_upload import upload_with_retry
 from .config import Config
 from .utils import *
@@ -62,7 +62,7 @@ def schedule(robot_id, path):
         while True:
             time.sleep(int(config['retry_interval']))
             print('try for %d times')
-            query_result = query_with_retry(robot_id, token, 0)
+            query_result = query_with_token_retry(robot_id, token, 0)
             if not query_result:
                 print('没有查询到url')
                 return

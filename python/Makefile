@@ -5,7 +5,6 @@ clean:
 	-rm *.pyc
 	-rm *.zip
 	-rm -rf build
-	-rm -rf dist
 	-rm -rf *.egg-info
 
 sub:

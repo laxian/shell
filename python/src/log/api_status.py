@@ -1,8 +1,12 @@
 import json
-import requests
+import os
 import sys
-from src.log.config import Config
+
+
+import requests
 from src.log.api_login import login_and_save_token
+from src.log.config import Config
+from src.log.token_exception import TokenException
 
 
 def robot_status_api(robot_id, token=None):
@@ -48,7 +52,7 @@ def get_status_data(robot_id, token=None):
                 if 'list' in j['data']:
                     lists = j['data']['list']
                     if lists:
-                        return lists[0]
+                        return lists
                     else:
                         print('list empty')
                 else:
@@ -58,7 +62,7 @@ def get_status_data(robot_id, token=None):
                 print('data not found')
         elif code == 9006:
             print(j['resultDesc'])
-            raise RuntimeError(j['resultDesc'])
+            raise TokenException(j['resultDesc'])
         else:
             print(j.get('resultDesc'))
     else:
@@ -68,7 +72,7 @@ def get_status_data(robot_id, token=None):
 def get_status_data_with_retry(robot_id, token=None):
     try:
         return get_status_data(robot_id, token)
-    except RuntimeError as er:
+    except TokenException as er:
         config = Config('config.json').config
         token = login_and_save_token(config['username'], config['password'])
         if token:
@@ -77,17 +81,17 @@ def get_status_data_with_retry(robot_id, token=None):
 
 def pretty_print(status_model):
     try:
-        activeTime = status_model['activeTime']
-        building = status_model['buildingInfo']
-        env = status_model['environment']
-        errorCodeConfigId = status_model['errorCodeConfigId']
-        navAppVersion = status_model['navAppVersion']
-        offlineTime = status_model['offlineTime']
-        onlineStatus = status_model['onlineStatus']
-        robotId = status_model['robotId']
-        robotSystemVersion = status_model['robotSystemVersion']
-        settings = status_model['settings']
-        ttsConfigId = status_model['ttsConfigId']
+        activeTime = status_model['activeTime'] if 'activeTime' in status_model else ''
+        building = status_model['buildingInfo'] if 'buildingInfo' in status_model else ''
+        env = status_model['environment'] if 'environment' in status_model else ''
+        errorCodeConfigId = status_model['errorCodeConfigId'] if 'errorCodeConfigId' in status_model else ''
+        navAppVersion = status_model['navAppVersion'] if 'navAppVersion' in status_model else ''
+        offlineTime = status_model['offlineTime'] if 'offlineTime' in status_model else ''
+        onlineStatus = status_model['onlineStatus'] if 'onlineStatus' in status_model else ''
+        robotId = status_model['robotId'] if 'robotId' in status_model else ''
+        robotSystemVersion = status_model['robotSystemVersion'] if 'robotSystemVersion' in status_model else ''
+        settings = status_model['settings'] if 'settings' in status_model else ''
+        ttsConfigId = status_model['ttsConfigId'] if 'ttsConfigId' in status_model else ''
         print('''
         ID：\t\t%s
         状态：\t\t%s
@@ -111,7 +115,8 @@ def pretty_print(status_model):
 
 def get_status(robot_id):
     result = get_status_data_with_retry(robot_id)
-    pretty_print(result)
+    for m in result:
+        pretty_print(m)
 
 
 if __name__ == '__main__':

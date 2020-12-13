@@ -8,7 +8,7 @@ sys.path.append(os.path.normpath(os.path.join(SCRIPT_DIR, PACKAGE_PARENT)))
 
 import unittest
 from src.log.cli import segway_fetch
-from src.log.api_query import query_with_retry2
+from src.log.api_query import query_with_retry
 from src.log.utils import get_name
 from src.log.cli import segway_download
 from src.log.config import Config
@@ -26,7 +26,7 @@ class TestDict(unittest.TestCase):
 
 
     def test_download(self):
-        url = query_with_retry2('GXBOX-${PREFIX}0036', 0)[0]
+        url = query_with_retry('GXBOX-${PREFIX}0036', 0)[0]
         print(url)
         name = get_name(url)
         segway_download(url)
@@ -35,7 +35,7 @@ class TestDict(unittest.TestCase):
         os.remove(name)
     
     def test_segway_fetch(self):
-        url = query_with_retry2('GXBOX-${PREFIX}0036', 0)[0]
+        url = query_with_retry('GXBOX-${PREFIX}0036', 0)[0]
         segway_fetch(url)
 
 

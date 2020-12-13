@@ -63,19 +63,19 @@ key | 作用 |
  $ segway
 Commands:
     segway_adb adb 解密
-    segway_auto <robot_id> <log_path> 
-      (上传->查询->拉取->下载->打开)自动获取远程日志
-    segway_config 个性化配置，可配置项见配置部分
-    segway_showconfig 显示配置
-    segway_login 登录刷新token
-    segway_upload <robot_id> 上传指定robot_id的日志
-    segway_query <robot_id> [index] 查询日志url
+    segway_auto <robot_id> <log_path> (上传->查询->拉取->下载->打开)自动获取远程日志
+    segway_config 个性化配置：可配置项见配置部分
     segway_download <url> 下载日志
     segway_fetch <url>  下载并打开日志
-    segway_nav GUI窗口，拉取nav日志，优化了窗口交互
+    segway_nav GUI窗口，拉取nav日志
+    segway_login 登录刷新token
     segway_pull <path> 本地拉取指定path日志并打开
     segway_pull_ex 本地拉取/sdcard/ex 日志并打开
     segway_pull_sys 本地拉取/data/logs 日志并打开
+    segway_query <robot_id> [index] 查询日志url
+    segway_showconfig 显示配置
+    segway_upload <robot_id> 上传指定robot_id的日志
+    segway_status <robot_id> 格式化打印机器人状态
  ```
 
  ## 问题记录
@@ -91,6 +91,7 @@ Commands:
  - [x] 整合本地拉取log
  - [x] 获取机器人状态
  - [ ] adb解密跳过未加密设备
- - [ ] sample
+ - [ ] More samples
  - [ ] 本地日志分享
  - [ ] 代码优化
+ - [ ] 高频操作（可用、初始化、到达）支持

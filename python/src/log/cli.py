@@ -3,19 +3,16 @@
 
 import sys
 
-from src.log.schedule import fetch_and_open
 from src.log.adb_auth import adb_auth
-from src.log.api_login import login, login_and_save_token
-from src.log.api_query import query_with_retry, query_with_retry2
+from src.log.adb_ex import dump_ex_log, dump_sys_log, pull_log_from_dir
+from src.log.api_login import login_and_save_token
+from src.log.api_query import query_with_retry
+from src.log.api_status import get_status
 from src.log.api_upload import upload_with_retry
 from src.log.config import Config
-from src.log.schedule import schedule
-from src.log.dumpnavLogs import local_log
+from src.log.dumpnavLogs import nav_log_gui
+from src.log.schedule import fetch_and_open, schedule
 from src.log.utils import download
-from src.log.adb_ex import dump_ex_log
-from src.log.adb_ex import pull_log_from_dir
-from src.log.adb_ex import dump_sys_log
-from src.log.api_status import get_status
 
 
 def segway_login(args=None):
@@ -83,7 +80,7 @@ def segway_query():
     else:
         print('Usage: segway_query <robot_id> [index]')
         return
-    result = query_with_retry2(robot_id, index)
+    result = query_with_retry(robot_id, index)
     if result:
         for u in result:
             print(u)
@@ -104,8 +101,8 @@ def segway_auto(args=None):
     schedule(robot_id, path)
 
 
-def segway_local(args=None):
-    local_log()
+def segway_nav(args=None):
+    nav_log_gui()
 
 
 def segway_adb(args=None):
@@ -148,8 +145,8 @@ def segway_status(args=None):
 def usage(args=None):
     print("""Commands:
     segway_adb adb 解密
-    segway_auto <robot_id> <log_path> (上传->拉取->下载->打开)自动获取远程日志
-    segway_config 个性化配置：
+    segway_auto <robot_id> <log_path> (上传->查询->拉取->下载->打开)自动获取远程日志
+    segway_config 个性化配置：可配置项见配置部分
     segway_download <url> 下载日志
     segway_fetch <url>  下载并打开日志
     segway_nav GUI窗口，拉取nav日志 
