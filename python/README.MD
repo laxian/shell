@@ -1,7 +1,6 @@
 # 拉取日志-Python版本
 
-> 使用Shell版本写了一套拉取日志的代码，实际使用中，可以在3s内将日志呈现在vscode窗口中，大大节省了查找线上问题
-的准备环节。但由于Shell糟糕的兼容性，所以我用Python实现一下。
+> 让拉取远程和本地日志，想浏览网页一样容易
 
 ## 配置环境
 推荐使用virtualenv。本项目使用Python3.9开发，通过Python2.7兼容测试
@@ -87,8 +86,11 @@ Commands:
  - [x] 解压跨平台实现
  - [x] setup.py
  - [x] 整合dumpnavLog.py
- - [x] dumpnavLog.py界面优化，添加滚动条
+ - [x] dumpnavLog.py 界面优化，添加滚动条
  - [x] python实现adb解密
  - [x] 整合本地拉取log
+ - [x] 获取机器人状态
  - [ ] adb解密跳过未加密设备
  - [ ] sample
+ - [ ] 本地日志分享
+ - [ ] 代码优化

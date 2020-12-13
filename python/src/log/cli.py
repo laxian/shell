@@ -15,6 +15,7 @@ from src.log.utils import download
 from src.log.adb_ex import dump_ex_log
 from src.log.adb_ex import pull_log_from_dir
 from src.log.adb_ex import dump_sys_log
+from src.log.api_status import get_status
 
 
 def segway_login(args=None):
@@ -138,6 +139,12 @@ def segway_pull(args=None):
     else:
         pull_log_from_dir(sys.argv[1])
 
+def segway_status(args=None):
+    if len(sys.argv) == 1:
+        print('segway_status <robot_id>')
+    else:
+        get_status(sys.argv[1])
+
 def usage(args=None):
     print("""Commands:
     segway_adb adb 解密
@@ -153,6 +160,7 @@ def usage(args=None):
     segway_query <robot_id> [index] 查询日志url
     segway_showconfig 显示配置
     segway_upload <robot_id> 上传指定robot_id的日志
+    segway_status <robot_id> 格式化打印机器人状态
     """)
 
 def segway(args=None):
