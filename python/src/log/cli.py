@@ -12,6 +12,7 @@ from src.log.api_upload import upload_with_retry
 from src.log.config import Config
 from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
+from src.log.api_login_old import api_restore, api_available, api_arrive
 from src.log.utils import download
 
 
@@ -142,6 +143,24 @@ def segway_status(args=None):
     else:
         get_status(sys.argv[1])
 
+def segway_restore(args=None):
+    if len(sys.argv) == 1:
+        print('segway_restore <robot_id>')
+    else:
+        api_restore(sys.argv[1])
+
+def segway_available(args=None):
+    if len(sys.argv) == 1:
+        print('segway_available <robot_id>')
+    else:
+        api_available(sys.argv[1])
+
+def segway_arrive(args=None):
+    if len(sys.argv) == 1:
+        print('segway_arrive <robot_id>')
+    else:
+        api_arrive(sys.argv[1])
+
 def usage(args=None):
     print("""Commands:
     segway_adb adb 解密
@@ -158,6 +177,9 @@ def usage(args=None):
     segway_showconfig 显示配置
     segway_upload <robot_id> 上传指定robot_id的日志
     segway_status <robot_id> 格式化打印机器人状态
+    segway_restore <robot_id> 重置
+    segway_available <robot_id> 可用
+    segway_arrive <robot_id> 到达
     """)
 
 def segway(args=None):
