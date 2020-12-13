@@ -79,6 +79,10 @@ Commands:
     segway_pull_sys 本地拉取/data/logs 日志并打开
  ```
 
+ ## 问题记录
+
+ [PROBLEMS.MD](https://github.com/laxian/shell/blob/dev/python/PROBLEMS.MD)
+
  ## issue
  - [x] 解压跨平台实现
  - [x] setup.py
@@ -87,3 +91,4 @@ Commands:
  - [x] python实现adb解密
  - [x] 整合本地拉取log
  - [ ] adb解密跳过未加密设备
+ - [ ] sample

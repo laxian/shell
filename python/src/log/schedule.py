@@ -63,6 +63,9 @@ def schedule(robot_id, path):
             time.sleep(int(config['retry_interval']))
             print('try for %d times')
             query_result = query_with_retry(robot_id, token, 0)
+            if not query_result:
+                print('没有查询到url')
+                return
             print(query_result)
             url = query_result[0]
             retry_count += 1
