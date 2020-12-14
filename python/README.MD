@@ -76,8 +76,8 @@ Commands:
     segway_pull <path> 本地拉取指定path日志并打开
     segway_pull_ex 本地拉取/sdcard/ex 日志并打开
     segway_pull_sys 本地拉取/data/logs 日志并打开
-    segway_query <robot_id> [index] 查询日志url
-    segway_showconfig 显示配置
+    segway_query <robot_id> [index] 查询日志url，index从零开始，可选，默认全选
+    segway_showconfig 显示本地配置信息
     segway_upload <robot_id> 上传指定robot_id的日志
     segway_status <robot_id> 格式化打印机器人状态
     segway_restore <robot_id> 重置(dev)

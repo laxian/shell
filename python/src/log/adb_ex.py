@@ -29,7 +29,13 @@ def get_device_id():
     """
     get android device id
     """
-    result = os.popen('adb devices | head -n 2 | tail -n 1').readline().strip()
+    # result = os.popen('adb devices | head -n 2 | tail -n 1').readline().strip()
+    std = os.popen('adb devices')
+    # skip the first line
+    std.readline()
+    # read the first device id
+    device_line = std.readline()
+    result = device_line.split('\t')[0]
     if result:
         print(result.split('\t')[0])
         return result.split('\t')[0]
