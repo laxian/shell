@@ -14,7 +14,7 @@ def get_name(url):
 
 def download(url, name=None):
     print("downloading...")
-    r = requests.get(url)
+    r = requests.get(url, allow_redirects=True)
     if not name:
         name = get_name(url)
     with open(name, "wb") as code:
@@ -36,6 +36,7 @@ def unzip(file, unzip_dir="."):
         with zipfile.ZipFile(file) as zip_file:
             [zip_file.extract(name, unzip_dir) for name in zip_file.namelist()]
     except Exception as e:
+        print('from %s to %s ' % (file, unzip_dir))
         raise RuntimeError("解压.zip文件出错, 原因:%r" % e)
 
 

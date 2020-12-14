@@ -6,5 +6,5 @@
     "open_app": "code",
     "retry_limit": 20,
     "retry_interval": 1,
-    "log_dir": "/Users/leochou/Downloads"
+    "log_dir": "/Users/admin/Downloads"
 }

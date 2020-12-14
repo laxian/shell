@@ -111,17 +111,17 @@ def segway_adb(args=None):
 
 
 def segway_download(args=None):
-    if args is None:
+    if len(sys.argv) == 1:
         print("Usage: %s %s" % ('segway_download', '<url>'))
         return
-    url = args
+    url = sys.argv[1]
     download(url)
 
 def segway_fetch(args=None):
-    if args is None:
+    if len(sys.argv) == 1:
         print("Usage: %s %s" % ('segway_fetch', '<url>'))
         return
-    url = args
+    url = sys.argv[1]
     config = Config('config.json').config
     fetch_and_open(url, config['open_app'], config['log_dir'])
 
