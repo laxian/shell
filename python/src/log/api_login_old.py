@@ -175,7 +175,7 @@ def api_arrive(robot_id):
 
 def clear_token():
     config = Config('config.json').config
-    config['token'] = None
+    config['token2'] = None
     Config.dump(config)
 
 
