@@ -59,7 +59,7 @@ def upload_with_retry(robot_id, path, token=None, env=None):
         return content
     else:
         print('other')
-        # print(j['resultDesc'])
+        print(j['resultDesc'])
 
 
 if __name__ == '__main__':
