@@ -55,7 +55,11 @@ key | 作用 |
 
  - 安装
  ```
- pip install pull-log-0.0.2
+ pip install pull-log-0.0.3.tar.gz
+ ```
+ 或者通过url安装
+ ```
+ pip install http://${adb_ip}:8080/files/pull_log-0.0.3.tar.gz
  ```
 
  - 显示命令列表
@@ -76,6 +80,9 @@ Commands:
     segway_showconfig 显示配置
     segway_upload <robot_id> 上传指定robot_id的日志
     segway_status <robot_id> 格式化打印机器人状态
+    segway_restore <robot_id> 重置(dev)
+    segway_available <robot_id> 可用(dev)
+    segway_arrive <robot_id> 到达(dev)
  ```
 
  ## 问题记录
@@ -97,3 +104,4 @@ Commands:
  - [ ] More samples
  - [ ] 本地日志快速分享
  - [ ] 代码优化
+ - [ ] 输出信息开关与优化

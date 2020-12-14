@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 import sys
+import json
 
 from src.log.adb_auth import adb_auth
 from src.log.adb_ex import dump_ex_log, dump_sys_log, pull_log_from_dir
@@ -57,7 +58,7 @@ def segway_config(args=None):
 
 def segway_showconfig():
     config = Config('config.json').config
-    print(config)
+    print(json.dumps(config, sort_keys=True, indent=4, ensure_ascii=False))
 
 
 def segway_upload(args=None):

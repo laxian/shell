@@ -5,6 +5,7 @@ import zipfile
 import os
 import re
 import requests
+import platform
 
 
 def get_name(url):
@@ -41,7 +42,30 @@ def unzip(file, unzip_dir="."):
 
 
 def open_with_app(app, path):
-    return os.system("%s %s" % (app, path))
+    result = os.system("%s %s" % (app, path))
+    if result != 0:
+        name = platform.system()
+        print(name)
+        app=None
+        if name == 'Windows':
+            print('Windows系统')
+            app='start'
+        elif name == 'Linux':
+            print('Linux系统')
+            app='nautilus'
+        elif name == 'Darwin':
+            print('Mac OS')
+            app='open'
+        if app:
+            if os.system('%s %s' % (app, path)) != 0:
+                cannot_open(path)
+        else:
+            print('未知系统')
+            cannot_open(path)
+        
+        
+def cannot_open(path):
+    print('已解压到：%s\n未配置正确的打开方式，请自行打开：' % path)
 
 
 def get_time_part(url, re_str):
