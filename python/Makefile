@@ -39,7 +39,6 @@ setup:
 	python setup.py build
 	python setup.py sdist
 	pip install dist/`ls dist | tail -1`
-	# scp dist/`ls dist | tail -1` wangjign@${adb_ip}:~/code/apache-tomcat-9.0.33/webapps/files
 
 server: setup
-	scp dist/pull_log-0.0.3.tar.gz wangjing@${adb_ip}:~/code/apache-tomcat-9.0.33/webapps/files/
+	scp dist/$$(ls dist | head -2 | tail -1) wangjing@${adb_ip}:~/code/apache-tomcat-9.0.33/webapps/files/

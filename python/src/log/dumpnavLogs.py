@@ -3,9 +3,18 @@
 
 import subprocess
 import time
-from tkinter import *
-from tkinter import ttk
-import tkinter as tk
+
+try:
+    PythonVersion = 3
+    from tkinter import *
+    from tkinter import ttk
+    import tkinter as tk
+except ImportError:  #Python 2.x
+    PythonVersion = 2
+    from Tkinter import *
+    import ttk
+    import Tkinter as tk
+
 
 # You can change logDir to the path that contains a list of files you want to dump
 logDir = "/sdcard/logs_folder/com.segway.robot.algo.${host_part_2}go_nav_app"
