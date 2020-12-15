@@ -7,7 +7,7 @@ import json
 from src.log.adb_auth import adb_auth
 from src.log.adb_ex import dump_ex_log, dump_sys_log, pull_log_from_dir
 from src.log.api_login import login_and_save_token
-from src.log.api_query import query_with_retry
+from src.log.api_query import query_with_retry, query_model_with_retry
 from src.log.api_status import get_status
 from src.log.api_upload import upload_with_retry
 from src.log.config import Config
@@ -88,6 +88,66 @@ def segway_query():
             print(u)
     else:
         print('没有查询到url')
+
+
+def segway_query2():
+    all_keys = [
+    "ackTime",
+    "commandId",
+    "commandMessage",
+    "commandStatus",
+    "createBy",
+    "createTime",
+    "endTime",
+    "environment",
+    "id",
+    "logName",
+    "logPath",
+    "logType",
+    "logUrl",
+    "responseTime",
+    "robotId",
+    "startTime"
+    ]
+    if len(sys.argv) > 1:
+        robot_id = sys.argv[1]
+    else:
+        print('''Usage: segway_query2 <robot_id> [option]
+        option: 
+        %s
+        Samples:
+        查询logPath=/sdcard/ex的日志，打印logPath和logUrl
+        segway_query2 <id> logPath=/sdcard/ex logUrl
+        ''' % all_keys)
+        return
+    result = query_model_with_retry(robot_id)
+    if len(sys.argv) == 2:
+        if result:
+            for u in result:
+                print(u)
+        else:
+            print('没有查询到url')
+    else:
+        args = []
+        for arg in sys.argv[2:]:
+            if '=' in arg:
+                k,v = arg.split('=')
+                result = [item for item in result if k in item.keys() and v == item.get(k)]
+                args.append(k)
+            else:
+                args.append(arg)
+        all_in = True
+        for u in result:
+            print('---------')
+            for k in args:
+                if k in all_keys and k not in u:
+                    all_in = False
+                    break
+            # 不含key的，不显示
+            if not all_in:
+                break
+            for k in args:
+                print(json.dumps(u[k], sort_keys=True, indent=4, ensure_ascii=False))
 
 
 def segway_auto(args=None):
@@ -175,6 +235,7 @@ def usage(args=None):
     segway_pull_ex 本地拉取/sdcard/ex 日志并打开
     segway_pull_sys 本地拉取/data/logs 日志并打开
     segway_query <robot_id> [index] 查询日志url
+    segway_query2 <robot_id> [option] 高级查询，输入segway_query2 获取帮助
     segway_showconfig 显示配置
     segway_upload <robot_id> 上传指定robot_id的日志
     segway_status <robot_id> 格式化打印机器人状态

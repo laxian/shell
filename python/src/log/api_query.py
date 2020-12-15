@@ -53,6 +53,29 @@ def _query(key, token):
     return None
 
 
+def query_model_with_token_retry(key, token, index=-1):
+    result = _query(key, token)
+    if result:
+        j = json.loads(result)
+        result_code = j.get('resultCode')
+        if j.get('resultCode') == 9000:
+            if 'list' in j['data']:
+                return j['data']['list']
+            else:
+                return None
+        elif result_code == 9006:
+            print(j.get('resultDesc'))
+            print(u'尝试自动登录...')
+            config = Config('config.json').config
+            token = login_and_save_token(config['username'], config['password'])
+            if token:
+                return query_model_with_token_retry(key, token, index)
+        else:
+            print(j.get('resultDesc'))
+    else:
+        pass
+
+
 def query_with_token_retry(key, token, index=-1):
     result = _query(key, token)
     if result:
@@ -92,6 +115,18 @@ def query_with_retry(key, index=-1):
             print('未设置账户密码')
             return
     return query_with_token_retry(key, token, index)
+
+
+def query_model_with_retry(key, index=-1):
+    config = Config('config.json').config
+    token = config['token']
+    if not token:
+        if config['username'] and config['password']:
+            token = login_and_save_token(config['username'], config['password'])
+        else:
+            print('未设置账户密码')
+            return
+    return query_model_with_token_retry(key, token, index)
 
 
 if __name__ == '__main__':
