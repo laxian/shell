@@ -1,27 +1,28 @@
 import requests
 
-from src.log.config import Config
 import json
+from src.log.config import Config
+from src.log.token_exception import TokenException
 
 
-def raw_login(username, password):
+def raw_login(username, password, env):
     headers = {
     'Connection': 'keep-alive',
     'Accept': 'application/json, text/plain, */*',
     'x-requested-with': 'XMLHttpRequest',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
     'Content-Type': 'application/json;charset=UTF-8',
-    'Origin': 'http://dev-delivery.${host_part_2}.com',
+    'Origin': 'http://%s-delivery.${host_part_2}.com' % env,
     'Sec-Fetch-Site': 'cross-site',
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Dest': 'empty',
-    'Referer': 'http://dev-delivery.${host_part_2}.com/',
+    'Referer': 'http://%s-delivery.${host_part_2}.com/' % env,
     'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
     data = '{"username":"%s","password":"%s"}' % (username, password)
 
-    response = requests.post('https://api-gate-dev-delivery.${host_part_2}.com/web/user/login', headers=headers, data=data)
+    response = requests.post('https://api-gate-%s-delivery.${host_part_2}.com/web/user/login' % env, headers=headers, data=data)
 
     print(response)
     if response.status_code == 200:
@@ -29,7 +30,7 @@ def raw_login(username, password):
     else:
         print(response.status_code)
 
-def raw_restore(token, robot_id):
+def raw_restore(token, robot_id, env):
     headers = {
         'Connection': 'keep-alive',
         'Accept': 'application/json, text/plain, */*',
@@ -37,17 +38,17 @@ def raw_restore(token, robot_id):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
         'token': token,
         'Content-Type': 'application/json;charset=UTF-8',
-        'Origin': 'http://dev-delivery.${host_part_2}.com',
+        'Origin': 'http://%s-delivery.${host_part_2}.com' % env,
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Referer': 'http://dev-delivery.${host_part_2}.com/',
+        'Referer': 'http://%s-delivery.${host_part_2}.com/' % env,
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
     data = '{"robotId":"%s"}' % robot_id
 
-    response = requests.post('https://api-gate-dev-delivery.${host_part_2}.com/web/transport/robot/simulation/arrive', headers=headers, data=data)
+    response = requests.post('https://api-gate-%s-delivery.${host_part_2}.com/web/transport/robot/simulation/arrive' % env, headers=headers, data=data)
 
     print(response)
     if response.status_code == 200:
@@ -55,7 +56,7 @@ def raw_restore(token, robot_id):
     else:
         print(response.status_code)
 
-def raw_arrive(token, robot_id):
+def raw_arrive(token, robot_id, env):
     headers = {
         'Connection': 'keep-alive',
         'Accept': 'application/json, text/plain, */*',
@@ -63,17 +64,17 @@ def raw_arrive(token, robot_id):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
         'token': token,
         'Content-Type': 'application/json;charset=UTF-8',
-        'Origin': 'http://dev-delivery.${host_part_2}.com',
+        'Origin': 'http://%s-delivery.${host_part_2}.com' % env,
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Referer': 'http://dev-delivery.${host_part_2}.com/',
+        'Referer': 'http://%s-delivery.${host_part_2}.com/' % env,
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
     data = '{"available":false,"robotIds":["%s"]}' % robot_id
 
-    response = requests.post('https://api-gate-dev-delivery.${host_part_2}.com/web/transport/robot/config/available', headers=headers, data=data)
+    response = requests.post('https://api-gate-%s-delivery.${host_part_2}.com/web/transport/robot/config/available' % env, headers=headers, data=data)
 
     print(response)
     if response.status_code == 200:
@@ -81,25 +82,27 @@ def raw_arrive(token, robot_id):
     else:
         print(response.status_code)
 
-def raw_available(token, robot_id):
+def raw_available(token, robot_id, available, env):
     headers = {
         'Connection': 'keep-alive',
+        'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
         'Accept': 'application/json, text/plain, */*',
         'x-requested-with': 'XMLHttpRequest',
+        'sec-ch-ua-mobile': '?0',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
         'token': token,
         'Content-Type': 'application/json;charset=UTF-8',
-        'Origin': 'http://dev-delivery.${host_part_2}.com',
+        'Origin': 'http://%s-delivery.${host_part_2}.com' % env,
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Referer': 'http://dev-delivery.${host_part_2}.com/',
+        'Referer': 'http://%s-delivery.${host_part_2}.com/' % env,
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
-    data = '{"robotId":"%s"}' % robot_id
+    data = '{"available":%s,"robotIds":["%s"]}' % (available, robot_id)
 
-    response = requests.post('https://api-gate-dev-delivery.${host_part_2}.com/web/transport/robot/restore', headers=headers, data=data)
+    response = requests.post('https://api-gate-%s-delivery.${host_part_2}.com/web/transport/robot/config/available' % env, headers=headers, data=data)
 
     print(response)
     if response.status_code == 200:
@@ -117,14 +120,14 @@ def get_token(response):
         print(j['message'])
         
 
-def login_and_save_token():
+def login_and_save_token(env):
     config = Config('config.json').config
     if 'token2' not in config or not config['token2']:
         if not config['username'] or not config['password']:
             print('请先配置账号密码')
             return
         else:
-            response = raw_login(config['username'], config['password'])
+            response = raw_login(config['username'], config['password'], env)
             token = get_token(response)
             if token:
                 config['token2'] = token
@@ -140,38 +143,38 @@ def login_and_save_token():
 def check_response(response):
     j = json.loads(response)
     code = j['code']
-    if code == 4006:
+    if code == 4006 or code == 4007:
         raise TokenException(j['message'])
     else:
         return j
 
 
-def api_restore(robot_id):
-    token = login_and_save_token()
-    response = raw_restore(token, robot_id)
+def api_restore(robot_id, env='dev'):
+    token = login_and_save_token(env)
+    response = raw_restore(token, robot_id, env)
     try:
         print(check_response(response))
     except TokenException as ex:
         clear_token()
-        api_restore(robot_id)
+        api_restore(robot_id, env)
 
-def api_available(robot_id):
-    token = login_and_save_token()
-    response = raw_restore(token, robot_id)
+def api_available(robot_id, available, env='dev'):
+    token = login_and_save_token(env)
+    response = raw_available(token, robot_id, available, env)
     try:
         print(check_response(response))
     except TokenException as ex:
         clear_token()
-        api_available(robot_id)
+        api_available(robot_id, available, env)
 
-def api_arrive(robot_id):
-    token = login_and_save_token()
-    response = raw_restore(token, robot_id)
+def api_arrive(robot_id, env='dev'):
+    token = login_and_save_token(env)
+    response = raw_arrive(token, robot_id, env)
     try:
         print(check_response(response))
     except TokenException as ex:
         clear_token()
-        api_arrive(robot_id)
+        api_arrive(robot_id, env)
 
 def clear_token():
     config = Config('config.json').config

@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="pull_log",
-    version='0.0.5',
+    version='0.0.6',
     description="The tool for pull log from segway.",
     long_description="""long_description""",
 

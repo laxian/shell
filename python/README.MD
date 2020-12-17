@@ -4,7 +4,7 @@
 
 ## 配置环境
 推荐使用virtualenv。本项目使用Python3.9开发，通过Python2.7兼容测试
-Python3.0 ~ Python3.5 有部分语法不支持
+
 
 - 创建虚拟环境3.9到venv目录
 ```shell
@@ -34,9 +34,10 @@ config.json
   "token": "${token}",
   "env": "release",
   "open_app": "code",
+  "log_start_time": "2020-12-17_12:00:00",
   "retry_limit": 20,
   "retry_interval": 1,
-  "log_dir": "/Users/leochou/Downloads"
+  "log_dir": "~/Downloads"
 }
 ```
 
@@ -55,7 +56,7 @@ key | 作用 |
 
  - 安装
  ```
- pip install pull-log-0.0.3.tar.gz
+ pip install pull-log-0.0.6.tar.gz
  ```
  或者通过url安装
  ```
@@ -99,11 +100,11 @@ Commands:
  - [x] 获取机器人状态
  - [x] 高频操作（可用、初始化、到达）支持
  - [x] 配置目录支持'~'相对路径
- - [ ] 拉取起始日期可配置
- - [ ] 可签名且秘钥路径签名可配置
- - [ ] 高频操作（可用、初始化、到达）可切换环境
- - [ ] adb解密跳过未加密设备
- - [ ] More samples
+ - [x] 拉取起始日期可配置
+ - [x] adb解密跳过未加密设备(解密待测试)
+ - [x] 高频操作（可用、初始化、到达）可切换环境
  - [ ] 本地日志快速分享
  - [ ] 代码优化
+ - [ ] 可签名且秘钥路径签名可配置
+ - [ ] More samples
  - [ ] 输出信息开关与优化

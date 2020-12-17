@@ -219,20 +219,28 @@ def segway_status(args=None):
 def segway_restore(args=None):
     if len(sys.argv) == 1:
         print('segway_restore <robot_id>')
-    else:
+    elif len(sys.argv) == 2:
         api_restore(sys.argv[1])
+    else:
+        api_restore(sys.argv[1], sys.argv[2])
 
 def segway_available(args=None):
     if len(sys.argv) == 1:
-        print('segway_available <robot_id>')
+        print('segway_available <robot_id> [true|false] [dev|alpha|internal|release]')
+    elif len(sys.argv) == 2:
+        api_available(sys.argv[1], 'true')
+    elif len(sys.argv) == 3:
+        api_available(sys.argv[1], sys.argv[2])
     else:
-        api_available(sys.argv[1])
+        api_available(sys.argv[1], sys.argv[2], sys.argv[3])
 
 def segway_arrive(args=None):
     if len(sys.argv) == 1:
         print('segway_arrive <robot_id>')
-    else:
+    elif len(sys.argv) == 2:
         api_arrive(sys.argv[1])
+    else:
+        api_arrive(sys.argv[1], sys.argv[2])
 
 def usage(args=None):
     print("""Commands:
