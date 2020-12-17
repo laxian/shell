@@ -4,6 +4,7 @@
     "token": "${token}",
     "env": "release",
     "open_app": "code",
+    "log_start_time": "2020-12-17_12:00:00",
     "retry_limit": 20,
     "retry_interval": 1,
     "log_dir": "~/Downloads"

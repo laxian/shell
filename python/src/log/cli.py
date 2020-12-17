@@ -3,6 +3,7 @@
 
 import sys
 import json
+import time
 
 from src.log.adb_auth import adb_auth
 from src.log.adb_ex import dump_ex_log, dump_sys_log, pull_log_from_dir
@@ -42,7 +43,7 @@ def segway_login(args=None):
 
 
 def segway_config(args=None):
-    keys = ['env', 'open_app', 'retry_limit', 'retry_interval', 'log_dir', 'username', 'password', 'token']
+    keys = ['env', 'open_app', 'retry_limit', 'retry_interval', 'log_dir', 'username', 'password', 'token', 'log_start_time']
     hit = False
     if len(sys.argv) > 1:
         args= sys.argv[1:]
@@ -67,7 +68,18 @@ def segway_upload(args=None):
         path = sys.argv[2]
     else:
         return
-    result = upload_with_retry(robot_id, path, None, None)
+
+    config = Config('config.json').config
+    log_start_time_f = config['log_start_time']
+    if not log_start_time_f:
+        # 默认拉取24小时日志
+        print('拉取24小时日志')
+        log_start_time = tick - 24 * 60 * 60
+    else:
+        print('拉取日志起始点：%s' % log_start_time_f)
+        log_start_time = int(time.mktime(time.strptime(log_start_time_f, '%Y-%m-%d_%H:%M:%S')) * 1000)
+
+    result = upload_with_retry(robot_id, path, log_start_time, None, None)
     if result:
         print(result)
 

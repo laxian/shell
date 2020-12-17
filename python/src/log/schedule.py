@@ -55,9 +55,19 @@ def schedule(robot_id, path):
     retry_count = 1
     tick = time.time()
     print(tick)
+
+    log_start_time_f = config['log_start_time']
+    if not log_start_time_f:
+        # 默认拉取24小时日志
+        print('拉取24小时日志')
+        log_start_time = tick - 24 * 60 * 60
+    else:
+        print('拉取日志起始点：%s' % log_start_time_f)
+        log_start_time = int(time.mktime(time.strptime(log_start_time_f, '%Y-%m-%d_%H:%M:%S')) * 1000)
+
     limit = config['retry_limit']
     # upload
-    if upload_with_retry(robot_id, path, token):
+    if upload_with_retry(robot_id, path, log_start_time, token):
         not_found = False
         while True:
             time.sleep(int(config['retry_interval']))
