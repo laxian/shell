@@ -82,6 +82,37 @@ def raw_arrive(token, robot_id, env):
     else:
         print(response.status_code)
 
+def raw_status(token, robot_id, env):
+    headers = {
+        'Connection': 'keep-alive',
+        'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
+        'Accept': 'application/json, text/plain, */*',
+        'x-requested-with': 'XMLHttpRequest',
+        'sec-ch-ua-mobile': '?0',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
+        'token': token,
+        'Origin': 'http://%s-delivery.${host_part_2}.com' % env,
+        'Sec-Fetch-Site': 'cross-site',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
+        'Referer': 'http://%s-delivery.${host_part_2}.com/' % env,
+        'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    }
+
+    params = (
+        ('pageNo', '1'),
+        ('pageSize', '10'),
+        ('robotId', '%s' % robot_id),
+    )
+
+    response = requests.get('https://api-gate-%s-delivery.${host_part_2}.com/web/transport/robot/info/list' % env, headers=headers, params=params)
+
+    print(response)
+    if response.status_code == 200:
+        return response.content.decode('utf-8')
+    else:
+        print(response.status_code)
+
 def raw_available(token, robot_id, available, env):
     headers = {
         'Connection': 'keep-alive',
@@ -131,7 +162,7 @@ def login_and_save_token(env):
             token = get_token(response)
             if token:
                 config['token2'] = token
-                print(config)
+                # print(config)
                 Config.dump(config)
                 return token
             else:
@@ -176,6 +207,59 @@ def api_arrive(robot_id, env='dev'):
         clear_token()
         api_arrive(robot_id, env)
 
+def api_status(robot_id, env='dev'):
+    token = login_and_save_token(env)
+    response = raw_status(token, robot_id, env)
+    try:
+        # print(json.dumps(check_response(response), sort_keys=True, indent=4, ensure_ascii=False))
+        response_model = check_response(response)
+        lists = response_model['data']['list']
+        for u in lists:
+            pretty_print(u)
+    except TokenException as ex:
+        clear_token()
+        api_status(robot_id, env)
+
+def pretty_print(status_model):
+    try:
+        robotId = status_model['robotId'] if 'robotId' in status_model else ''
+        robotStatus = status_model['robotStatus'] if 'robotStatus' in status_model else ''
+        available = status_model['available'] if 'available' in status_model else ''
+        online = status_model['online'] if 'online' in status_model else ''
+        broken = status_model['broken'] if 'broken' in status_model else ''
+        battery = status_model['battery'] if 'battery' in status_model else ''
+        nickname = status_model['nickname'] if 'nickname' in status_model else ''
+        boxSize = status_model['boxSize'] if 'boxSize' in status_model else ''
+        preemptBoxSize = status_model['preemptBoxSize'] if 'preemptBoxSize' in status_model else ''
+        remanentBoxSize = status_model['remanentBoxSize'] if 'remanentBoxSize' in status_model else ''
+        usingBoxSize = status_model['usingBoxSize'] if 'usingBoxSize' in status_model else ''
+        home = status_model['home'] if 'home' in status_model else ''
+        buildingName = status_model['buildingName'] if 'buildingName' in status_model else ''
+        stationName = status_model['stationName'] if 'stationName' in status_model else ''
+        subarea = status_model['subarea'] if 'subarea' in status_model else ''
+        warn = status_model['warn'] if 'warn' in status_model else ''
+        print('''---------------------------------------
+        ID:\t\t%s
+        状态:\t\t%s
+        可用:\t\t%s
+        在线:\t\t%s
+        broken:\t\t%s
+        电量:\t\t%s
+        昵称:\t\t%s
+        箱格数:\t\t%s
+        预占:\t\t%s
+        剩余:\t\t%s
+        已使用:\t\t%s
+        待命点:\t\t%s
+        当前站点:\t%s
+        楼宇:\t\t%s
+        楼座:\t\t%s
+        警告:\t\t%s
+        ''' % (robotId, robotStatus, available, online, broken, battery, nickname, boxSize, 
+        preemptBoxSize, remanentBoxSize, usingBoxSize, home, stationName, buildingName, subarea, warn))
+    except expression as identifier:
+        print(json.dumps(status_model, sort_keys=True, indent=4, ensure_ascii=False))
+
 def clear_token():
     config = Config('config.json').config
     config['token2'] = None
@@ -184,6 +268,7 @@ def clear_token():
 
 if __name__ == '__main__':
     # login_and_save_token()
-    print(api_restore('EVT6-2-1'))
-    print(api_available('EVT6-2-1'))
-    print(api_arrive('EVT6-2-1'))
+    # print(api_restore('EVT6-2-1'))
+    # print(api_available('EVT6-2-1'))
+    # print(api_arrive('EVT6-2-1'))
+    print(api_status('EVT6-2-1'))

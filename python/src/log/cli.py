@@ -14,7 +14,7 @@ from src.log.api_upload import upload_with_retry
 from src.log.config import Config
 from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
-from src.log.api_login_old import api_restore, api_available, api_arrive
+from src.log.api_login_old import api_restore, api_available, api_arrive, api_status
 from src.log.utils import download
 
 
@@ -242,8 +242,17 @@ def segway_arrive(args=None):
     else:
         api_arrive(sys.argv[1], sys.argv[2])
 
+def segway_status2(args=None):
+    if len(sys.argv) == 1:
+        print('segway_status2 <robot_id>')
+    elif len(sys.argv) == 2:
+        api_status(sys.argv[1])
+    else:
+        api_status(sys.argv[1], sys.argv[2])
+
 def usage(args=None):
-    print("""Commands:
+    print("""author weixian.zhou@ninebot.com
+Commands:
     segway_adb adb 解密
     segway_auto <robot_id> <log_path> (上传->查询->拉取->下载->打开)自动获取远程日志
     segway_config 个性化配置：可配置项见配置部分
@@ -258,10 +267,11 @@ def usage(args=None):
     segway_query2 <robot_id> [option] 高级查询，输入segway_query2 获取帮助
     segway_showconfig 显示配置
     segway_upload <robot_id> 上传指定robot_id的日志
-    segway_status <robot_id> 格式化打印机器人状态
-    segway_restore <robot_id> 重置
-    segway_available <robot_id> 可用
-    segway_arrive <robot_id> 到达
+    segway_status <robot_id> 格式化打印机器人状态（导航）
+    segway_status2 <robot_id> 格式化打印机器人状态（业务）
+    segway_restore <robot_id> [dev|alpha|...]重置
+    segway_available <robot_id> [false|true|] [dev|alpha|...]可用
+    segway_arrive <robot_id> [dev|alpha|...]到达
     """)
 
 def segway(args=None):

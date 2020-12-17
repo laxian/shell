@@ -77,13 +77,15 @@ Commands:
     segway_pull <path> 本地拉取指定path日志并打开
     segway_pull_ex 本地拉取/sdcard/ex 日志并打开
     segway_pull_sys 本地拉取/data/logs 日志并打开
-    segway_query <robot_id> [index] 查询日志url，index从零开始，可选，默认全选
-    segway_showconfig 显示本地配置信息
+    segway_query <robot_id> [index] 查询日志url
+    segway_query2 <robot_id> [option] 高级查询，输入segway_query2 获取帮助
+    segway_showconfig 显示配置
     segway_upload <robot_id> 上传指定robot_id的日志
-    segway_status <robot_id> 格式化打印机器人状态
-    segway_restore <robot_id> 重置(dev)
-    segway_available <robot_id> 可用(dev)
-    segway_arrive <robot_id> 到达(dev)
+    segway_status <robot_id> 格式化打印机器人状态（导航）
+    segway_status2 <robot_id> 格式化打印机器人状态（业务）
+    segway_restore <robot_id> [dev|alpha|...]重置
+    segway_available <robot_id> [false|true|] [dev|alpha|...]可用
+    segway_arrive <robot_id> [dev|alpha|...]到达
  ```
 
  ## 问题记录
@@ -103,6 +105,7 @@ Commands:
  - [x] 拉取起始日期可配置
  - [x] adb解密跳过未加密设备(解密待测试)
  - [x] 高频操作（可用、初始化、到达）可切换环境
+ - [x] 业务板机器人状态
  - [ ] 本地日志快速分享
  - [ ] 代码优化
  - [ ] 可签名且秘钥路径签名可配置

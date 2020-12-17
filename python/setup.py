@@ -64,6 +64,7 @@ setup(
             "segway_pull_ex=src.log.cli:segway_pull_ex",
             "segway_pull_sys=src.log.cli:segway_pull_sys",
             "segway_status=src.log.cli:segway_status",
+            "segway_status2=src.log.cli:segway_status2",
             "segway_restore=src.log.cli:segway_restore",
             "segway_available=src.log.cli:segway_available",
             "segway_arrive=src.log.cli:segway_arrive",
