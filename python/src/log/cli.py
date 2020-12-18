@@ -226,7 +226,7 @@ def segway_restore(args=None):
 
 def segway_available(args=None):
     if len(sys.argv) == 1:
-        print('segway_available <robot_id> [true|false] [dev|alpha|internal|release]')
+        print('segway_available <robot_id> [true|false] [dev|alpha|internal|release='']')
     elif len(sys.argv) == 2:
         api_available(sys.argv[1], 'true')
     elif len(sys.argv) == 3:
@@ -251,7 +251,7 @@ def segway_status2(args=None):
         api_status(sys.argv[1], sys.argv[2])
 
 def usage(args=None):
-    print("""author weixian.zhou@ninebot.com
+    print("""author ${username}
 Commands:
     segway_adb adb 解密
     segway_auto <robot_id> <log_path> (上传->查询->拉取->下载->打开)自动获取远程日志
@@ -268,7 +268,7 @@ Commands:
     segway_showconfig 显示配置
     segway_upload <robot_id> 上传指定robot_id的日志
     segway_status <robot_id> 格式化打印机器人状态（导航）
-    segway_status2 <robot_id> 格式化打印机器人状态（业务）
+    segway_status2 <robot_id> [dev|alpha|...] 格式化打印机器人状态（业务）
     segway_restore <robot_id> [dev|alpha|...]重置
     segway_available <robot_id> [false|true|] [dev|alpha|...]可用
     segway_arrive <robot_id> [dev|alpha|...]到达
