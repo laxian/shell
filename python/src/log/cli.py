@@ -136,7 +136,7 @@ def segway_query2():
     if len(sys.argv) == 2:
         if result:
             for u in result:
-                print(u)
+                print(json.dumps(u, sort_keys=True, indent=4, ensure_ascii=False))
         else:
             print('没有查询到url')
     else:
@@ -148,18 +148,20 @@ def segway_query2():
                 args.append(k)
             else:
                 args.append(arg)
-        all_in = True
         for u in result:
+            # 对每一个model遍历输入的keys，如有一命中，即为命中
+            hit = False
             print('---------')
             for k in args:
-                if k in all_keys and k not in u:
-                    all_in = False
+                if k in all_keys and k in u:
+                    hit = True
                     break
             # 不含key的，不显示
-            if not all_in:
-                break
+            if not hit:
+                continue
             for k in args:
-                print(json.dumps(u[k], sort_keys=True, indent=4, ensure_ascii=False))
+                if k in u:
+                    print(json.dumps(u[k], sort_keys=True, indent=4, ensure_ascii=False))
 
 
 def segway_auto(args=None):

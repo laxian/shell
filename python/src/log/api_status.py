@@ -23,7 +23,7 @@ def robot_status_api(robot_id, token=None):
 
     params = (
         ('page', '1'),
-        ('pageSize', '10'),
+        ('pageSize', '10000'),
         ('robotId', robot_id),
         ('onlineStatus', ''),
         ('environment', ''),
