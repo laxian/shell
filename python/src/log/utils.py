@@ -6,6 +6,7 @@ import os
 import re
 import requests
 import platform
+import socket
 
 
 def get_name(url):
@@ -70,3 +71,17 @@ def cannot_open(path):
 
 def get_time_part(url, re_str):
     return re.findall(re_str, url)[0]
+
+def get_host_ip():
+    """
+    查询本机ip地址
+    :return: ip
+    """
+    try:
+        s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+        s.connect(('8.8.8.8', 80))
+        ip = s.getsockname()[0]
+    finally:
+        s.close()
+
+    return ip

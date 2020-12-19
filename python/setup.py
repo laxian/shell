@@ -68,6 +68,7 @@ setup(
             "segway_restore=src.log.cli:segway_restore",
             "segway_available=src.log.cli:segway_available",
             "segway_arrive=src.log.cli:segway_arrive",
+            "segway_share=src.log.cli:segway_share",
             "segway=src.log.cli:segway",
         ],
     },

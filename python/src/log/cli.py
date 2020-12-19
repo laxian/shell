@@ -2,6 +2,7 @@
 # -*- encoding: utf-8 -*-
 
 import sys
+import os
 import json
 import time
 
@@ -15,7 +16,7 @@ from src.log.config import Config
 from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
 from src.log.api_login_old import api_restore, api_available, api_arrive, api_status
-from src.log.utils import download
+from src.log.utils import download, get_host_ip
 
 
 def segway_login(args=None):
@@ -252,6 +253,29 @@ def segway_status2(args=None):
     else:
         api_status(sys.argv[1], sys.argv[2])
 
+def segway_share(args=None):
+    """
+    开启本地文件服务器，分享文件或目录
+    """
+    if len(sys.argv) == 1:
+        print("""Usage: %s %s
+        开启简易文件服务器，在内网快速共享文件
+        """ % ('segway_share', '<path>'))
+    else:
+        path = sys.argv[1]
+        ip = get_host_ip()
+        port = 5000
+        if os.path.isfile(path):
+            name = os.path.basename(path)
+            path = os.path.dirname(path)
+            print('http://%s:%d/%s' % (ip, port, name))
+        else:
+            print('http://%s:%s' % (ip, port))
+        if sys.version_info.major == 2:
+            os.system('python -m SimpleHTTPServer 5000')
+        else:
+            os.system('python -m http.server 5000')
+
 def usage(args=None):
     print("""author ${username}
 Commands:
@@ -274,6 +298,7 @@ Commands:
     segway_restore <robot_id> [dev|alpha|...]重置
     segway_available <robot_id> [false|true|] [dev|alpha|...]可用
     segway_arrive <robot_id> [dev|alpha|...]到达
+    segway_share <file_path> 开启文件服务器，以url方式分享本地文件
     """)
 
 def segway(args=None):

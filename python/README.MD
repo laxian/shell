@@ -48,6 +48,7 @@ key | 作用 |
  token | 用户token，如有则无需登录
  env | 日志环境
  open_app | 打开应用带路径
+ log_start_time | 日志起始时间
  retry_limit | 重试次数
  retry_interval | 重试时间间隔
  log_dir | 日志解压绝对路径
@@ -106,7 +107,7 @@ Commands:
  - [x] adb解密跳过未加密设备(解密待测试)
  - [x] 高频操作（可用、初始化、到达）可切换环境
  - [x] 业务板机器人状态
- - [ ] 本地日志快速分享
+ - [x] 本地日志快速分享
  - [ ] 代码优化
  - [ ] 可签名且秘钥路径签名可配置
  - [ ] More samples
