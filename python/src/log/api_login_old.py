@@ -50,7 +50,7 @@ def raw_restore(token, robot_id, env):
 
     data = '{"robotId":"%s"}' % robot_id
 
-    response = requests.post('https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/simulation/arrive' % env, headers=headers, data=data)
+    response = requests.post('https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/restore' % env, headers=headers, data=data)
 
     print(response)
     if response.status_code == 200:
@@ -75,9 +75,12 @@ def raw_arrive(token, robot_id, env):
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
-    data = '{"available":false,"robotIds":["%s"]}' % robot_id
+    data = '{"robotId":"%s"}' % robot_id
 
-    response = requests.post('https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/config/available' % env, headers=headers, data=data)
+    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/simulation/arrive' % env
+    print(url)
+    print(data)
+    response = requests.post(url, headers=headers, data=data)
 
     print(response)
     if response.status_code == 200:
