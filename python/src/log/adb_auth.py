@@ -2,6 +2,7 @@
 
 import os
 import requests
+import subprocess
 
 
 def adb_auth():
@@ -10,6 +11,7 @@ def adb_auth():
     WEB_URL = "http://${adb_ip}:8080/scooter_adb/adb_get?hashCode="
     val = os.popen('adb reboot A55A')
     # hashcode = '65c6b596f7d33492d1c23179ae217927541d1bb7\n'
+    hashcode = val.readline()
     print(hashcode)
     if not hashcode:
         print('未连接')
@@ -33,11 +35,9 @@ def adb_auth():
 
 
 def need_auth():
-    val = os.popen('adb shell uname')
-    result = val.readline()
-    if 'close' in result:
-        return True
-    return False
+    cmd = 'adb shell'
+    ret = subprocess.run(cmd,shell=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE,encoding="utf-8",timeout=1)
+    return ret.returncode != 0
 
 
 if __name__ == '__main__':

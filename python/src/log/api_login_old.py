@@ -112,7 +112,8 @@ def raw_status(token, robot_id, env):
         ('robotId', '%s' % robot_id),
     )
 
-    response = requests.get('https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/info/list' % env, headers=headers, params=params)
+    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/info/list' % env
+    response = requests.get(url, headers=headers, params=params)
 
     print(response)
     if response.status_code == 200:
@@ -152,6 +153,7 @@ def raw_available(token, robot_id, available, env):
 
 def get_token(response):
     j = json.loads(response)
+    print(j)
     code = j['code']
     if code == 200:
         return j['data']['token']
