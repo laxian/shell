@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name="pull_log",
-    version='0.0.6',
+    version='0.0.7',
     description="The tool for pull log from segway.",
     long_description="""long_description""",
 
@@ -68,6 +68,7 @@ setup(
             "segway_restore=src.log.cli:segway_restore",
             "segway_available=src.log.cli:segway_available",
             "segway_arrive=src.log.cli:segway_arrive",
+            "segway_broken=src.log.cli:segway_broken",
             "segway_share=src.log.cli:segway_share",
             "segway=src.log.cli:segway",
         ],

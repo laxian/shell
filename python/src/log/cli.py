@@ -17,6 +17,7 @@ from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
 from src.log.api_login_old import api_restore, api_available, api_arrive, api_status
 from src.log.utils import download, get_host_ip
+from src.log.api_simulate import api_broken
 
 
 def segway_login(args=None):
@@ -276,6 +277,18 @@ def segway_share(args=None):
         else:
             os.system('python -m http.server 5000')
 
+def segway_broken(args=None):
+    if len(sys.argv) == 1:
+        print('segway_broken <robot_id> [env=dev] [error_code=110123] [msg=test]')
+    elif len(sys.argv) == 2:
+        api_broken(sys.argv[1])
+    elif len(sys.argv) == 3:
+        api_broken(sys.argv[1], env=sys.argv[2])
+    elif len(sys.argv) == 4:
+        api_broken(sys.argv[1], env=sys.argv[2], errorCode=sys.argv[3])
+    else:
+        api_broken(sys.argv[1], env=sys.argv[2], errorCode=sys.argv[3], msg=sys.argv[4])
+
 def usage(args=None):
     print("""author ${username}
 Commands:
@@ -299,6 +312,7 @@ Commands:
     segway_available <robot_id> [false|true|] [dev|alpha|...]可用
     segway_arrive <robot_id> [dev|alpha|...]到达
     segway_share <file_path> 开启文件服务器，以url方式分享本地文件
+    segway_broken <robot_id> [env=dev] [error_code=110123] [msg=test] 模拟机器人进故障
     """)
 
 def segway(args=None):

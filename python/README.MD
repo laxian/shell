@@ -57,11 +57,11 @@ key | 作用 |
 
  - 安装
  ```
- pip install pull-log-0.0.6.tar.gz
+ pip install pull-log-0.0.7.tar.gz
  ```
  或者通过url安装
  ```
- pip install http://${adb_ip}:8080/files/pull_log-0.0.3.tar.gz
+ pip install http://${adb_ip}:8080/files/pull_log-0.0.7.tar.gz
  ```
 
  - 显示命令列表
@@ -73,7 +73,7 @@ Commands:
     segway_config 个性化配置：可配置项见配置部分
     segway_download <url> 下载日志
     segway_fetch <url>  下载并打开日志
-    segway_nav GUI窗口，拉取nav日志
+    segway_nav GUI窗口，拉取nav日志 
     segway_login 登录刷新token
     segway_pull <path> 本地拉取指定path日志并打开
     segway_pull_ex 本地拉取/sdcard/ex 日志并打开
@@ -83,10 +83,12 @@ Commands:
     segway_showconfig 显示配置
     segway_upload <robot_id> 上传指定robot_id的日志
     segway_status <robot_id> 格式化打印机器人状态（导航）
-    segway_status2 <robot_id> 格式化打印机器人状态（业务）
+    segway_status2 <robot_id> [dev|alpha|...] 格式化打印机器人状态（业务）
     segway_restore <robot_id> [dev|alpha|...]重置
     segway_available <robot_id> [false|true|] [dev|alpha|...]可用
     segway_arrive <robot_id> [dev|alpha|...]到达
+    segway_share <file_path> 开启文件服务器，以url方式分享本地文件
+    segway_broken <robot_id> [env=dev] [error_code=110123] [msg=test] 模拟机器人进故障
  ```
 
  ## 问题记录
@@ -108,6 +110,8 @@ Commands:
  - [x] 高频操作（可用、初始化、到达）可切换环境
  - [x] 业务板机器人状态
  - [x] 本地日志快速分享
+ - [x] 一键进故障
+ - [ ] 一键取消所有订单任务
  - [ ] 代码优化
  - [ ] 可签名且秘钥路径签名可配置
  - [ ] More samples
