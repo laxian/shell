@@ -123,8 +123,57 @@ def task_complete(env='dev', taskId=None):
         print(ex)
 
 
+def raw_shield_nav(token, robotId, shield='true', env='dev'):
+    env = env+'-' if env else ''
+
+    headers = {
+        'Connection': 'keep-alive',
+        'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
+        'Accept': 'application/json, text/plain, */*',
+        'x-requested-with': 'XMLHttpRequest',
+        'sec-ch-ua-mobile': '?0',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
+        'token': token,
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
+        'Sec-Fetch-Site': 'cross-site',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
+        'Referer': 'http://%sdelivery.${host_part_2}.com/' % env,
+        'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    }
+
+    data = json.dumps({"robotId":robotId,"shieldNav":shield})
+
+    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/config/shieldNav' % env
+    print(url)
+    print(data)
+    response = requests.post(url, headers=headers, data=data)
+
+    print(response)
+    if response.status_code == 200:
+        return response.content.decode('utf-8')
+    else:
+        print(response.status_code)
+
+def shield_nav(robotId, shield='true', env='dev'):
+    token = login_and_save_token(env)
+    content = raw_shield_nav(token, robotId, shield, env)
+    try:
+        j = check_response(content)
+        print(j)
+    except TokenException as ex:
+        clear_token()
+        shield_nav(env, shield, taskId)
+    except Exception as ex:
+        print(j)
+        print(ex)
+
+
+
 if __name__ == '__main__':
     print('----------------------------------------------------------------')
     # ids = get_all_tasks('')
     # print(ids)
-    task_complete('dev', 'xxxx')
+    # task_complete('dev', 'xxxx')
+    shield_nav('EVT8-10', 'false')
