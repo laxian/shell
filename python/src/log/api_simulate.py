@@ -233,11 +233,11 @@ def raw_close_box(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
         'token': '903f88ba9112459aaa3541b122bf3848',
         'Content-Type': 'application/json;charset=UTF-8',
-        'Origin': 'http://dev-delivery.${host_part_2}.com',
+        'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Referer': 'http://dev-delivery.${host_part_2}.com/',
+        'Referer': 'http://%sdelivery.${host_part_2}.com/' % env,
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 

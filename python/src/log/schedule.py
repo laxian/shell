@@ -75,7 +75,7 @@ def schedule(robot_id, path):
             query_result = query_with_token_retry(robot_id, token, 0)
             if not query_result:
                 print('没有查询到url')
-                return
+                continue
             print(query_result)
             url = query_result[0]
             retry_count += 1
