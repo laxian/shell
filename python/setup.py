@@ -72,6 +72,7 @@ setup(
             "segway_shield=src.log.cli:segway_shield",
             "segway_share=src.log.cli:segway_share",
             "segway_clear_tasks=src.log.cli:segway_clear_tasks",
+            "segway_box=src.log.cli:segway_box",
             "segway=src.log.cli:segway",
         ],
     },

@@ -221,12 +221,59 @@ def clear_tasks(robotId, env='dev'):
     for task in ids:
         task_complete(task)
 
+def raw_close_box(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env='dev'):
+    env = env+'-' if env else ''
+
+    headers = {
+        'Connection': 'keep-alive',
+        'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
+        'Accept': 'application/json, text/plain, */*',
+        'x-requested-with': 'XMLHttpRequest',
+        'sec-ch-ua-mobile': '?0',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
+        'token': '903f88ba9112459aaa3541b122bf3848',
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Origin': 'http://dev-delivery.${host_part_2}.com',
+        'Sec-Fetch-Site': 'cross-site',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
+        'Referer': 'http://dev-delivery.${host_part_2}.com/',
+        'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    }
+
+    data = json.dumps({"robotId":robotId,"boxIndexes":boxIndexies})
+
+    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/command/box/%s' % (env, openOrClose)
+    print(url)
+    print(data)
+    response = requests.post(url, headers=headers, data=data)
+
+    print(response)
+    if response.status_code == 200:
+        return response.content.decode('utf-8')
+    else:
+        print(response.status_code)
+
+def oper_boxies(robotId, boxIndexies=[0,1,2,3], openOrClose='open', env='dev'):
+    token = login_and_save_token(env)
+    content = raw_close_box(token, robotId, boxIndexies, openOrClose, env)
+    try:
+        j = check_response(content)
+        print(j)
+    except TokenException as ex:
+        clear_token()
+        oper_boxies(robotId, boxIndexies, openOrClose, env)
+    except Exception as ex:
+        print(j)
+        print(ex)
+
 
 if __name__ == '__main__':
     print('----------------------------------------------------------------')
-    ids = get_all_tasks('EVT8-10')
-    print(ids)
-    interrupt_tasks(ids)
-    for task in ids:
-        task_complete(task)
+    # ids = get_all_tasks('EVT8-10')
+    # print(ids)
+    # interrupt_tasks(ids)
+    # for task in ids:
+    #     task_complete(task)
     # shield_nav('EVT8-10', 'false')
+    oper_boxies('EVT8-10', [0, 1], 'close')

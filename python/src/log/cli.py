@@ -17,7 +17,7 @@ from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
 from src.log.api_login_old import api_restore, api_available, api_arrive, api_status
 from src.log.utils import download, get_host_ip
-from src.log.api_simulate import api_broken, shield_nav, clear_tasks
+from src.log.api_simulate import api_broken, shield_nav, clear_tasks, oper_boxies
 
 
 def segway_login(args=None):
@@ -303,9 +303,21 @@ def segway_clear_tasks(args=None):
     if len(sys.argv) == 1:
         print('segway_clear_tasks <robot_id> [env=dev]')
     elif len(sys.argv) == 2:
-        segway_clear_tasks(sys.argv[1])
+        clear_tasks(sys.argv[1])
     else:
-        shield_nav(sys.argv[1], env=sys.argv[2])
+        clear_tasks(sys.argv[1], env=sys.argv[2])
+
+def segway_box(args=None):
+    if len(sys.argv) == 1:
+        print('segway_box <robot_id> 0123 [open|close] [env=dev]')
+    elif len(sys.argv) == 2:
+        oper_boxies(sys.argv[1])
+    elif len(sys.argv) == 3:
+        oper_boxies(sys.argv[1], list(sys.argv[2]))
+    elif len(sys.argv) == 4:
+        oper_boxies(sys.argv[1], list(sys.argv[2]), sys.argv[3])
+    else:
+        oper_boxies(sys.argv[1], list(sys.argv[2]), sys.argv[3], sys.argv[4])
 
 def usage(args=None):
     print("""author ${username}
@@ -333,6 +345,7 @@ Commands:
     segway_broken <robot_id> [env=dev] [error_code=110123] [msg=test] 模拟机器人进故障
     segway_shield <robot_id> [true|false] [env=dev] 屏蔽导航
     segway_clear_tasks <robot_id> [env=dev] 中断并完成所有任务
+    segway_box <robot_id> 0123 ['open'|'close'] [env=dev] 开关箱
     """)
 
 def segway(args=None):
