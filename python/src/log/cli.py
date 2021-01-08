@@ -17,7 +17,7 @@ from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
 from src.log.api_login_old import api_restore, api_available, api_arrive, api_status
 from src.log.utils import download, get_host_ip
-from src.log.api_simulate import api_broken
+from src.log.api_simulate import api_broken, shield_nav, clear_tasks
 
 
 def segway_login(args=None):
@@ -289,6 +289,24 @@ def segway_broken(args=None):
     else:
         api_broken(sys.argv[1], env=sys.argv[2], errorCode=sys.argv[3], msg=sys.argv[4])
 
+def segway_shield(args=None):
+    if len(sys.argv) == 1:
+        print('segway_shield <robot_id> [true|false] [env=dev]')
+    elif len(sys.argv) == 2:
+        shield_nav(sys.argv[1])
+    elif len(sys.argv) == 3:
+        shield_nav(sys.argv[1], shield=sys.argv[2])
+    else:
+        shield_nav(sys.argv[1], shield=sys.argv[2], env=sys.argv[3])
+
+def segway_clear_tasks(args=None):
+    if len(sys.argv) == 1:
+        print('segway_clear_tasks <robot_id> [env=dev]')
+    elif len(sys.argv) == 2:
+        segway_clear_tasks(sys.argv[1])
+    else:
+        shield_nav(sys.argv[1], env=sys.argv[2])
+
 def usage(args=None):
     print("""author ${username}
 Commands:
@@ -313,6 +331,8 @@ Commands:
     segway_arrive <robot_id> [dev|alpha|...]到达
     segway_share <file_path> 开启文件服务器，以url方式分享本地文件
     segway_broken <robot_id> [env=dev] [error_code=110123] [msg=test] 模拟机器人进故障
+    segway_shield <robot_id> [true|false] [env=dev] 屏蔽导航
+    segway_clear_tasks <robot_id> [env=dev] 中断并完成所有任务
     """)
 
 def segway(args=None):

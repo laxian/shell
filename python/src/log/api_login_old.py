@@ -112,7 +112,7 @@ def raw_status(token, robot_id, env):
         ('robotId', '%s' % robot_id),
     )
 
-    furl = 'https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/info/list' % env
+    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/info/list' % env
     response = requests.get(url, headers=headers, params=params)
 
     print(response)

@@ -64,7 +64,7 @@ def task_list_parser(j, robotId=None):
     
 
 
-def get_all_tasks(env='dev', robotId=None):
+def get_all_tasks(robotId=None, env='dev'):
     token = login_and_save_token(env)
     content = task_list(token, env)
     try:
@@ -73,10 +73,55 @@ def get_all_tasks(env='dev', robotId=None):
         return tasks
     except TokenException as ex:
         clear_token()
-        get_all_tasks(env, robotId)
+        get_all_tasks(robotId, env)
     except Exception as ex:
         print(j)
         print(ex)
+
+def raw_interrupt_tasks(token, tasks, env='dev'):
+    env = env+'-' if env else ''
+    headers = {
+        'Connection': 'keep-alive',
+        'sec-ch-ua': '"Google Chrome";v="87", " Not;A Brand";v="99", "Chromium";v="87"',
+        'Accept': 'application/json, text/plain, */*',
+        'x-requested-with': 'XMLHttpRequest',
+        'sec-ch-ua-mobile': '?0',
+        'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
+        'token': token,
+        'Content-Type': 'application/json;charset=UTF-8',
+        'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
+        'Sec-Fetch-Site': 'cross-site',
+        'Sec-Fetch-Mode': 'cors',
+        'Sec-Fetch-Dest': 'empty',
+        'Referer': 'http://%sdelivery.${host_part_2}.com/' % env,
+        'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
+    }
+
+    # data = '{"taskIds":["37632ae8bca041b3989e4e8f1e618ba2"]}'
+    data = json.dumps({"taskIds": tasks})
+    print(data)
+
+    response = requests.post('https://api-gate-%sdelivery.${host_part_2}.com/web/transport/task/interrupt' % env, headers=headers, data=data)
+    print(response)
+    if response.status_code == 200:
+        return response.content.decode('utf-8')
+    else:
+        print(response.status_code)
+
+def interrupt_tasks(tasks, env='dev'):
+    token = login_and_save_token(env)
+    content = raw_interrupt_tasks(token, tasks, env)
+    print(content)
+    try:
+        j = check_response(content)
+        print('------------------------')
+    except TokenException as ex:
+        clear_token()
+        interrupt_tasks(env, robotId)
+    except Exception as ex:
+        print(j)
+        print(ex)
+
 
 def raw_complete(token, taskId, env):
     env = env + '-' if env else ''
@@ -109,7 +154,7 @@ def raw_complete(token, taskId, env):
         print(response.status_code)
 
 
-def task_complete(env='dev', taskId=None):
+def task_complete(taskId=None, env='dev'):
     token = login_and_save_token(env)
     content = raw_complete(token, taskId, env)
     try:
@@ -117,7 +162,7 @@ def task_complete(env='dev', taskId=None):
         print(j)
     except TokenException as ex:
         clear_token()
-        task_complete(env, taskId)
+        task_complete(taskId, env)
     except Exception as ex:
         print(j)
         print(ex)
@@ -169,11 +214,19 @@ def shield_nav(robotId, shield='true', env='dev'):
         print(j)
         print(ex)
 
+def clear_tasks(robotId, env='dev'):
+    ids = get_all_tasks('EVT8-10')
+    print(ids)
+    interrupt_tasks(ids)
+    for task in ids:
+        task_complete(task)
 
 
 if __name__ == '__main__':
     print('----------------------------------------------------------------')
-    # ids = get_all_tasks('')
-    # print(ids)
-    # task_complete('dev', 'xxxx')
-    shield_nav('EVT8-10', 'false')
+    ids = get_all_tasks('EVT8-10')
+    print(ids)
+    interrupt_tasks(ids)
+    for task in ids:
+        task_complete(task)
+    # shield_nav('EVT8-10', 'false')
