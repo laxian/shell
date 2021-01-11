@@ -21,7 +21,7 @@ def api_broken(robotId, env='dev', errorCode=110123, msg='test'):
     print(response.content.decode('utf-8'))
 
 
-def task_list(token, env='dev'):
+def raw_task_list(token, env='dev'):
     env = env+'-' if env else ''
     headers = {
         'Connection': 'keep-alive',
@@ -63,20 +63,9 @@ def task_list_parser(j, robotId=None):
         return []
     
 
-
-def get_all_tasks(robotId=None, env='dev'):
-    token = login_and_save_token(env)
-    content = task_list(token, env)
-    try:
-        j = check_response(content)
-        tasks = task_list_parser(j, robotId)
-        return tasks
-    except TokenException as ex:
-        clear_token()
-        get_all_tasks(robotId, env)
-    except Exception as ex:
-        print(j)
-        print(ex)
+@relogin(h=task_list_parser)
+def get_all_tasks(token, robotId=None, env='dev'):
+    return raw_task_list(token, env)
 
 def raw_interrupt_tasks(token, tasks, env='dev'):
     env = env+'-' if env else ''
@@ -201,18 +190,9 @@ def raw_shield_nav(token, robotId, shield='true', env='dev'):
     else:
         print(response.status_code)
 
-def shield_nav(robotId, shield='true', env='dev'):
-    token = login_and_save_token(env)
-    content = raw_shield_nav(token, robotId, shield, env)
-    try:
-        j = check_response(content)
-        print(j)
-    except TokenException as ex:
-        clear_token()
-        shield_nav(env, shield, taskId)
-    except Exception as ex:
-        print(j)
-        print(ex)
+@relogin()
+def shield_nav(token, robotId, shield='true', env='dev'):
+    return raw_shield_nav(token, robotId, shield, env)
 
 def clear_tasks(robotId, env='dev'):
     ids = get_all_tasks('EVT8-10')
@@ -221,7 +201,7 @@ def clear_tasks(robotId, env='dev'):
     for task in ids:
         task_complete(task)
 
-def raw_close_box(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env='dev'):
+def raw_oper_box(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env='dev'):
     env = env+'-' if env else ''
 
     headers = {
@@ -231,7 +211,7 @@ def raw_close_box(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env
         'x-requested-with': 'XMLHttpRequest',
         'sec-ch-ua-mobile': '?0',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_1_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
-        'token': '903f88ba9112459aaa3541b122bf3848',
+        'token': token,
         'Content-Type': 'application/json;charset=UTF-8',
         'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
         'Sec-Fetch-Site': 'cross-site',
@@ -248,24 +228,15 @@ def raw_close_box(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env
     print(data)
     response = requests.post(url, headers=headers, data=data)
 
-    print(response)
+    print(response.content.decode('utf-8'))
     if response.status_code == 200:
         return response.content.decode('utf-8')
     else:
         print(response.status_code)
 
-def oper_boxies(robotId, boxIndexies=[0,1,2,3], openOrClose='open', env='dev'):
-    token = login_and_save_token(env)
-    content = raw_close_box(token, robotId, boxIndexies, openOrClose, env)
-    try:
-        j = check_response(content)
-        print(j)
-    except TokenException as ex:
-        clear_token()
-        oper_boxies(robotId, boxIndexies, openOrClose, env)
-    except Exception as ex:
-        print(j)
-        print(ex)
+@relogin()
+def oper_boxies(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env='dev'):
+    return raw_oper_box(token, robotId, boxIndexies, openOrClose, env)
 
 
 if __name__ == '__main__':

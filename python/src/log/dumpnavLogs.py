@@ -62,7 +62,7 @@ def getFileList():
                            stdout=subprocess.PIPE,
                            stderr=subprocess.STDOUT)
     stdout, stderr = out.communicate()
-    raw_out = str(stdout, encoding="utf-8")
+    raw_out = str(stdout)
     print("raw_out", raw_out)
     if len(raw_out) == 0:
         print('raw_out lenght is 0')

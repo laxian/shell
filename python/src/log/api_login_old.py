@@ -3,7 +3,31 @@ import requests
 import json
 from src.log.config import Config
 from src.log.token_exception import TokenException
+from functools import wraps
 
+def relogin(h=print, **kw):
+    def logging_decorator(func):
+        @wraps(func)
+        def wrapped_function(*args, **kwargs):
+            token = login_and_save_token(kwargs['env']) if 'env' in kwargs else login_and_save_token()
+            print('--------------------------------1 %s' % token)
+            print('%s %s %s' % (token, args, kwargs))
+            content = func(token, *args, **kwargs)
+            print('--------------------------------2')
+            try:
+                j = check_response(content)
+                print('--------------------------------3')
+                return h(j, **kw)
+            except TokenException as ex:
+                clear_token()
+                print('--------------------------------4')
+                return wrapped_function(*args, **kwargs)
+            except Exception as ex:
+                print(j)
+                print(ex)
+            # return func(token, *args, **kwargs)
+        return wrapped_function
+    return logging_decorator
 
 def raw_login(username, password, env):
     env = env + '-' if env else ''
@@ -22,8 +46,11 @@ def raw_login(username, password, env):
     }
 
     data = '{"username":"%s","password":"%s"}' % (username, password)
-
-    response = requests.post('https://api-gate-%sdelivery.${host_part_2}.com/web/user/login' % env, headers=headers, data=data)
+    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/user/login' % env
+    print(url)
+    print(data)
+    print(headers)
+    response = requests.post(url, headers=headers, data=data)
 
     print(response)
     if response.status_code == 200:
@@ -161,7 +188,7 @@ def get_token(response):
         print(j['message'])
         
 
-def login_and_save_token(env):
+def login_and_save_token(env='dev'):
     config = Config('config.json').config
     if 'token2' not in config or not config['token2']:
         if not config['username'] or not config['password']:
@@ -189,33 +216,17 @@ def check_response(response):
     else:
         return j
 
+@relogin()
+def api_restore(token, robot_id, env='dev'):
+    return raw_restore(token, robot_id, env)
 
-def api_restore(robot_id, env='dev'):
-    token = login_and_save_token(env)
-    response = raw_restore(token, robot_id, env)
-    try:
-        print(check_response(response))
-    except TokenException as ex:
-        clear_token()
-        api_restore(robot_id, env)
+@relogin()
+def api_available(token, robot_id, available, env='dev'):
+    return raw_available(token, robot_id, available, env)
 
-def api_available(robot_id, available, env='dev'):
-    token = login_and_save_token(env)
-    response = raw_available(token, robot_id, available, env)
-    try:
-        print(check_response(response))
-    except TokenException as ex:
-        clear_token()
-        api_available(robot_id, available, env)
-
-def api_arrive(robot_id, env='dev'):
-    token = login_and_save_token(env)
-    response = raw_arrive(token, robot_id, env)
-    try:
-        print(check_response(response))
-    except TokenException as ex:
-        clear_token()
-        api_arrive(robot_id, env)
+@relogin()
+def api_arrive(token, robot_id, env='dev'):
+    return raw_arrive(token, robot_id, env)
 
 def api_status(robot_id, env='dev'):
     token = login_and_save_token(env)
