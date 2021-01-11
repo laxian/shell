@@ -144,7 +144,7 @@ class DumpSomePathLog:
                                stdout=subprocess.PIPE,
                                stderr=subprocess.STDOUT)
         stdout, stderr = out.communicate()
-        raw_out = str(stdout, encoding="utf-8")
+        raw_out = str(stdout)
         print(type(raw_out))
 
     def createLabel(self, mainframe, infoStr):

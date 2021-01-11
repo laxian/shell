@@ -1,3 +1,5 @@
+# -*- encoding: utf-8 -*-
+
 import requests
 import json
 from src.log.config import Config

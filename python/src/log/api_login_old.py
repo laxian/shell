@@ -5,7 +5,10 @@ from src.log.config import Config
 from src.log.token_exception import TokenException
 from functools import wraps
 
-def relogin(h=print, **kw):
+def p(obj):
+    print(obj)
+
+def relogin(h=p, **kw):
     def logging_decorator(func):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
