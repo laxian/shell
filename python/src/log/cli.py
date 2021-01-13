@@ -173,10 +173,10 @@ def segway_auto(args=None):
         Usage: segway_auto <robot_id> <path>
         ''')
         return
+    elif len(sys.argv) == 3:
+        schedule(sys.argv[1], sys.argv[2])
     else:
-        robot_id = sys.argv[1]
-        path = sys.argv[2]
-    schedule(robot_id, path)
+        schedule(sys.argv[1], sys.argv[2], sys.argv[3])
 
 
 def segway_nav(args=None):
