@@ -5,7 +5,7 @@
     "env": "release",
     "open_app": "code",
     "log_start_time": "2021-01-10_00:00:00",
-    "retry_limit": 20,
+    "retry_limit": 30,
     "retry_interval": 1,
     "log_dir": "~/Downloads"
 }

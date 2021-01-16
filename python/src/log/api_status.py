@@ -74,7 +74,7 @@ def get_status_data_with_retry(robot_id, token=None):
         return get_status_data(robot_id, token)
     except TokenException as er:
         config = Config('config.json').config
-        token = login_and_save_token(config['username'], config['password'])
+        token = login_and_save_token()
         if token:
             return get_status_data(robot_id, token)
 

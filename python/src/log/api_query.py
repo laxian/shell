@@ -7,11 +7,12 @@ import sys
 
 import requests
 
-from .api_login import login_and_save_token
+from src.log.api_login import login_and_save_token, check_response, clear_token
 from .config import Config
+from src.log.token_exception import TokenException
 
 
-def _query(key, token):
+def raw_query(key, token):
     """
     查询，返回json
     :param key:
@@ -43,6 +44,8 @@ def _query(key, token):
         ('commandStatus', ''),
     )
 
+    print("token %s, params %r" % (token, params))
+
     response = requests.get(
         'http://${host_part_1}-api.${host_part_2}.com/robot/log/management', headers=headers, params=params)
 
@@ -53,80 +56,45 @@ def _query(key, token):
     return None
 
 
-def query_model_with_token_retry(key, token, index=-1):
-    result = _query(key, token)
-    if result:
-        j = json.loads(result)
-        result_code = j.get('resultCode')
-        if j.get('resultCode') == 9000:
-            if 'list' in j['data']:
-                return j['data']['list']
-            else:
-                return None
-        elif result_code == 9006:
-            print(j.get('resultDesc'))
-            print(u'尝试自动登录...')
-            config = Config('config.json').config
-            token = login_and_save_token(config['username'], config['password'])
-            if token:
-                return query_model_with_token_retry(key, token, index)
-        else:
-            print(j.get('resultDesc'))
-    else:
-        pass
-
-
-def query_with_token_retry(key, token, index=-1):
-    result = _query(key, token)
-    if result:
-        j = json.loads(result)
-        result_code = j.get('resultCode')
-        if j.get('resultCode') == 9000:
-            if 'list' in j['data']:
-                list_part = j['data']['list']
-                urls = [data['logUrl'] for data in list_part if 'logUrl' in data]
-                if urls:
-                    url = [urls[index]] if index > -1 else urls
-                else:
-                    return None
-                return url
-            else:
-                return None
-        elif result_code == 9006:
-            print(j.get('resultDesc'))
-            print(u'尝试自动登录...')
-            config = Config('config.json').config
-            token = login_and_save_token(config['username'], config['password'])
-            if token:
-                return query_with_token_retry(key, token, index)
-        else:
-            print(j.get('resultDesc'))
-    else:
-        pass
-
-
 def query_with_retry(key, index=-1):
-    config = Config('config.json').config
-    token = config['token']
-    if not token:
-        if config['username'] and config['password']:
-            token = login_and_save_token(config['username'], config['password'])
+    token = login_and_save_token()
+    response = raw_query(key, token)
+    try:
+        j = check_response(response)
+        if 'list' in j['data']:
+            list_part = j['data']['list']
+            urls = [data['logUrl'] for data in list_part if 'logUrl' in data]
+            if urls:
+                url = [urls[index]] if index > -1 else urls
+            else:
+                return None
+            return url
         else:
-            print('未设置账户密码')
-            return
-    return query_with_token_retry(key, token, index)
+            return None
+    except TokenException as ex:
+        clear_token()
+        return query_with_retry(key, index)
+    except Exception as ex:
+        print(type(ex))
+        print(j)
 
 
 def query_model_with_retry(key, index=-1):
-    config = Config('config.json').config
-    token = config['token']
-    if not token:
-        if config['username'] and config['password']:
-            token = login_and_save_token(config['username'], config['password'])
+    token = login_and_save_token()
+    response = raw_query(key, token)
+    try:
+        j = check_response(response)
+        print(j)
+        if 'list' in j['data']:
+            return j['data']['list']
         else:
-            print('未设置账户密码')
-            return
-    return query_model_with_token_retry(key, token, index)
+            return None
+    except TokenException as ex:
+        clear_token()
+        return query_model_with_retry(key, index)
+    except Exception as ex:
+        print(type(ex))
+        print(j)
 
 
 if __name__ == '__main__':

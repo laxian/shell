@@ -7,10 +7,11 @@ import json
 
 import requests
 
-from .config import Config
+from src.log.token_exception import TokenException
+from src.log.config import Config
 
 
-def _login(username, password):
+def raw_login(username, password):
     """
     登录，返回json
     :param username:
@@ -41,37 +42,49 @@ def _login(username, password):
         print(response.status_code)
 
 
-def login(username, password):
-    """
-    登录，返回token
-    :param username:
-    :param password:
-    :return:
-    """
-    result = _login(username, password)
-    if result:
-        j = json.loads(result)
-        result_code = j.get('resultCode')
-        if result_code == 9000:
-            return j['data']['token']
+def get_token(response):
+    j = json.loads(response)
+    print(j)
+    code = j['resultCode']
+    if code == 9000:
+        return j['data']['token']
+    else:
+        print(j['resultDesc'])
+
+
+def login_and_save_token():
+    config = Config('config.json').config
+    if 'token' not in config or not config['token']:
+        if not config['username'] or not config['password']:
+            print('请先配置账号密码')
+            return
         else:
-            print(j.get('resultDesc'))
+            response = raw_login(config['username'], config['password'])
+            token = get_token(response)
+            if token:
+                config['token'] = token
+                Config.dump(config)
+                return token
+            else:
+                print('登录失败')
+    else:
+        print('已有token: %s' % config['token'])
+        return config['token']
 
+def check_response(response):
+    j = json.loads(response)
+    code = j['resultCode']
+    if code == 9006:
+        raise TokenException(j['resultDesc'])
+    else:
+        return j
 
-def login_and_save_token(username, password):
-    """
-    登录，返回token，并更新到config
-    :param username:
-    :param password:
-    :return:
-    """
-    token = login(username, password)
-    if token:
-        config = Config('config.json').config
-        config['token'] = token
-        Config.dump(config)
-        return token
+def clear_token():
+    config = Config('config.json').config
+    config['token'] = None
+    Config.dump(config)
+
 
 
 if __name__ == '__main__':
-    print(login_and_save_token('${username}', '${password}'))
+    print(login_and_save_token())
