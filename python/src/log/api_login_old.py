@@ -5,7 +5,7 @@ from src.log.config import Config
 from src.log.token_exception import TokenException
 from functools import wraps
 
-def p(obj):
+def p(obj, *args, **kw):
     print(obj)
 
 def relogin(h=p, **kw):
@@ -20,7 +20,7 @@ def relogin(h=p, **kw):
             try:
                 j = check_response(content)
                 print('--------------------------------3')
-                return h(j, **kw)
+                return h(j, **kwargs)
             except TokenException as ex:
                 clear_token()
                 print('--------------------------------4')
@@ -302,3 +302,4 @@ if __name__ == '__main__':
     # print(api_available('EVT6-2-1'))
     # print(api_arrive('EVT6-2-1'))
     print(api_status('EVT6-2-1'))
+    p('hello', robotId='EVT6-2-2')

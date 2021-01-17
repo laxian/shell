@@ -60,7 +60,8 @@ def task_list_parser(j, robotId=None):
         return None
     size = j['data']['totalSize']
     tasks = j['data']['list']
-    return [l['taskId'] for l in tasks if robotId in l.values() ] if robotId else [ l['taskId'] for l in tasks ]
+    print('------------------------ %d' % size)
+    return [l['taskId'] for l in tasks if l['robotId'] == robotId ] if robotId else [ l['taskId'] for l in tasks ]
     if size == 0:
         return []
     
@@ -249,4 +250,5 @@ if __name__ == '__main__':
     # for task in ids:
     #     task_complete(task)
     # shield_nav('EVT8-10', 'false')
-    oper_boxies('EVT8-10', [0, 1], 'close')
+    # oper_boxies('EVT8-10', [0, 1], 'close')
+    print(json.dumps(get_all_tasks(robotId='EVT7-1'), sort_keys=True, indent=4, ensure_ascii=False))
