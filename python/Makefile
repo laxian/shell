@@ -35,7 +35,8 @@ test:
 	python test_api_wrapper.py
 
 
-setup: 
+setup:
+	./tools/setup.sh
 	python setup.py build
 	python setup.py sdist
 	pip install dist/`ls dist | tail -1`
