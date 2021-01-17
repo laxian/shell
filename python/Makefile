@@ -8,26 +8,32 @@ clean:
 	-rm -rf *.egg-info
 
 sub:
-	../apr/secret/remove_sensitive.sh . sub
+	-../apr/secret/remove_sensitive.sh . sub
 res:
 	../apr/secret/remove_sensitive.sh . res
 
-install:
+dep:
 	pip install -r requirements.txt
+
+undep:
+	pip uninstall -r requirements.txt
+
+uninstall:
+	pip uninstall pull-log
 
 env: 
 	-virtualenv venv --python=python3.9
 
 activate:
-	source venv/bin/activate
+	source venv391/bin/activate
 
 deactivate:
 	deactivate
 
 rmenv:
-	rm -rf venv
+	rm -rf venv*
 
-config: env activate install
+config: env activate dep
 
 test:
 	python test.py
@@ -35,8 +41,10 @@ test:
 	python test_api_wrapper.py
 
 
-setup:
+setup_cli:
 	./tools/setup.sh
+
+setup: setup_cli sub
 	python setup.py build
 	python setup.py sdist
 	pip install dist/`ls dist | tail -1`
@@ -45,4 +53,4 @@ server: setup
 	scp dist/$$(ls dist | head -2 | tail -1) wangjing@${adb_ip}:~/code/apache-tomcat-9.0.33/webapps/files/
 
 robot:
-	segway_status 1 | grep ID
+	segway_status '' | grep ID
