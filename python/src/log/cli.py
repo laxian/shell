@@ -10,7 +10,7 @@ from src.log.adb_auth import adb_auth
 from src.log.adb_ex import dump_ex_log, dump_sys_log, pull_log_from_dir
 from src.log.api_login import login_and_save_token
 from src.log.api_query import query_with_retry, query_model_with_retry
-from src.log.api_status import get_status
+from src.log.api_status import status_with_retry
 from src.log.api_upload import upload_with_retry
 from src.log.config import Config
 from src.log.dumpnavLogs import nav_log_gui
@@ -218,7 +218,7 @@ def segway_status(args=None):
     if len(sys.argv) == 1:
         print('segway_status <robot_id>')
     else:
-        get_status(sys.argv[1])
+        status_with_retry(sys.argv[1])
 
 def segway_restore(args=None):
     if len(sys.argv) == 1:

@@ -8,7 +8,7 @@ import sys
 import requests
 
 from src.log.api_login import login_and_save_token, check_response, clear_token
-from .config import Config
+from src.log.config import Config
 from src.log.token_exception import TokenException
 
 
@@ -101,4 +101,4 @@ if __name__ == '__main__':
     key = sys.argv[1]
     token = sys.argv[2] if len(sys.argv) > 2 else Config('config.json').config['token']
     index = 0
-    query_with_token_retry(key, token, index)
+    query_with_retry(key, index)
