@@ -15,12 +15,6 @@ from src.log.token_exception import TokenException
 
 def upload(robot_id, path, log_start_time, token, env='release', log_end_time=None):
     timestamp = time.time() * 1000 - 5000 if not log_end_time else log_end_time
-    print('--------------------------------')
-    print(log_end_time)
-    print(timestamp)
-    print(log_start_time)
-    print(token)
-    print('--------------------------------')
     headers = {
         'Connection': 'keep-alive',
         'Accept': 'application/json, text/plain, */*',

@@ -303,9 +303,9 @@ def segway_clear_tasks(args=None):
     if len(sys.argv) == 1:
         print('segway_clear_tasks <robot_id> [env=dev]')
     elif len(sys.argv) == 2:
-        clear_tasks(sys.argv[1])
+        clear_tasks(robotId=sys.argv[1])
     else:
-        clear_tasks(sys.argv[1], env=sys.argv[2])
+        clear_tasks(robotId=sys.argv[1], env=sys.argv[2])
 
 def segway_box(args=None):
     if len(sys.argv) == 1:

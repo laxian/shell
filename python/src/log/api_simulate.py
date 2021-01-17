@@ -110,9 +110,6 @@ def interrupt_tasks(tasks, env='dev'):
     except TokenException as ex:
         clear_token()
         interrupt_tasks(env, robotId)
-    except Exception as ex:
-        print(j)
-        print(ex)
 
 
 def raw_complete(token, taskId, env):
@@ -156,7 +153,6 @@ def task_complete(taskId=None, env='dev'):
         clear_token()
         task_complete(taskId, env)
     except Exception as ex:
-        print(j)
         print(ex)
 
 
@@ -198,9 +194,13 @@ def shield_nav(token, robotId, shield='true', env='dev'):
     return raw_shield_nav(token, robotId, shield, env)
 
 def clear_tasks(robotId, env='dev'):
-    ids = get_all_tasks('EVT8-10')
+    ids = get_all_tasks(robotId=robotId)
     print(ids)
-    interrupt_tasks(ids)
+    try:
+        interrupt_tasks(ids)
+    except Exception as ex:
+        print(ex)
+        exit(1)
     for task in ids:
         task_complete(task)
 
@@ -243,7 +243,6 @@ def oper_boxies(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env='
 
 
 if __name__ == '__main__':
-    print('----------------------------------------------------------------')
     # ids = get_all_tasks('EVT8-10')
     # print(ids)
     # interrupt_tasks(ids)

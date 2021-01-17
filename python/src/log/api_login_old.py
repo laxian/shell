@@ -13,17 +13,13 @@ def relogin(h=p, **kw):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
             token = login_and_save_token(kwargs['env']) if 'env' in kwargs else login_and_save_token()
-            print('--------------------------------1 %s' % token)
             print('%s %s %s' % (token, args, kwargs))
             content = func(token, *args, **kwargs)
-            print('--------------------------------2')
             try:
                 j = check_response(content)
-                print('--------------------------------3')
                 return h(j, **kwargs)
             except TokenException as ex:
                 clear_token()
-                print('--------------------------------4')
                 return wrapped_function(*args, **kwargs)
             except Exception as ex:
                 print(j)
@@ -216,6 +212,8 @@ def check_response(response):
     code = j['code']
     if code == 4006 or code == 4007:
         raise TokenException(j['message'])
+    elif code != 200:
+        raise Exception(j['message'])
     else:
         return j
 
