@@ -22,7 +22,6 @@ def relogin(h=p, **kw):
                 clear_token()
                 return wrapped_function(*args, **kwargs)
             except Exception as ex:
-                print(j)
                 print(ex)
             # return func(token, *args, **kwargs)
         return wrapped_function
@@ -167,10 +166,8 @@ def raw_available(token, robot_id, available, env):
     }
 
     data = '{"available":%s,"robotIds":["%s"]}' % (available, robot_id)
-
-    response = requests.post('https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/config/available' % env, headers=headers, data=data)
-
-    print(response)
+    url='https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/config/available' % env
+    response = requests.post(url, headers=headers, data=data)
     if response.status_code == 200:
         return response.content.decode('utf-8')
     else:

@@ -10,7 +10,7 @@ clean:
 sub:
 	-../apr/secret/remove_sensitive.sh . sub
 res:
-	../apr/secret/remove_sensitive.sh . res
+	-../apr/secret/remove_sensitive.sh . res
 
 dep:
 	pip install -r requirements.txt
@@ -44,7 +44,9 @@ test:
 setup_cli:
 	./tools/setup.sh
 
-setup: setup_cli sub
+dist: setup_cli res
+
+setup: 
 	python setup.py build
 	python setup.py sdist
 	pip install dist/`ls dist | tail -1`
