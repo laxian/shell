@@ -44,7 +44,7 @@ def match_url(url, tick):
 
 def match_time(tick, tock):
     print('tick: %s -> tock: %s' % (tick, tock))
-    return -2 < tock - tick <= 5
+    return -2 < tock - tick <= 10
 
 
 def get_times(endTime=None):

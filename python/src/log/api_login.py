@@ -32,8 +32,7 @@ def raw_login(username, password):
 
     data = '{"username":"%s","password":"%s"}' % (username, password)
 
-    response = requests.post(
-        'http://${host_part_1}-api.${host_part_2}.com/user/login', headers=headers, data=data, verify=False)
+    response = requests.post('https://robot-base.${host_part_2}.com/navcenter/user/login', headers=headers, data=data, verify=False)
 
     print(response)
     if response.status_code == 200:
@@ -87,4 +86,5 @@ def clear_token():
 
 
 if __name__ == '__main__':
-    print(login_and_save_token())
+    # print(login_and_save_token())
+    print(raw_login('${username}', '${password}'))
