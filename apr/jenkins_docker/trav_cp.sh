@@ -44,7 +44,8 @@ else
 fi
 
 time=$(date "+%Y-%m-%d_%H_%M_%S")
-apkdir=app/build/outputs/apk/
+# apkdir=app/build/outputs/apk/
+apkdir=.
 outdir=$JENKINS_HOME/outputs/$time
 mkdir -p $outdir
 host="${host}"
