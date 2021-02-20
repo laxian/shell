@@ -2,8 +2,8 @@
 JENKINS_HOME := /var/jenkins_home
 DELIVERY_PATH := workspace/app-apr-food-delivery
 CABINET_PATH := workspace/apr-cabinet-app-android/GxCabinetApp
-RELATIVE_PATH := NULL
-CONTAINER := jenkins
+RELATIVE_PATH := 
+CONTAINER := jenkins-android2
 PROJECT_ROOT := $(CONTAINER):$(JENKINS_HOME)/$(RELATIVE_PATH)
 
 push: set_ip build remove_ip
@@ -46,7 +46,7 @@ notify: md_utils
 	docker cp ./jenkins/utils/notify.sh $(PROJECT_ROOT)/utils/
 
 md_utils: 
-	docker exec -it jenkins bash -c "[ -d $(JENKINS_HOME)/$(RELATIVE_PATH)/utils ] || mkdir -p $(JENKINS_HOME)/$(RELATIVE_PATH)/utils"
+	docker exec -it $(CONTAINER) bash -c "[ -d $(JENKINS_HOME)/$(RELATIVE_PATH)/utils ] || mkdir -p $(JENKINS_HOME)/$(RELATIVE_PATH)/utils"
 
 server_check: head
 	docker cp ./jenkins/server_check.sh $(PROJECT_ROOT)

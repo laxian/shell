@@ -17,8 +17,10 @@ def api_broken(robotId, env='dev', errorCode=110123, msg='test'):
         ('msg', msg),
     )
 
-    response = requests.get(
-        'https://api-gate-%s-delivery.${host_part_2}.com/test/robot/simulation/error' % env, params=params)
+    url = 'https://api-gate-%s-delivery.${host_part_2}.com/test/%s/error/server/simulation/error' % (env, 'zz101222ss')
+    response = requests.get(url, params=params)
+    print(url)
+    print(params)
 
     print(response.content.decode('utf-8'))
 
@@ -60,7 +62,8 @@ def task_list_parser(j, robotId=None):
         return None
     size = j['data']['totalSize']
     tasks = j['data']['list']
-    return [l['taskId'] for l in tasks if robotId in l.values() ] if robotId else [ l['taskId'] for l in tasks ]
+    print('------------------------ %d' % size)
+    return [l['taskId'] for l in tasks if l['robotId'] == robotId ] if robotId else [ l['taskId'] for l in tasks ]
     if size == 0:
         return []
     
@@ -109,9 +112,6 @@ def interrupt_tasks(tasks, env='dev'):
     except TokenException as ex:
         clear_token()
         interrupt_tasks(env, robotId)
-    except Exception as ex:
-        print(j)
-        print(ex)
 
 
 def raw_complete(token, taskId, env):
@@ -155,7 +155,6 @@ def task_complete(taskId=None, env='dev'):
         clear_token()
         task_complete(taskId, env)
     except Exception as ex:
-        print(j)
         print(ex)
 
 
@@ -197,9 +196,13 @@ def shield_nav(token, robotId, shield='true', env='dev'):
     return raw_shield_nav(token, robotId, shield, env)
 
 def clear_tasks(robotId, env='dev'):
-    ids = get_all_tasks('EVT8-10')
+    ids = get_all_tasks(robotId=robotId)
     print(ids)
-    interrupt_tasks(ids)
+    try:
+        interrupt_tasks(ids)
+    except Exception as ex:
+        print(ex)
+        exit(1)
     for task in ids:
         task_complete(task)
 
@@ -242,11 +245,11 @@ def oper_boxies(token, robotId, boxIndexies=[0,1,2,3], openOrClose='open', env='
 
 
 if __name__ == '__main__':
-    print('----------------------------------------------------------------')
     # ids = get_all_tasks('EVT8-10')
     # print(ids)
     # interrupt_tasks(ids)
     # for task in ids:
     #     task_complete(task)
     # shield_nav('EVT8-10', 'false')
-    oper_boxies('EVT8-10', [0, 1], 'close')
+    # oper_boxies('EVT8-10', [0, 1], 'close')
+    print(json.dumps(get_all_tasks(robotId='EVT7-1'), sort_keys=True, indent=4, ensure_ascii=False))

@@ -10,7 +10,7 @@ from src.log.adb_auth import adb_auth
 from src.log.adb_ex import dump_ex_log, dump_sys_log, pull_log_from_dir
 from src.log.api_login import login_and_save_token
 from src.log.api_query import query_with_retry, query_model_with_retry
-from src.log.api_status import get_status
+from src.log.api_status import status_with_retry
 from src.log.api_upload import upload_with_retry
 from src.log.config import Config
 from src.log.dumpnavLogs import nav_log_gui
@@ -173,10 +173,10 @@ def segway_auto(args=None):
         Usage: segway_auto <robot_id> <path>
         ''')
         return
+    elif len(sys.argv) == 3:
+        schedule(sys.argv[1], sys.argv[2])
     else:
-        robot_id = sys.argv[1]
-        path = sys.argv[2]
-    schedule(robot_id, path)
+        schedule(sys.argv[1], sys.argv[2], sys.argv[3])
 
 
 def segway_nav(args=None):
@@ -218,15 +218,15 @@ def segway_status(args=None):
     if len(sys.argv) == 1:
         print('segway_status <robot_id>')
     else:
-        get_status(sys.argv[1])
+        status_with_retry(sys.argv[1])
 
 def segway_restore(args=None):
     if len(sys.argv) == 1:
-        print('segway_restore <robot_id>')
+        print('segway_restore <robot_id> [dev|alpha|internal|release='']')
     elif len(sys.argv) == 2:
         api_restore(sys.argv[1])
     else:
-        api_restore(sys.argv[1], sys.argv[2])
+        api_restore(sys.argv[1], env=sys.argv[2])
 
 def segway_available(args=None):
     if len(sys.argv) == 1:
@@ -236,23 +236,23 @@ def segway_available(args=None):
     elif len(sys.argv) == 3:
         api_available(sys.argv[1], sys.argv[2])
     else:
-        api_available(sys.argv[1], sys.argv[2], sys.argv[3])
+        api_available(sys.argv[1], sys.argv[2], env=sys.argv[3])
 
 def segway_arrive(args=None):
     if len(sys.argv) == 1:
-        print('segway_arrive <robot_id>')
+        print('segway_arrive <robot_id> [dev|alpha|internal|release='']')
     elif len(sys.argv) == 2:
         api_arrive(sys.argv[1])
     else:
-        api_arrive(sys.argv[1], sys.argv[2])
+        api_arrive(sys.argv[1], env=sys.argv[2])
 
 def segway_status2(args=None):
     if len(sys.argv) == 1:
-        print('segway_status2 <robot_id>')
+        print('segway_status2 <robot_id> [dev|alpha|internal|release='']')
     elif len(sys.argv) == 2:
         api_status(sys.argv[1])
     else:
-        api_status(sys.argv[1], sys.argv[2])
+        api_status(sys.argv[1], env=sys.argv[2])
 
 def segway_share(args=None):
     """
@@ -303,9 +303,9 @@ def segway_clear_tasks(args=None):
     if len(sys.argv) == 1:
         print('segway_clear_tasks <robot_id> [env=dev]')
     elif len(sys.argv) == 2:
-        clear_tasks(sys.argv[1])
+        clear_tasks(robotId=sys.argv[1])
     else:
-        clear_tasks(sys.argv[1], env=sys.argv[2])
+        clear_tasks(robotId=sys.argv[1], env=sys.argv[2])
 
 def segway_box(args=None):
     if len(sys.argv) == 1:

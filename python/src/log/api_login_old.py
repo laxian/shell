@@ -5,7 +5,7 @@ from src.log.config import Config
 from src.log.token_exception import TokenException
 from functools import wraps
 
-def p(obj):
+def p(obj, *args, **kw):
     print(obj)
 
 def relogin(h=p, **kw):
@@ -13,20 +13,15 @@ def relogin(h=p, **kw):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
             token = login_and_save_token(kwargs['env']) if 'env' in kwargs else login_and_save_token()
-            print('--------------------------------1 %s' % token)
             print('%s %s %s' % (token, args, kwargs))
             content = func(token, *args, **kwargs)
-            print('--------------------------------2')
             try:
                 j = check_response(content)
-                print('--------------------------------3')
-                return h(j, **kw)
+                return h(j, **kwargs)
             except TokenException as ex:
                 clear_token()
-                print('--------------------------------4')
                 return wrapped_function(*args, **kwargs)
             except Exception as ex:
-                print(j)
                 print(ex)
             # return func(token, *args, **kwargs)
         return wrapped_function
@@ -171,10 +166,8 @@ def raw_available(token, robot_id, available, env):
     }
 
     data = '{"available":%s,"robotIds":["%s"]}' % (available, robot_id)
-
-    response = requests.post('https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/config/available' % env, headers=headers, data=data)
-
-    print(response)
+    url='https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/config/available' % env
+    response = requests.post(url, headers=headers, data=data)
     if response.status_code == 200:
         return response.content.decode('utf-8')
     else:
@@ -216,6 +209,8 @@ def check_response(response):
     code = j['code']
     if code == 4006 or code == 4007:
         raise TokenException(j['message'])
+    elif code != 200:
+        raise Exception(j['message'])
     else:
         return j
 
@@ -302,3 +297,4 @@ if __name__ == '__main__':
     # print(api_available('EVT6-2-1'))
     # print(api_arrive('EVT6-2-1'))
     print(api_status('EVT6-2-1'))
+    p('hello', robotId='EVT6-2-2')

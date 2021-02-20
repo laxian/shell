@@ -4,12 +4,12 @@ import sys
 
 
 import requests
-from src.log.api_login import login_and_save_token
+from src.log.api_login import login_and_save_token, check_response, clear_token
 from src.log.config import Config
 from src.log.token_exception import TokenException
 
 
-def robot_status_api(robot_id, token=None):
+def raw_status(robot_id, token=None):
     headers = {
     'Connection': 'keep-alive',
     'Accept': 'application/json, text/plain, */*',
@@ -39,44 +39,31 @@ def robot_status_api(robot_id, token=None):
         print(response.status_code)
 
 
-def get_status_data(robot_id, token=None):
-    if not token:
-        config = Config('config.json').config
-        token = config['token']
-    response = robot_status_api(robot_id, token)
-    if response:
-        j = json.loads(response)
-        code = j['resultCode']
-        if code == 9000:
-            if 'data' in j:
-                if 'list' in j['data']:
-                    lists = j['data']['list']
-                    if lists:
-                        return lists
-                    else:
-                        print('list empty')
-                else:
-                    print('list not found')
-                    print(j)
-            else:
-                print('data not found')
-        elif code == 9006:
-            print(j['resultDesc'])
-            raise TokenException(j['resultDesc'])
-        else:
-            print(j.get('resultDesc'))
-    else:
-        print('request failed')
-
-
-def get_status_data_with_retry(robot_id, token=None):
+def status_with_retry(robot_id):
+    token = login_and_save_token()
+    response = raw_status(robot_id, token)
     try:
-        return get_status_data(robot_id, token)
-    except TokenException as er:
-        config = Config('config.json').config
-        token = login_and_save_token(config['username'], config['password'])
-        if token:
-            return get_status_data(robot_id, token)
+        j = check_response(response)
+        if 'data' in j:
+            if 'list' in j['data']:
+                lists = j['data']['list']
+                if lists:
+                    for m in lists:
+                        pretty_print(m)
+                    return lists
+                else:
+                    print('list empty')
+            else:
+                print('list not found')
+                print(j)
+        else:
+            print('data not found')
+    except TokenException as ex:
+        clear_token()
+        return status_with_retry(robot_id)
+    except Exception as ex:
+        print(type(ex))
+        print(j)
 
 
 def pretty_print(status_model):
@@ -113,11 +100,5 @@ def pretty_print(status_model):
         print(ex)
 
 
-def get_status(robot_id):
-    result = get_status_data_with_retry(robot_id)
-    for m in result:
-        pretty_print(m)
-
-
 if __name__ == '__main__':
-    get_status(sys.argv[1])
+    status_with_retry(sys.argv[1])

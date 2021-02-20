@@ -1,6 +1,7 @@
 # Jenkins 无侵入打包方案
 
 ## 1. 整体流程
+
 1. 将脚本和工具发送到jenkins构建项目根目录
 2. Docker+Jenkins打包
 3. 打包后执行signapk签名
@@ -8,8 +9,8 @@
 5. 将apk发送到可以访问的仓库
 6. wechat work 群机器人通知完成，显示可访问的仓库链接
 
-
 ## 2. 脚本说明
+
 ```shell
 Makefile        // 调度
 jenkins.sh      // 脚本总入口
@@ -68,11 +69,12 @@ curl -v -u admin:admin \
 详细参数参考
 [Components API](https://help.sonatype.com/repomanager3/rest-and-integration-api/components-api?_ga=2.252588809.1278989473.1586491809-667887869.1586017412#ComponentsAPI-Raw)
 
-
 ## private 目录
+
 private 下是未被git收录的隐私文件。
 token是企业微信群机器人的token，
 rk目录下是apk签名证书
+
 ```shell
 $ tree
 ├── rk
