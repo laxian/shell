@@ -34,14 +34,14 @@ Postman触发截图：
 1. oneliner
 
     ```shell
-    curl http://admin:${jenkins_api_token}@${host}:8002/job/app-apr-food-delivery-debug/buildWithParameters\?br\=origin/release
+    curl http://admin:11b114575809164aebae456cbc855af368@10.10.80.25:8002/job/app-apr-food-delivery-debug/buildWithParameters\?br\=origin/release
     ```
 
 2. multiliner
 
     ```shell
-    curl http://${host}:8002/job/app-apr-food-delivery-debug/buildWithParameters \
-    --user admin:${jenkins_api_token} \
+    curl http://10.10.80.25:8002/job/app-apr-food-delivery-debug/buildWithParameters \
+    --user admin:11b114575809164aebae456cbc855af368 \
     --data br=origin/release
     ```
 
