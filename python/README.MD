@@ -62,13 +62,13 @@ log_dir | 日志解压绝对路径
 - 安装
   
 ```shell
-pip install pull-log-0.0.7.tar.gz
+pip install pull-log-0.0.8.tar.gz
 ```
 
 或者通过url安装
 
 ```shell
-pip install http://${adb_ip}:8080/files/pull_log-0.0.7.tar.gz
+pip install http://${adb_ip}:8080/files/pull_log-0.0.8.tar.gz
 ```
 
 - 显示命令列表

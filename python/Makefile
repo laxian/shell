@@ -52,7 +52,7 @@ setup:
 	pip install dist/`ls dist | tail -1`
 
 server: setup
-	scp dist/$$(ls dist | head -2 | tail -1) wangjing@${adb_ip}:~/code/apache-tomcat-9.0.33/webapps/files/
+	scp dist/$$(ls dist | tail -1) wangjing@${adb_ip}:~/code/apache-tomcat-9.0.33/webapps/files/
 
 robot:
 	segway_status '' | grep ID
