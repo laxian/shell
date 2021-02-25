@@ -64,9 +64,13 @@ find $apkdir -name "*.apk" | xargs -I F cp F $outdir
 if [ $sign == 'true' ]; then
         pushd $outdir
         for apk in $(ls $outdir/*.apk); do
-                new_apk="${apk//.apk/}-$GIT_REV.apk"
-                mv $apk ${new_apk//-unsigned/}
-                $workdir/sign.sh $new_apk "${new_apk//.apk/}-signed.apk"
+                # 如果不带git hash，加上
+                if [ ! `echo $apk | grep $GIT_REV` ]; then
+                        apk="${apk//.apk/}-$GIT_REV.apk"
+                fi
+                # 如果带unsigned，去掉
+                mv $apk ${apk//-unsigned/}
+                $workdir/sign.sh $apk "${apk//.apk/}-signed.apk"
         done
         popd
 fi
