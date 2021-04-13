@@ -11,9 +11,12 @@ workdir=$(
         pwd
 )
 
+module=${module:-app}
 echo $br
 echo $variant
 echo $sign
+echo $module
+echo $use_aliyun_maven
 
 VARIANT_ALL="all"
 VARIANT_ALPHA="alpha"
@@ -21,7 +24,7 @@ VARIANT_DEBUG="debug"
 VARIANT_RELEASE="release"
 
 # 切换到参数指定分支
-[ -n "$br" ] && git checkout $br
+[ -n "$br" ] && git checkout -f $br
 #WORKSPACE=.
 JENKINS_HOME=/var/jenkins_home
 GIT_REV=$(git rev-parse --short HEAD)
@@ -31,14 +34,17 @@ echo $GIT_BRANCH
 echo $GIT_REV
 COMMIT=$(git log -n 1 | sed '/\(commit\|Author\|Date\|Merge:\|Merge branch\|See merge\|^[ ]*$\)/d' | tr -d ' ')
 
+# gradle执行前的一些操作，如果有，加在这里
+. ./before_build.sh
+
 # 开始构建
 $workdir/gradlew clean
 if [ $variant == $VARIANT_RELEASE ]; then
-        $workdir/gradlew assembleRelease
+        $workdir/gradlew :$module:assembleRelease
 elif [ $variant == $VARIANT_ALPHA ]; then
-        $workdir/gradlew assembleAlpha
+        $workdir/gradlew :$module:assembleAlpha
 elif [ $variant == $VARIANT_DEBUG ]; then
-        $workdir/gradlew assembleDebug
+        $workdir/gradlew :$module:assembleDebug
 else
         $workdir/gradlew build
 fi
@@ -48,7 +54,7 @@ time=$(date "+%Y-%m-%d_%H_%M_%S")
 apkdir=.
 outdir=$JENKINS_HOME/outputs/$time
 mkdir -p $outdir
-host="${host}"
+host="10.10.80.25:8080"
 url=http://$host/files/$time
 
 # 复制apk到指定目录，outdir和tomcat托管目录磁盘映射
@@ -58,17 +64,21 @@ find $apkdir -name "*.apk" | xargs -I F cp F $outdir
 if [ $sign == 'true' ]; then
         pushd $outdir
         for apk in $(ls $outdir/*.apk); do
-                new_apk="${apk//.apk/}-$GIT_REV.apk"
-                mv $apk $new_apk
-                $workdir/sign.sh $new_apk "${new_apk//.apk/}-signed.apk"
+                # 如果不带git hash，加上
+                if [ ! `echo $apk | grep $GIT_REV` ]; then
+                        apk="${apk//.apk/}-$GIT_REV.apk"
+                fi
+                # 如果带unsigned，去掉
+                mv $apk ${apk//-unsigned/}
+                $workdir/sign.sh $apk "${apk//.apk/}-signed.apk"
         done
         popd
 fi
 
 # 微信通知
-token=`cat ./private/token`
+token=$(cat ./private/token)
 . $workdir/utils/notify.sh
-urls="apks:\n$GIT_BRANCH\n$GIT_REV\n$COMMIT\n"
+urls="apks:\n$JOB_NAME\n$GIT_BRANCH\n$GIT_REV\n$COMMIT\n"
 for f in $(ls $outdir); do
         uri=$url/$f
         block="[$f]($uri)"
