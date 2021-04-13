@@ -38,7 +38,7 @@ eg: `./gradlew assembleDebug`
 ## gradle-wrapper.jar 是什么？
 
 gradlew/gradlew.bat 是一个脚本，最终执行的任务的，是gradle-wrapper.jar，gradlew assemble，本质上是在执行：
-`java -classpath gradle-wrapper.jar assemble`，当然还有一些附加参数省略了。
+`java -classpath gradle-wrapper.jar org.gradle.wrapper.GradleWrapperMain assemble`，当然还有一些附加参数省略了。
 并且gradle-wrapper.jar检测到本地没有对应版本的gradle，会根据`gradle-wrapper.properties`配置的`distributionUrl`自动下载安装。
 
 ## gradle官方的distributionUrl下载缓慢怎么办？
