@@ -1,4 +1,4 @@
-#!/usr/bin/env bash -x
+#!/usr/bin/env bash
 
 #----------------------------------------------------------------
 # 使用国内镜像下载gradle distributeUrl并部署
@@ -12,11 +12,8 @@ GRADLE_DIST_PATH=$GRADLE_USER_HOME/$GRADLE_WRAPPER_PATH
 SCRIPT_PATH="gradle/wrapper"
 SCRIPT_NAME="gradle-wrapper.properties"
 
-echo $GRADLE_DIST_PATH
-
 project_path=$1
 gradle_file=$1/$SCRIPT_PATH/$SCRIPT_NAME
-echo $gradle_file
 
 url=$(grep distributionUrl $gradle_file | sed 's/distributionUrl=//g; s/https\\/https/g')
 name=${url##*/}
@@ -25,14 +22,12 @@ gradle_version=${name%-*}
 
 mirror_host="https://mirrors.cloud.tencent.com/gradle"
 mirror_url=$mirror_host/$name
-echo $url $name $mirror_url
 
 hash=$(python hash.py $url)
-echo $hash
 zip_output=$GRADLE_DIST_PATH/$name_no_ext/$hash
 
 if [ -f $zip_output/$name.ok ]; then
-    echo $zip_output exists
+    echo $zip_output already exists!
     $project_path/gradlew -p $project_path
 else
     [ -f $name ] || curl -OL $mirror_url

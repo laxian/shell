@@ -1,6 +1,6 @@
 # 自用shell集合
 
-> 从来都是随手写，用后扔。建个项目，作个备忘。
+> 写一小时脚本，省一分钟手工
 
 ## [apkviewer](https://github.com/laxian/shell/blob/master/apkviewer/README.MD)
 
@@ -38,7 +38,7 @@
 
 ## apr
 
-> 一套jenkins打包、上传、通知脚本
+> 生产力工具。包括一套jenkins打包、上传、通知脚本
 
 ## adb
 
@@ -55,3 +55,15 @@
 ## jar wrapper
 
 [how-to-make-a-jar-file-linux-executable](https://coderwall.com/p/ssuaxa/how-to-make-a-jar-file-linux-executable)
+
+## python 效率日志工具
+
+一键完成日志的上传、查询、下载、解压、打开。可配置
+
+## gradle_hash
+
+使用镜像下载部署gradle distribution
+
+## course、course2
+
+lexiang.com自动上课脚本
