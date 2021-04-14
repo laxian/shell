@@ -10,4 +10,4 @@ for file in ${apk_array[@]}; do
     cp $file $dest
 done
 
-cp2share $1 $2
+# cp2share $1 $2

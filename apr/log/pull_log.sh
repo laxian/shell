@@ -6,4 +6,5 @@
 # $2 指定拉取第$2行，默认0
 # ----------------------------
 
-./query_log_url.sh $@ | xargs -I URL curl -LO URL
+pwd=$( cd "$( dirname "$0"  )" && pwd )
+$pwd/query_log_url.sh $@ | xargs -I URL curl -LO URL

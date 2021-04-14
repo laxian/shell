@@ -1,6 +1,6 @@
 #!/bin/sh
 # by zhouweixian
-# 本地plugin的修改，都房子这个shell文件里了。不同用户，需执行一下这个脚本，完成对齐
+# 本地plugin的修改，都放在这个shell文件里了。不同用户，需执行一下这个脚本，完成对齐
 # sed 用的是 Mac-sed。 gnu-sed 需要做适量修改
 
 if [ -z $1 ]; then

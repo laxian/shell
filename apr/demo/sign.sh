@@ -1,3 +1,10 @@
 #!/usr/bin/env bash
 
-java -jar ../files/signapk.jar ../private/rk/platform.x509.pem ../private/rk/platform.pk8 $1 $2
+workdir=$(
+    cd $(dirname $0)
+    pwd
+)
+echo $workdir
+parent=`dirname $workdir`
+
+java -jar $parent/files/signapk.jar $parent/private/rk/platform.x509.pem $parent/private/rk/platform.pk8 $1 $2

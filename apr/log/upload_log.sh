@@ -24,6 +24,6 @@ curl "http://${host_part_1}-api.${host_part_2}.com/robot/log/toUploadLog" \
   -H "Origin: http://${host_part_1}.${host_part_2}.com" \
   -H "Referer: http://${host_part_1}.${host_part_2}.com/" \
   -H 'Accept-Language: zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7' \
-  --data-binary "{\"robotId\":\"GXBOX-$robot_id\",\"environment\":\"$env\",\"logPath\":\"$path\",\"startTime\":1590984000000,\"endTime\":${endtime}000}" \
+  --data-binary "{\"robotId\":\"$robot_id\",\"environment\":\"$env\",\"logPath\":\"$path\",\"startTime\":1590984000000,\"endTime\":${endtime}000}" \
   --compressed \
   --insecure

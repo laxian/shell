@@ -1,30 +1,48 @@
-#!/usr/bin/env bash -x
+#!/usr/bin/env bash
 
-id=$1
+if [ $# -ne 2 ]; then
+    cat <<-EOF
+		Usage: ./auto_get.sh <id> <path>
+	EOF
+    exit 1
+fi
+
+
+# id 需要被子shell使用
+export id=$1
 path=$2
 # success_words="指令下发成功并已收到！"
-success_codes="9000"
+SUCCESS_CODES="9000"
+# 轮询日志url的最大次数
+POLL_LIMIT=120
 
-./clean.sh
-result=`./upload_log.sh $id $path | grep $success_codes`
+pwd=$( cd "$( dirname "$0"  )" && pwd )
+$pwd/clean.sh
+json=`./upload_log.sh $id $path`
+result=`echo $json| grep $SUCCESS_CODES`
 
 if [[ -n $result ]]; then
+    # 上传成功后，以当前时间时间戳为准，轮询当前id下最新日志url，如果url最新包含该时间戳，则认为是
+    # 本次上传的日志。理论上此本地时间戳和网络时间戳可能以一秒之差分布在两分钟。实际使用中
+    # 尚未遇到，不考虑此情况
+    # 循环获取url，如果时间戳不一致，1秒后再次获取。累计达到一定次数，停止轮询
+    cnt=1
     time_tag=$(date +"%Y-%m-%d_%H-%M")
     until [[ $new_url =~ $time_tag ]];
     do
+        if [ $cnt -gt $POLL_LIMIT ]; then
+            echo "POLL_LIMIT exceeded!"
+            exit 1
+        fi
+        
         sleep 1
         new_url=$(./query_log_url.sh $id)
+        # 次数计数器，防止过多查询
+        let cnt++
     done
-    curl -LO $new_url
-    file_name=${new_url##*/}
-    mv $file_name ~/Downloads
-    cd ~/Downloads
-    dir=$id$time_tag
-    unzip $file_name -d $dir
-    code $dir
-    echo enjoy!!!
-
+    $pwd/fetch_and_open.sh $new_url
 else
     echo request failed.
+    echo $json
 fi
 
