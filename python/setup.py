@@ -45,7 +45,7 @@ setup(
         'chardet==3.0.4',
         'idna==2.10',
         'requests==2.25.0',
-        'urllib3==1.26.2',
+        'urllib3==1.26.5',
     ],
     entry_points={
         "console_scripts": [
