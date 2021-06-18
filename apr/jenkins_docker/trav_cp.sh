@@ -24,7 +24,7 @@ VARIANT_DEBUG="debug"
 VARIANT_RELEASE="release"
 
 # 切换到参数指定分支
-[ -n "$br" ] && git checkout -f $br
+[ -n "$br" ] && git checkout -f $br && git reset --hard HEAD
 #WORKSPACE=.
 JENKINS_HOME=/var/jenkins_home
 GIT_REV=$(git rev-parse --short HEAD)

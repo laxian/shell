@@ -1,4 +1,5 @@
 JENKINS_JOB := app-apr-food-delivery-debug
+# JENKINS_JOB := app-apr-food-delivery-r1-1
 # JENKINS_JOB := gx-appservice
 # JENKINS_JOB := Gx_Service
 
