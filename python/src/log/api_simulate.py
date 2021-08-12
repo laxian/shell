@@ -19,6 +19,7 @@ def api_broken(robotId, env='dev', errorCode=110123, msg='test'):
 
     url = 'https://api-gate-%s-delivery.${host_part_2}.com/test/%s/error/robot/simulation/error' % (env, 'zz101222ss')
     response = requests.get(url, params=params)
+    print('=== === === 开始模拟 === === ===')
     print(url)
     print(params)
 

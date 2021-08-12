@@ -45,9 +45,11 @@ def raw_login(username, password, env):
 
     data = '{"username":"%s","password":"%s"}' % (username, password)
     url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/user/login' % env
+    
+    print('=== === === 开始登陆旧版业务后台 === === ===')
+
     print(url)
     print(data)
-    print(headers)
     response = requests.post(url, headers=headers, data=data)
 
     print(response)

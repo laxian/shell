@@ -44,10 +44,12 @@ def raw_query(key, token):
         ('commandStatus', ''),
     )
 
+    print('=== === === 开始查询 === === ===')
+    url = 'http://${host_part_1}-api.${host_part_2}.com/robot/log/management'
+    print(url)
     print("token %s, params %r" % (token, params))
 
-    response = requests.get(
-        'http://${host_part_1}-api.${host_part_2}.com/robot/log/management', headers=headers, params=params)
+    response = requests.get(url, headers=headers, params=params)
 
     if response.status_code == 200:
         return response.content.decode('utf-8')

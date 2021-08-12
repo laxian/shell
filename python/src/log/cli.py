@@ -33,7 +33,7 @@ def segway_login(args=None):
     else:
         username = config['username']
         password = config['password']
-    token = login_and_save_token(username, password)
+    token = login_and_save_token()
     if token:
         if not config:
             config = Config('config.json').config
