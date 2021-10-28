@@ -327,7 +327,11 @@ def usage(args=None):
 version 0.0.9
 Commands:
     segway_adb adb 解密
-    segway_auto <robot_id> <log_path> (上传->查询->拉取->下载->打开)自动获取远程日志
+    segway_auto <robot_id> <log_path> <yyyy-mm-dd_HH:MM:SS|\d+(h|d|m)> (上传->查询->拉取->下载->打开)自动获取远程日志
+        开始时间在配置中配置，如果没配置，则默认拉取24小时内的日志。否则：需要参数3.
+        参数3可以使为空则为now；
+        也可以指定'%Y-%m-%d_%H:%M:%S'格式的日志截止时间；
+        也可以指定1d、2h、30m格式，分别对应1天、2小时、30分钟，暂不支持负数，在开始时间上加上此时间段为结束时间。
     segway_config 个性化配置：可配置项见配置部分
     segway_download <url> 下载日志
     segway_fetch <url>  下载并打开日志
