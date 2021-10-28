@@ -23,6 +23,14 @@ https://api-gate-dev-delivery.loomo.com/,https://device-gateway-bj.loomo.com:125
 https://api-gate-internal-delivery.loomo.com/,https://device-gateway-bj.loomo.com:12521
 https://api-gate-delivery.loomo.com/,https://device-gateway-bj.loomo.com:12530
 
+# 无接触取件
+
+https://alpha-delivery.loomo.com,https://device-gateway-bj.loomo.com:12501
+https://dev-delivery.loomo.com,https://device-gateway-bj.loomo.com:12511
+https://internal-delivery.loomo.com,https://device-gateway-bj.loomo.com:12521
+https://delivery.loomo.com,https://device-gateway-bj.loomo.com:12530
+
+
 # 餐厅后台
 https://restaurant-alpha.loomo.com,https://device-gateway-bj.loomo.com:14501
 https://restaurant-dev.loomo.com,https://device-gateway-bj.loomo.com:14511
