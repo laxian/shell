@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -x
 
 echo "------ before gradle build ------"
 if [ $use_aliyun_maven == 'true' ]; then

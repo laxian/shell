@@ -11,7 +11,15 @@ workdir=$(
         pwd
 )
 
-module=${module:-app}
+# 用于在非Jenkins环境使用
+[ ! $JENKINS_HOME ] && {
+        export ANDROID_HOME=/opt/app/android-sdk
+        export JAVA_HOME=/usr/local/openjdk-8
+        export PATH=$JAVA_HOME/bin:$PATH
+        sign=true
+ }
+
+module=${1:-app}
 echo $br
 echo $variant
 echo $sign
@@ -49,6 +57,14 @@ else
         $workdir/gradlew build
 fi
 
+. $workdir/utils/notify.sh
+# gradle失败后直接报错退出
+if [ $? != 0 ]; then
+        err_msg="构建失败: $GIT_BRANCH - ${BUILD_URL}console"
+        wechat_notify $token $err_msg
+        exit 1
+fi
+
 time=$(date "+%Y-%m-%d_%H_%M_%S")
 # apkdir=app/build/outputs/apk/
 apkdir=.
@@ -66,7 +82,10 @@ if [ $sign == 'true' ]; then
         for apk in $(ls $outdir/*.apk); do
                 # 如果不带git hash，加上
                 if [ ! `echo $apk | grep $GIT_REV` ]; then
+                        apk_old=$apk
                         apk="${apk//.apk/}-$GIT_REV.apk"
+                        mv $apk_old $apk
+                        unset apk_old
                 fi
                 # 如果带unsigned，去掉
                 mv $apk ${apk//-unsigned/}
@@ -77,7 +96,6 @@ fi
 
 # 微信通知
 token=$(cat ./private/token)
-. $workdir/utils/notify.sh
 urls="apks:\n$JOB_NAME\n$GIT_BRANCH\n$GIT_REV\n$COMMIT\n"
 for f in $(ls $outdir); do
         uri=$url/$f
