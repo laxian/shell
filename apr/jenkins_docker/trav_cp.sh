@@ -33,6 +33,8 @@ VARIANT_RELEASE="release"
 
 # 切换到参数指定分支
 [ -n "$br" ] && git checkout -f $br && git reset --hard HEAD
+# gitlabBranch 是gitlab触发的构建内置的环境变量，和br不同时存在
+[ -n "$gitlabBranch" ] && git checkout -f $gitlabBranch && git reset --hard HEAD
 #WORKSPACE=.
 JENKINS_HOME=/var/jenkins_home
 GIT_REV=$(git rev-parse --short HEAD)
@@ -40,8 +42,9 @@ GIT_REV=$(git rev-parse --short HEAD)
 GIT_BRANCH=$(git name-rev --name-only HEAD)
 echo $GIT_BRANCH
 echo $GIT_REV
-COMMIT=$(git log -n 1 | sed '/\(commit\|Author\|Date\|Merge:\|Merge branch\|See merge\|^[ ]*$\)/d' | tr -d ' ')
 
+# 显示最近3条git提交log
+COMMIT=$(git log --no-merges -n 3 | sed '/\(commit\|Author\|Date\|Merge:\|Merge branch\|See merge\|^[ ]*$\)/d' | tr -d ' ' | sed -n '=;p' | sed -n '{N;s/\n/. /;p;d}')
 # gradle执行前的一些操作，如果有，加在这里
 . ./before_build.sh
 
@@ -103,4 +106,4 @@ for f in $(ls $outdir); do
         urls="$urls\n$block"
 done
 echo $urls
-wechat_notify $token $urls
+wechat_notify $token "$urls"
