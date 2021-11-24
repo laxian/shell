@@ -2,7 +2,7 @@
 
 ## IP排查
 
-[云端服务环境说明 & IP白名单](https://wiki.segwayrobotics.com/pages/viewpage.action?pageId=50279616)
+[云端服务环境说明 & IP白名单](https://wiki.sssssrobotics.com/pages/viewpage.action?pageId=50279616)
 [机器人端IP白名单需要修改的项目统计](https://doc.weixin.qq.com/txdoc/word?docid=w2_AAEA-gaQAMQgy5J2x8MRiSUOeNCfu&scode=AHwAVAcbAAgBb7PY15AAEA-gaQAMQ&type=0)
 
 ## 所有修改的项目
@@ -41,6 +41,7 @@
 - [ ] r1_app
 - [ ] scooter_app
 - [ ] lite_app
+- [x] GxAppService
 
 ### mqtt only
 
@@ -87,6 +88,7 @@
 - robotconfig
 - GXMonitor
 - nav_app
+- GxAppService
 
 ### D2车型对应的App
 

@@ -1,41 +1,41 @@
 # 车辆硬件基础服务
-https://robot-base-alpha.loomo.com,https://device-gateway-bj.loomo.com:10001
-https://robot-base.loomo.com,https://device-gateway-bj.loomo.com:10010
+https://robot-base-alpha.lllll.com,https://device-gateway-bj.lllll.com:10001
+https://robot-base.lllll.com,https://device-gateway-bj.lllll.com:10010
 
 # S2导航后台 
-https://nav-alpha-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11001
-https://nav-alpha2-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11011
-https://nav-alpha3-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11021
-https://nav-dev-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11031
-https://nav-dev2-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11041
-https://nav-dev3-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11051
-https://nav-demo-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11061
-https://nav-internal-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11071
-https://nav-release-mqtt.loomo.com,https://device-gateway-bj.loomo.com:11080
+https://nav-alpha-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11001
+https://nav-alpha2-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11011
+https://nav-alpha3-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11021
+https://nav-dev-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11031
+https://nav-dev2-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11041
+https://nav-dev3-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11051
+https://nav-demo-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11061
+https://nav-internal-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11071
+https://nav-release-mqtt.lllll.com,https://device-gateway-bj.lllll.com:11080
 
 # NavCenter (导航中心)
-https://alpha-nav-center-api.loomo.com/,https://device-gateway-bj.loomo.com:12001
-https://nav-center-api.loomo.com/,https://device-gateway-bj.loomo.com:12010
+https://alpha-nav-center-api.lllll.com/,https://device-gateway-bj.lllll.com:12001
+https://nav-center-api.lllll.com/,https://device-gateway-bj.lllll.com:12010
 
 # S2运力后台
-https://api-gate-alpha-delivery.loomo.com/,https://device-gateway-bj.loomo.com:12501
-https://api-gate-dev-delivery.loomo.com/,https://device-gateway-bj.loomo.com:12511
-https://api-gate-internal-delivery.loomo.com/,https://device-gateway-bj.loomo.com:12521
-https://api-gate-delivery.loomo.com/,https://device-gateway-bj.loomo.com:12530
+https://api-gate-alpha-delivery.lllll.com/,https://device-gateway-bj.lllll.com:12501
+https://api-gate-dev-delivery.lllll.com/,https://device-gateway-bj.lllll.com:12511
+https://api-gate-internal-delivery.lllll.com/,https://device-gateway-bj.lllll.com:12521
+https://api-gate-delivery.lllll.com/,https://device-gateway-bj.lllll.com:12530
 
 # 无接触取件
 
-https://alpha-delivery.loomo.com,https://device-gateway-bj.loomo.com:12501
-https://dev-delivery.loomo.com,https://device-gateway-bj.loomo.com:12511
-https://internal-delivery.loomo.com,https://device-gateway-bj.loomo.com:12521
-https://delivery.loomo.com,https://device-gateway-bj.loomo.com:12530
+https://alpha-delivery.lllll.com,https://device-gateway-bj.lllll.com:12501
+https://dev-delivery.lllll.com,https://device-gateway-bj.lllll.com:12511
+https://internal-delivery.lllll.com,https://device-gateway-bj.lllll.com:12521
+https://delivery.lllll.com,https://device-gateway-bj.lllll.com:12530
 
 
 # 餐厅后台
-https://restaurant-alpha.loomo.com,https://device-gateway-bj.loomo.com:14501
-https://restaurant-dev.loomo.com,https://device-gateway-bj.loomo.com:14511
-https://restaurant-internal.loomo.com,https://device-gateway-bj.loomo.com:14521
-https://restaurant.loomo.com,https://device-gateway-bj.loomo.com:14530
+https://restaurant-alpha.lllll.com,https://device-gateway-bj.lllll.com:14501
+https://restaurant-dev.lllll.com,https://device-gateway-bj.lllll.com:14511
+https://restaurant-internal.lllll.com,https://device-gateway-bj.lllll.com:14521
+https://restaurant.lllll.com,https://device-gateway-bj.lllll.com:14530
 
 # ping服务
 www.baidu.com,120.92.80.137
@@ -43,18 +43,18 @@ www.sogou.com,120.92.80.137
 120.92.209.166,120.92.80.137
 
 # aws文件上传、下载服务
-https://s3.cn-northwest-1.amazonaws.com.cn,other-service-gateway-bj.loomo.com:10001
+https://s3.cn-northwest-1.amazonaws.com.cn,other-service-gateway-bj.lllll.com:10001
 
 
 # 大数据后台
-120.92.78.197,https://device-gateway-bj/.loomo.com:15000
+120.92.78.197,https://device-gateway-bj/.lllll.com:15000
 
 # 其他地址
-http://jira.loomo.com,https://other-service-gateway-bj.loomo.com:10500
-http://merchantdelivery.ninebot.com.cn,https://other-service-gateway-bj.loomo.com:10501
-http://sjzs.ijianghu.net,https://other-service-gateway-bj.loomo.com:10502
-https://nav.segwayrobotics.com,https://other-service-gateway-bj.loomo.com:10503
-https://qyapi.weixin.qq.com,https://other-service-gateway-bj.loomo.com:10504
+http://jira.lllll.com,https://other-service-gateway-bj.lllll.com:10500
+http://merchantdelivery.ninebot.com.cn,https://other-service-gateway-bj.lllll.com:10501
+http://sjzs.ijianghu.net,https://other-service-gateway-bj.lllll.com:10502
+https://nav.sssssrobotics.com,https://other-service-gateway-bj.lllll.com:10503
+https://qyapi.weixin.qq.com,https://other-service-gateway-bj.lllll.com:10504
 
 # 车载商店
-http://120.92.20.57:3001,https://device-gateway-bj.loomo.com:15500
+http://120.92.20.57:3001,https://device-gateway-bj.lllll.com:15500

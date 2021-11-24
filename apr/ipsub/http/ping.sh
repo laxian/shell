@@ -1,23 +1,23 @@
 #!/usr/bin/env bash
 
-ips=(api-doc-delivery.loomo.com
-jira.segwayrobotics.com
+ips=(api-doc-delivery.lllll.com
+jira.sssssrobotics.com
 amazonaws.com.cn
 amazonaws.com
-robot-base-us.loomo.com
-robot-base.loomo.com
-nav-demo-mqtt.loomo.com
-nav-release-mqtt.loomo.com
-nav-internal-mqtt.loomo.com
-robot-base-alpha.loomo.com
-api-gate-alpha-delivery.loomo.com
-api-gate-dev-delivery.loomo.com
-api-gate-internal-delivery.loomo.com
-api-gate-delivery.loomo.com
-alpha-api-segwaygo.segwayrobotics.com
-dev-api-segwaygo.segwayrobotics.com
-internal-api-segwaygo.segwayrobotics.com
-api-segwaygo.segwayrobotics.com
+robot-base-us.lllll.com
+robot-base.lllll.com
+nav-demo-mqtt.lllll.com
+nav-release-mqtt.lllll.com
+nav-internal-mqtt.lllll.com
+robot-base-alpha.lllll.com
+api-gate-alpha-delivery.lllll.com
+api-gate-dev-delivery.lllll.com
+api-gate-internal-delivery.lllll.com
+api-gate-delivery.lllll.com
+alpha-api-sssssgo.sssssrobotics.com
+dev-api-sssssgo.sssssrobotics.com
+internal-api-sssssgo.sssssrobotics.com
+api-sssssgo.sssssrobotics.com
 ota-robot-base.s3.cn-north-1.amazonaws.com.cn
 ore-apr-robot-base.s3.us-west-2.amazonaws.com
 120.131.7.82
@@ -39,20 +39,20 @@ z.cn
 taobao.com
 )
 
-urls=(http://robot-base-us.loomo.com
-    http://robot-base.loomo.com
-    http://nav-demo-mqtt.loomo.com
-    http://nav-release-mqtt.loomo.com
-    http://nav-internal-mqtt.loomo.com
-    http://robot-base-alpha.loomo.com
-    https://api-gate-alpha-delivery.loomo.com/
-    https://api-gate-dev-delivery.loomo.com/
-    https://api-gate-internal-delivery.loomo.com/
-    https://api-gate-delivery.loomo.com/
-    https://alpha-api-segwaygo.segwayrobotics.com/
-    https://dev-api-segwaygo.segwayrobotics.com/
-    https://internal-api-segwaygo.segwayrobotics.com/
-    https://api-segwaygo.segwayrobotics.com/
+urls=(http://robot-base-us.lllll.com
+    http://robot-base.lllll.com
+    http://nav-demo-mqtt.lllll.com
+    http://nav-release-mqtt.lllll.com
+    http://nav-internal-mqtt.lllll.com
+    http://robot-base-alpha.lllll.com
+    https://api-gate-alpha-delivery.lllll.com/
+    https://api-gate-dev-delivery.lllll.com/
+    https://api-gate-internal-delivery.lllll.com/
+    https://api-gate-delivery.lllll.com/
+    https://alpha-api-sssssgo.sssssrobotics.com/
+    https://dev-api-sssssgo.sssssrobotics.com/
+    https://internal-api-sssssgo.sssssrobotics.com/
+    https://api-sssssgo.sssssrobotics.com/
     https://ota-robot-base.s3.cn-north-1.amazonaws.com.cn
     https://ore-apr-robot-base.s3.us-west-2.amazonaws.com)
 

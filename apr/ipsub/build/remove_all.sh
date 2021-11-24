@@ -1,7 +1,10 @@
 #!/usr/bin/env bash -x
 
+# --------------------------------------
 # NEED ROOT - REMOUNT - DISVERITY FIRST
 # SEE ./root.sh
+# 删除下面列出的8个内置App
+# --------------------------------------
 
 # -----------REMOVE S2 Nav Board-----------
 adb root
