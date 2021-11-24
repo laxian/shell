@@ -55,3 +55,6 @@ http://merchantdelivery.ninebot.com.cn,https://other-service-gateway-bj.loomo.co
 http://sjzs.ijianghu.net,https://other-service-gateway-bj.loomo.com:10502
 https://nav.segwayrobotics.com,https://other-service-gateway-bj.loomo.com:10503
 https://qyapi.weixin.qq.com,https://other-service-gateway-bj.loomo.com:10504
+
+# 车载商店
+http://120.92.20.57:3001,https://device-gateway-bj.loomo.com:15500
