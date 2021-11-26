@@ -24,6 +24,9 @@ for l in $(cat $list); do
 		echo "############### JAVA ################"
 		remove_sensitive.sh $l sub java
 
+		echo "############### JAVA ################"
+		remove_sensitive.sh $l sub gradle
+
 		echo "############### KT ################"
 		remove_sensitive.sh $l sub kt
 		rm -rf $l/private

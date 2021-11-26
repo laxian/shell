@@ -39,6 +39,7 @@ for l in $(cat $list); do
 
 		# 调用外部工具，批量替换http相关、mqtt相关地址
 		popd
+		pwd
 		../http/http.sh ./projs
 		../mqtt/http.sh ./projs
 		pushd $l
@@ -47,7 +48,7 @@ for l in $(cat $list); do
 		if [ $skip_build = false ]; then
 			rm signed-*-debug.apk
 			./gradlew assembleDebug
-			find . -name "*-debug.apk" | xargs -I@ bash -c "$(declare -f sign) ; echo @ ; sign @"
+			find . -name "*-debug*.apk" | xargs -I@ bash -c "$(declare -f sign) ; echo @ ; sign @"
 		else
 			echo skip build
 		fi
@@ -57,7 +58,14 @@ for l in $(cat $list); do
 		for f in $(ls signed-*.apk);do
 			adb install -r $f
 		done
+		popd
 	else
 		echo "--- skip $l, not exists ---"
 	fi
 done
+
+echo BUILD SUCCESS!
+
+# 复制出来放在同一个目录
+echo COPY TO IP DIRECTORY...
+./tr_cp.sh

@@ -47,7 +47,7 @@ https://s3.cn-northwest-1.amazonaws.com.cn,other-service-gateway-bj.lllll.com:10
 
 
 # 大数据后台
-120.92.78.197,https://device-gateway-bj/.lllll.com:15000
+120.92.78.197,https://device-gateway-bj.lllll.com:15000
 
 # 其他地址
 http://jira.lllll.com,https://other-service-gateway-bj.lllll.com:10500
