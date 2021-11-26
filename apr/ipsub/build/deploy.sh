@@ -48,6 +48,7 @@ for l in $(cat $list); do
 		if [ $skip_build = false ]; then
 			rm signed-*-debug.apk
 			./gradlew assembleDebug
+			[ $? != 0 ] && exit 1
 			find . -name "*-debug*.apk" | xargs -I@ bash -c "$(declare -f sign) ; echo @ ; sign @"
 		else
 			echo skip build
@@ -68,4 +69,4 @@ echo BUILD SUCCESS!
 
 # 复制出来放在同一个目录
 echo COPY TO IP DIRECTORY...
-./tr_cp.sh
+./tr_cp.sh S1D
