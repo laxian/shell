@@ -22,6 +22,10 @@ sign() {
 	~/Github/shell/apr/demo/sign.sh $1 ./signed-$name
 }
 
+commit() {
+	pushd $1 && git add . && git commit -m $2 && popd
+}
+
 list=${1:-projs}
 skip_build=${2:-false}
 echo $list
@@ -40,10 +44,12 @@ for l in $(cat $list); do
 		# 调用外部工具，批量替换http相关、mqtt相关地址
 		popd
 		pwd
+		../mqtt/mqtt.sh ./projs
+		commit $l 'MQTT URL UPDATED (AUTO-MODIFIED)'
 		../http/http.sh ./projs
-		../mqtt/http.sh ./projs
-		pushd $l
+		commit $l 'HTTP URL UPDATED (AUTO-MODIFIED)'
 
+		pushd $l
 		# 构建、或者跳过构建；签名、复制到根目录
 		if [ $skip_build = false ]; then
 			rm signed-*-debug.apk

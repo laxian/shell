@@ -25,7 +25,7 @@ for d in $(cat projs); do
 		ls *signed-*-debug*.apk >/dev/null 2>&1 && mv *-signed-*-debug*.apk ../IP
 
 		# 如果有一个参数
-		if [ -n $1 ]; then
+		if [ $1 ]; then
 			# 如果smb目录已挂载，同步到smb目录
 			if [ -d /Volumes/smb_dir/GX_IMG/tmp/ip_app/ ]; then
 				cp ../IP/* /Volumes/smb_dir/GX_IMG/tmp/ip_app/$1
