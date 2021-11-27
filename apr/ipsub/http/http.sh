@@ -19,16 +19,16 @@ for l in $(cat $list); do
 		cp -R $workdir/private $l
 		echo "--- handling $l ---"
 		echo "############### JSON ################"
-		remove_sensitive.sh $l sub json
+		remove_sensitive.sh $l sub json 2> /dev/null
 
 		echo "############### JAVA ################"
-		remove_sensitive.sh $l sub java
+		remove_sensitive.sh $l sub java 2> /dev/null
 
 		echo "############### JAVA ################"
-		remove_sensitive.sh $l sub gradle
+		remove_sensitive.sh $l sub gradle 2> /dev/null
 
 		echo "############### KT ################"
-		remove_sensitive.sh $l sub kt
+		remove_sensitive.sh $l sub kt 2> /dev/null
 		rm -rf $l/private
 
 		echo "--- handling $l SUCCESS ---"
