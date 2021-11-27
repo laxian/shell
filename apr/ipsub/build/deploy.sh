@@ -58,6 +58,7 @@ for l in $(cat $list); do
 	if test -d "$l"; then
 		# 进入目录，检出dev，pull更新后创建检出到新分支
 		pushd $l
+		rm *.apk
 		git stash
 		git checkout dev || git checkout dev2
 		#git pull
@@ -69,7 +70,6 @@ for l in $(cat $list); do
 			echo branch EXISTS
 			git checkout -b zhouweixian/ip_allin_10
 		fi
-		rm *.apk
 		#if [ ! $? -eq 0 ];then
 		#	echo CREATE GIT BRANCH FAILED!
 		#	exit 1
@@ -92,7 +92,6 @@ for l in $(cat $list); do
 		# 构建、或者跳过构建；签名、复制到根目录
 
 		if [ $skip_build = false ]; then
-			rm signed-*-debug.apk
 			echo BEGIN GRADLE BUILD
 			sed -i '/google/d' build.gradle
 			sed -i "/repositories {/a \ \t\tmaven { url 'https://maven.aliyun.com/repository/google' }" build.gradle
@@ -119,6 +118,8 @@ for l in $(cat $list); do
 		echo ==== `pwd` ===
 		cat $workdir/kv | grep $l | awk -F: '{print $2}' | tr ',' ' ' | xargs -I@ -n1 bash -c "$(declare -f archive); archive $APK_DIR/@"
 
+		echo --------------ARCHIVE END----------------
+
 		popd
 	else
 		echo "--- skip $l, not exists ---"
@@ -128,5 +129,5 @@ done
 echo BUILD SUCCESS!
 
 # 复制出来放在同一个目录
-echo COPY TO IP DIRECTORY...
-#./tr_cp.sh
+echo SYNC TO SMB...
+./sync_smb.sh
