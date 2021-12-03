@@ -59,43 +59,10 @@ for l in $(cat $list); do
 		# 进入目录，检出dev，pull更新后创建检出到新分支
 		pushd $l
 		rm *.apk
-		git stash
-		git checkout dev || git checkout dev2
-		#git pull
-		
-		git branch | grep zhouweixian/ip_allin_10 > /dev/null 2>&1
-		if [ $? -eq 0 ];then
-			git checkout zhouweixian/ip_allin_10
-		else
-			echo branch EXISTS
-			git checkout -b zhouweixian/ip_allin_10
-		fi
-		#if [ ! $? -eq 0 ];then
-		#	echo CREATE GIT BRANCH FAILED!
-		#	exit 1
-		#fi
-
-		# 调用外部工具，批量替换http相关、mqtt相关地址
-		popd
-		pwd
-		../mqtt/mqtt.sh ./projs
-		commit $l 'MQTT URL UPDATED (AUTO-MODIFIED)'
-
-		echo --------------MQTT END----------------
-
-		../http/http.sh ./projs
-		commit $l 'HTTP URL UPDATED (AUTO-MODIFIED)'
-
-		echo --------------HTTP END----------------
-
-		pushd $l
 		# 构建、或者跳过构建；签名、复制到根目录
 
 		if [ $skip_build = false ]; then
 			echo BEGIN GRADLE BUILD
-			sed -i '/google/d' build.gradle
-			sed -i "/repositories {/a \ \t\tmaven { url 'https://maven.aliyun.com/repository/google' }" build.gradle
-			sed -i "/repositories {/a \ \t\tmaven { url 'https://maven.aliyun.com/repository/central' }" build.gradle
 			chmod +x ./gradlew
 			./gradlew assembleDebug > /dev/null
 			[ $? != 0 ] && exit 1
@@ -105,14 +72,6 @@ for l in $(cat $list); do
 		fi
 		
 		echo --------------BUILD END----------------
-
-		# 循环批量安装apk
-		# adb install -r signed-*-debug.apk
-		for f in $(ls signed-*.apk);do
-			adb install -r $f
-		done
-
-		echo --------------TRY INSTALL END----------------
 
 		namify $l
 		echo ==== `pwd` ===
