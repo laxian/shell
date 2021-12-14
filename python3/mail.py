@@ -8,8 +8,8 @@ import sys
 
 
 # 邮件地址, 口令和POP3服务器地址:
-download_email = 'weixian.zhou@ninebot.com'
-password = '***'
+download_email = 'xxx@xxx.com'
+password = '******'
 pop3_server = 'pop.qiye.163.com'
 
 server = poplib.POP3_SSL(pop3_server)
@@ -53,7 +53,7 @@ for i in range(len(mails), 0, -1):
     msg = Parser().parsestr(msg_content)
     # 邮件标题
     from_addr = msg.get('From')
-    expect_from = 'app-test-mail@ninebot.com'
+    expect_from = 'expect@xxx.com'
     if expect_from not in from_addr:
         # print(from_addr)
         continue
