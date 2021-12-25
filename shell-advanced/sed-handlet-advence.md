@@ -6,6 +6,7 @@
 	- [添加行号](#添加行号)
 	- [字符集替换，1-5，替换成A-E](#字符集替换1-5替换成a-e)
 	- [Python2 print convert to Python3 print](#python2-print-convert-to-python3-print)
+	- [regex](#regex)
 	- [REF](#ref)
 
 ## 命令/选项说明
@@ -119,6 +120,23 @@ sed -i 's/\([^#]*[[:space:]]*\)print[[:space:]]\(.*\)/\1print(\2)/' `find . -nam
 ```
 
 匹配print，和print前后内容:`\1print\2`，转换成`\1print(\2)`
+
+## regex
+
+正则
+-r: use  extended regular expressions in the script
+\1 ~ \9 捕获组
+& 相当于\0，整体匹配
+
+```Bash
+echo "foobarbaz"| sed -r 's/^foo(.*)baz$/\1/' # 捕获组1：bar
+echo hello|sed -r 's/hello/\1/'	# 报错
+echo hello|sed -r 's/hello/\0/'	# hello
+echo "foobarbaz"| sed -r 's/^foo(.*)baz$/\0/' #foobarbaz
+echo "foobarbaz"| sed -r 's/^foo(.*)baz$/&/' #foobarbaz
+echo "hello world"| sed 's/[a-z]*/(&)/' #(hello) world
+echo "hello world"| sed 's/[a-z]*/(&)/g' #(hello) (world)
+```
 
 ## REF
 
