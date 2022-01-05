@@ -60,7 +60,9 @@ for l in $(cat $list); do
 		pushd $l
 		rm *.apk
 		git stash
-		git checkout dev || git checkout dev2
+		git checkout s2_lite_dev || git checkout dev2 || git checkout dev-gx || git checkout dev
+		git branch --show-current
+		git clean -fd
 		#git pull
 		
 		git branch | grep zhouweixian/ip_allin_10 > /dev/null 2>&1
@@ -131,4 +133,4 @@ echo BUILD SUCCESS!
 
 # 复制出来放在同一个目录
 echo SYNC TO SMB...
-./sync_smb.sh
+#./sync_smb.sh

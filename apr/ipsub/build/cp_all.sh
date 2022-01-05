@@ -55,33 +55,8 @@ echo $list
 OLD_IFS=$IFS
 IFS=$'\n'
 for l in $(cat $list); do
-	if test -d "$l"; then
-		# 进入目录，检出dev，pull更新后创建检出到新分支
-		pushd $l
-		rm *.apk
-		# 构建、或者跳过构建；签名、复制到根目录
-
-		if [ $skip_build = false ]; then
-			echo BEGIN GRADLE BUILD
-			chmod +x ./gradlew
-			./gradlew assembleDebug >/dev/null
-			[ $? != 0 ] && exit 1
-			find . -name "*-debug*.apk" | xargs -I@ bash -c "$(declare -f sign) ; sign @"
-		else
-			echo skip build
-		fi
-
-		echo --------------BUILD END----------------
-		popd
-	else
-		echo "--- skip $l, not exists ---"
-	fi
-done
-
-for l in $(cat $list); do
 	pushd $l
 	echo --------------ARCHIVE BEGIN----------------
-	namify $l
 	echo ==== $(pwd) ===
 	cat $workdir/kv | grep $l | awk -F: '{print $2}' | tr ',' ' ' | xargs -I@ -n1 bash -c "$(declare -f archive); archive $APK_DIR/@"
 
