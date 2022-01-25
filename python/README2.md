@@ -11,8 +11,8 @@
 本文假设Python环境变量设置正确，在Windows和Mac上经过了一段时间实际场景的测试，
 
 ```Bash
-# 最新版本0.0.9
-pip install http://${adb_ip}:8080/files/pull_log-0.0.9.tar.gz
+# 最新版本0.1.0
+pip install http://${adb_ip}:8080/files/pull_log-0.1.0.tar.gz
 ```
 
 ## 配置
@@ -47,7 +47,7 @@ segway_config username=xxx.xxx@ninebot.com password=******
 ```Bash
 $ segway
 author ${username}
-version 0.0.9
+version 0.1.0
 Commands:
     segway_adb adb解密
     segway_auto <robot_id> <log_path> (上传->查询->拉取->下载->打开)自动获取远程日志
@@ -118,7 +118,7 @@ segway_auto GXBOX-S2DGH2032C0003 /sdcard/ex
 2. 1d、3h、30m等格式，数字不能为负，结合开始时间，加上这个时间段为结束时间
 3. 为空则默认结束时间为now
 
-加入开始时间未设置，则：
+假如开始时间未设置，则：
 
 1. yyyy-mm-dd_HH:MM:SS 对应结束时间，开始时间前移24小时
 2. 1d、3h、30m等格式，结束时间为now，开始时间前移当前时间对应的时间段

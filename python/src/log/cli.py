@@ -45,7 +45,7 @@ def segway_login(args=None):
 
 
 def segway_config(args=None):
-    keys = ['env', 'open_app', 'retry_limit', 'retry_interval', 'log_dir', 'username', 'password', 'token', 'log_start_time']
+    keys = ['env', 'open_app', 'retry_limit', 'retry_interval', 'log_dir', 'username', 'password', 'token', 'log_start_time', 'token2']
     hit = False
     if len(sys.argv) > 1:
         args= sys.argv[1:]
@@ -324,7 +324,7 @@ def segway_box(args=None):
 
 def usage(args=None):
     print("""author ${username}
-version 0.0.9
+version 0.1.0
 Commands:
     segway_adb adb 解密
     segway_auto <robot_id> <log_path> <yyyy-mm-dd_HH:MM:SS|\d+(h|d|m)> (上传->查询->拉取->下载->打开)自动获取远程日志
