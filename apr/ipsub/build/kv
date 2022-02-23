@@ -1,0 +1,13 @@
+
+/Users/leochou/Work/app-apr-food-deliver3:S2I,D2
+/Users/leochou/Work/GxAppService:S2N,D2
+/Users/leochou/Work/GX_Service:S2I
+/Users/leochou/Work/GxSystemDevKit2:S2I,S2N,S1D,D2
+/Users/leochou/Work/ControlService:S2N,S1D,D2
+/Users/leochou/Work/nav_app:S2N,D2
+/Users/leochou/Work/GXMonitor2:S2N,D2,S1D
+/Users/leochou/Work/SegwayProvision:S2I,S2N,S1D,D2
+/Users/leochou/Work/apprestaurant:S1D
+/Users/leochou/Work/RobotStore:S2N,S1D,D2
+/Users/leochou/Work/robotRemoteOta:S2I,S2N,S1D,D2
+/Users/leochou/Work/r1_app:S1D

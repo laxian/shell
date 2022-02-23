@@ -31,8 +31,12 @@ def raw_status(robot_id, token=None):
         ('navAppVersion', ''),
     )
 
-    response = requests.get('http://${host_part_1}-api.${host_part_2}.com/robot/information', headers=headers, params=params, verify=False)
-    print(response)
+    url = 'http://${host_part_1}-api.${host_part_2}.com/robot/information'
+    print('=== === === 开始导航状态查询 === === ===')
+    print(url)
+    print(params)
+    response = requests.get(url, headers=headers, params=params, verify=False)
+    # print(response)
     if response.status_code == 200:
         return response.content.decode('utf-8')
     else:

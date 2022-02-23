@@ -7,7 +7,7 @@ import json
 import time
 
 from src.log.adb_auth import adb_auth
-from src.log.adb_ex import dump_ex_log, dump_sys_log, pull_log_from_dir
+from src.log.adb_ex import dump_ex_log, dump_s2_log, dump_sys_log, pull_log_from_dir
 from src.log.api_login import login_and_save_token
 from src.log.api_query import query_with_retry, query_model_with_retry
 from src.log.api_status import status_with_retry
@@ -33,7 +33,7 @@ def segway_login(args=None):
     else:
         username = config['username']
         password = config['password']
-    token = login_and_save_token(username, password)
+    token = login_and_save_token()
     if token:
         if not config:
             config = Config('config.json').config
@@ -45,7 +45,7 @@ def segway_login(args=None):
 
 
 def segway_config(args=None):
-    keys = ['env', 'open_app', 'retry_limit', 'retry_interval', 'log_dir', 'username', 'password', 'token', 'log_start_time']
+    keys = ['env', 'open_app', 'retry_limit', 'retry_interval', 'log_dir', 'username', 'password', 'token', 'log_start_time', 'token2']
     hit = False
     if len(sys.argv) > 1:
         args= sys.argv[1:]
@@ -205,6 +205,9 @@ def segway_fetch(args=None):
 def segway_pull_ex(args=None):
     dump_ex_log()
 
+def segway_pull_s2(args=None):
+    dump_s2_log()
+
 def segway_pull_sys(args=None):
     dump_sys_log()
 
@@ -321,16 +324,22 @@ def segway_box(args=None):
 
 def usage(args=None):
     print("""author ${username}
+version 0.1.0
 Commands:
     segway_adb adb 解密
-    segway_auto <robot_id> <log_path> (上传->查询->拉取->下载->打开)自动获取远程日志
+    segway_auto <robot_id> <log_path> <yyyy-mm-dd_HH:MM:SS|\d+(h|d|m)> (上传->查询->拉取->下载->打开)自动获取远程日志
+        开始时间在配置中配置，如果没配置，则默认拉取24小时内的日志。否则：需要参数3.
+        参数3可以使为空则为now；
+        也可以指定'%Y-%m-%d_%H:%M:%S'格式的日志截止时间；
+        也可以指定1d、2h、30m格式，分别对应1天、2小时、30分钟，暂不支持负数，在开始时间上加上此时间段为结束时间。
     segway_config 个性化配置：可配置项见配置部分
     segway_download <url> 下载日志
     segway_fetch <url>  下载并打开日志
     segway_nav GUI窗口，拉取nav日志 
     segway_login 登录刷新token
     segway_pull <path> 本地拉取指定path日志并打开
-    segway_pull_ex 本地拉取/sdcard/ex 日志并打开
+    segway_pull_ex [Deprecated]本地拉取/sdcard/ex 日志并打开
+    segway_pull_s2 本地拉取/sdcard/logs_folder/com.segway.robotic.app 日志并打开
     segway_pull_sys 本地拉取/data/logs 日志并打开
     segway_query <robot_id> [index] 查询日志url
     segway_query2 <robot_id> [option] 高级查询，输入segway_query2 获取帮助

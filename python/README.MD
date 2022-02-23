@@ -77,7 +77,7 @@ pip install http://${adb_ip}:8080/files/pull_log-0.0.8.tar.gz
 $ segway
 Commands:
     segway_adb adb 解密
-    segway_auto <robot_id> <log_path> (上传->查询->拉取->下载->打开)自动获取远程日志
+    segway_auto <robot_id> <log_path> <endtime> (上传->查询->拉取->下载->打开)自动获取远程日志
     segway_config 个性化配置：可配置项见配置部分
     segway_download <url> 下载日志
     segway_fetch <url>  下载并打开日志

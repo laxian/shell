@@ -56,7 +56,7 @@ def get_times(endTime=None):
     """
     config = Config('config.json').config
     log_start_time_f = config['log_start_time']
-    now = time.time()
+    now = time.time() -5
     print(now)
     delta = None
     end_time = None

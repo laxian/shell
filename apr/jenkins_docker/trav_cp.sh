@@ -11,7 +11,15 @@ workdir=$(
         pwd
 )
 
-module=${module:-app}
+# 用于在非Jenkins环境使用
+[ ! $JENKINS_HOME ] && {
+        export ANDROID_HOME=/opt/app/android-sdk
+        export JAVA_HOME=/usr/local/openjdk-8
+        export PATH=$JAVA_HOME/bin:$PATH
+        sign=true
+ }
+
+module=${1:-app}
 echo $br
 echo $variant
 echo $sign
@@ -24,7 +32,9 @@ VARIANT_DEBUG="debug"
 VARIANT_RELEASE="release"
 
 # 切换到参数指定分支
-[ -n "$br" ] && git checkout -f $br
+[ -n "$br" ] && git checkout -f $br && git reset --hard HEAD
+# gitlabBranch 是gitlab触发的构建内置的环境变量，和br不同时存在
+[ -n "$gitlabBranch" ] && git checkout -f $gitlabBranch && git reset --hard HEAD
 #WORKSPACE=.
 JENKINS_HOME=/var/jenkins_home
 GIT_REV=$(git rev-parse --short HEAD)
@@ -32,8 +42,9 @@ GIT_REV=$(git rev-parse --short HEAD)
 GIT_BRANCH=$(git name-rev --name-only HEAD)
 echo $GIT_BRANCH
 echo $GIT_REV
-COMMIT=$(git log -n 1 | sed '/\(commit\|Author\|Date\|Merge:\|Merge branch\|See merge\|^[ ]*$\)/d' | tr -d ' ')
 
+# 显示最近3条git提交log
+COMMIT=$(git log --no-merges -n 3 | sed '/\(commit\|Author\|Date\|Merge:\|Merge branch\|See merge\|^[ ]*$\)/d' | tr -d ' ' | sed -n '=;p' | sed -n '{N;s/\n/. /;p;d}')
 # gradle执行前的一些操作，如果有，加在这里
 . ./before_build.sh
 
@@ -47,6 +58,14 @@ elif [ $variant == $VARIANT_DEBUG ]; then
         $workdir/gradlew :$module:assembleDebug
 else
         $workdir/gradlew build
+fi
+
+. $workdir/utils/notify.sh
+# gradle失败后直接报错退出
+if [ $? != 0 ]; then
+        err_msg="构建失败: $GIT_BRANCH - ${BUILD_URL}console"
+        wechat_notify $token $err_msg
+        exit 1
 fi
 
 time=$(date "+%Y-%m-%d_%H_%M_%S")
@@ -66,7 +85,10 @@ if [ $sign == 'true' ]; then
         for apk in $(ls $outdir/*.apk); do
                 # 如果不带git hash，加上
                 if [ ! `echo $apk | grep $GIT_REV` ]; then
+                        apk_old=$apk
                         apk="${apk//.apk/}-$GIT_REV.apk"
+                        mv $apk_old $apk
+                        unset apk_old
                 fi
                 # 如果带unsigned，去掉
                 mv $apk ${apk//-unsigned/}
@@ -77,7 +99,6 @@ fi
 
 # 微信通知
 token=$(cat ./private/token)
-. $workdir/utils/notify.sh
 urls="apks:\n$JOB_NAME\n$GIT_BRANCH\n$GIT_REV\n$COMMIT\n"
 for f in $(ls $outdir); do
         uri=$url/$f
@@ -85,4 +106,4 @@ for f in $(ls $outdir); do
         urls="$urls\n$block"
 done
 echo $urls
-wechat_notify $token $urls
+wechat_notify $token "$urls"

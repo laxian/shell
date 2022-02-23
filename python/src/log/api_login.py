@@ -31,8 +31,12 @@ def raw_login(username, password):
     }
 
     data = '{"username":"%s","password":"%s"}' % (username, password)
+    url = 'https://usercenter.${host_part_2}.com/usercenter/user/login'
+    print('=== === === 开始登陆 === === ===')
+    print(url)
+    print(data)
 
-    response = requests.post('https://robot-base.${host_part_2}.com/navcenter/user/login', headers=headers, data=data, verify=False)
+    response = requests.post(url, headers=headers, data=data, verify=False)
 
     print(response)
     if response.status_code == 200:
@@ -73,7 +77,7 @@ def login_and_save_token():
 def check_response(response):
     j = json.loads(response)
     code = j['resultCode']
-    if code == 9006:
+    if code == 9006 or code == 4006:
         raise TokenException(j['resultDesc'])
     else:
         return j

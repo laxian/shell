@@ -12,7 +12,7 @@ def relogin(h=p, **kw):
     def logging_decorator(func):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
-            token = login_and_save_token(kwargs['env']) if 'env' in kwargs else login_and_save_token()
+            token = login_and_save_token(args[3]) if len(args) > 3 else login_and_save_token()
             print('%s %s %s' % (token, args, kwargs))
             content = func(token, *args, **kwargs)
             try:
@@ -45,9 +45,11 @@ def raw_login(username, password, env):
 
     data = '{"username":"%s","password":"%s"}' % (username, password)
     url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/user/login' % env
+    
+    print('=== === === 开始登陆旧版业务后台 === === ===')
+
     print(url)
     print(data)
-    print(headers)
     response = requests.post(url, headers=headers, data=data)
 
     print(response)

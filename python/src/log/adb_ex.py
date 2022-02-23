@@ -10,6 +10,9 @@ from src.log.config import Config
 def dump_ex_log():
     pull_log_from_dir('/sdcard/ex')
 
+def dump_s2_log():
+    pull_log_from_dir('/sdcard/logs_folder/com.segway.robotic.app')
+
 def dump_sys_log():
     pull_log_from_dir('/data/logs')
 
