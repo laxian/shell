@@ -23,9 +23,17 @@ factor = sys.argv[2]
 
 outfile=file.replace(".css", "") + "-rem.css"
 outfile_w=open(outfile, "w")
+print(outfile)
 for line in open(file, 'r').readlines():
+        # 0px不处理
+        line=re.sub(r'\b0px', '0', line)
+        line=re.sub(r'\b0.0px', '0', line)
         match=re.findall('((\d+)px)', line)
         if match:
-                rem="%rrem" % (int(match[0][1])*float(factor))
-                line.replace(match[0][0], rem)
+                # 一行多匹配，分别处理
+                for tub in match:
+                        print(tub)
+                        rem="%rrem" % (int(tub[1])*float(factor))
+                        print(rem)
+                        line=line.replace(tub[0], rem)
         outfile_w.write(line)
