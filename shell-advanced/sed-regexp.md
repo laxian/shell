@@ -98,3 +98,14 @@ Hexadecimal digits: 0 1 2 3 4 5 6 7 8 9 A B C D E F a b c d e f.
 [:blank:]
 ...
 等
+
+## 捕获组
+
+|表达式|解释|sample|作用|
+|---|---|---|---|
+|`()`|之内的捕获，会被缓存，通过\n（n∈1~99）获取。||
+|`(?:)`  |非捕获组，可以让()不被缓存。||
+|`(?=pattern)`  |零宽正向先行断言(zero-width positive lookahead assertion)|`re(?=gular)`|匹配re，且后面是gular|
+|`(?!pattern)`  |零宽负向先行断言(zero-width negative lookahead assertion)|`re(?!g)`|匹配re，且后面不是g|
+|`(?<=pattern)`  |零宽正向后行断言(zero-width positive lookbehind assertion)|`(?<=\w)re`|匹配re，且前是字母|
+|`(?<!pattern)`  |零宽负向后行断言(zero-width negative lookbehind assertion)|`(?<!\w)re`|匹配re，且前不是字母|
