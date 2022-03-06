@@ -3,9 +3,10 @@
 ISSUE:
 
 - [x] 编写接收管道的函数
-- [x] SED 模式空间和保持空间的使用
-- [x] SED d/D命令使用说明
-- [x] SED CommandLine options
+- [x] sed 模式空间和保持空间的使用
+- [x] sed d/D命令使用说明
+- [x] sed s/c替换命令使用水命
+- [x] sed CommandLine options
 - [ ] 标准文件描述符与重定向
 - [ ] printf
 - [ ] trap的使用
