@@ -85,3 +85,12 @@ axBx
 world
 world
 ```
+
+## y命令
+
+y命令字符的替换，指定一个字符集，和一个同样长度的替换字符集，一一对应替换。
+
+```Bash
+$ echo hello world | sed 'y/abcdefghij/0123456789/'
+74llo worl3
+```
