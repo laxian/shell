@@ -140,6 +140,6 @@ echo "hello world"| sed 's/[a-z]*/(&)/g' #(hello) (world)
 
 ## REF
 
-http://www.gnu.org/software/sed/manual/sed.html#Multiline-techniques
+[gnu-sed](http://www.gnu.org/software/sed/manual/sed.html)
 
-https://www.cnblogs.com/qyddbear/p/3405021.html
+[cnblog](https://www.cnblogs.com/qyddbear/p/3405021.html)
