@@ -2,6 +2,8 @@
 
 #----------------------------------------------------------------
 # jenkins 参数化构建，动态指定分支等参数
+# 支持gitlab触发构建：
+# https://plugins.jenkins.io/gitlab-plugin/     
 #----------------------------------------------------------------
 
 echo ============ begin build ============
@@ -17,7 +19,7 @@ workdir=$(
         export JAVA_HOME=/usr/local/openjdk-8
         export PATH=$JAVA_HOME/bin:$PATH
         sign=true
- }
+}
 
 module=${1:-app}
 echo $br
@@ -49,22 +51,38 @@ COMMIT=$(git log --no-merges -n 3 | sed '/\(commit\|Author\|Date\|Merge:\|Merge 
 . ./before_build.sh
 
 # 开始构建
-$workdir/gradlew clean
+# $workdir/gradlew clean
 if [ $variant == $VARIANT_RELEASE ]; then
-        $workdir/gradlew :$module:assembleRelease
+        $workdir/gradlew :$module:assembleRelease 2> error
 elif [ $variant == $VARIANT_ALPHA ]; then
-        $workdir/gradlew :$module:assembleAlpha
+        $workdir/gradlew :$module:assembleAlpha 2> error
 elif [ $variant == $VARIANT_DEBUG ]; then
-        $workdir/gradlew :$module:assembleDebug
+        $workdir/gradlew :$module:assembleDebug 2> error
 else
-        $workdir/gradlew build
+        $workdir/gradlew build 2> error
 fi
 
+build_result=$?
+
+tokens=$(cat ./private/token)
 . $workdir/utils/notify.sh
 # gradle失败后直接报错退出
-if [ $? != 0 ]; then
-        err_msg="构建失败: $GIT_BRANCH - ${BUILD_URL}console"
-        wechat_notify $token $err_msg
+if [ $build_result != 0 ]; then
+        err_msg="$JOB_NAME 构建失败:\n$GIT_BRANCH\n${BUILD_URL}console"
+        set
+        if [[ -n $gitlabActionType ]]; then
+                err_msg="$err_msg\n$gitlabActionType by $gitlabUserName"
+        fi
+        if [[ -f error ]]; then
+                error_content=`sed -n '/What went wrong/{N;p;q}' error`
+                err_msg="$err_msg\n$error_content"
+                rm error
+        fi
+        
+        
+        for token in $tokens; do
+                wechat_notify $token "$err_msg"
+        done
         exit 1
 fi
 
@@ -73,7 +91,7 @@ time=$(date "+%Y-%m-%d_%H_%M_%S")
 apkdir=.
 outdir=$JENKINS_HOME/outputs/$time
 mkdir -p $outdir
-host="10.10.80.25:8080"
+host="${host}:8080"
 url=http://$host/files/$time
 
 # 复制apk到指定目录，outdir和tomcat托管目录磁盘映射
@@ -84,7 +102,7 @@ if [ $sign == 'true' ]; then
         pushd $outdir
         for apk in $(ls $outdir/*.apk); do
                 # 如果不带git hash，加上
-                if [ ! `echo $apk | grep $GIT_REV` ]; then
+                if [ ! $(echo $apk | grep $GIT_REV) ]; then
                         apk_old=$apk
                         apk="${apk//.apk/}-$GIT_REV.apk"
                         mv $apk_old $apk
@@ -98,7 +116,6 @@ if [ $sign == 'true' ]; then
 fi
 
 # 微信通知
-token=$(cat ./private/token)
 urls="apks:\n$JOB_NAME\n$GIT_BRANCH\n$GIT_REV\n$COMMIT\n"
 for f in $(ls $outdir); do
         uri=$url/$f
@@ -106,4 +123,7 @@ for f in $(ls $outdir); do
         urls="$urls\n$block"
 done
 echo $urls
-wechat_notify $token "$urls"
+
+for token in $tokens; do
+        wechat_notify $token "$urls"
+done
