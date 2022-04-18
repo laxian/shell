@@ -16,8 +16,8 @@ def raw_status(robot_id, token=None):
     'x-requested-with': 'XMLHttpRequest',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
     'authToken': token,
-    'Origin': 'http://${host_part_1}.${host_part_2}.com',
-    'Referer': 'http://${host_part_1}.${host_part_2}.com/',
+    'Origin': 'http://${host_part_nc}.${host_l}',
+    'Referer': 'http://${host_part_nc}.${host_l}/',
     'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
@@ -31,7 +31,7 @@ def raw_status(robot_id, token=None):
         ('navAppVersion', ''),
     )
 
-    url = 'http://${host_part_1}-api.${host_part_2}.com/robot/information'
+    url = 'http://${host_part_nc}-api.${host_l}/robot/information'
     print('=== === === 开始导航状态查询 === === ===')
     print(url)
     print(params)

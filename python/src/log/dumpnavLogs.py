@@ -17,7 +17,7 @@ except ImportError:  #Python 2.x
 
 
 # You can change logDir to the path that contains a list of files you want to dump
-logDir = "/sdcard/logs_folder/com.segway.robot.algo.${host_part_2}go_nav_app"
+logDir = "/sdcard/logs_folder/com.segway.robot.algo.loomogo_nav_app"
 
 display_column_count = 5  # start from 1,so 5 means 4 columns
 

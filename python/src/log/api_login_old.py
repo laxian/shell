@@ -17,7 +17,7 @@ def relogin(h=p, **kw):
             content = func(token, *args, **kwargs)
             try:
                 j = check_response(content)
-                return h(j, **kwargs)
+                return h(j, *args, **kwargs)
             except TokenException as ex:
                 clear_token()
                 return wrapped_function(*args, **kwargs)
@@ -35,16 +35,16 @@ def raw_login(username, password, env):
     'x-requested-with': 'XMLHttpRequest',
     'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
     'Content-Type': 'application/json;charset=UTF-8',
-    'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
+    'Origin': 'http://%sdelivery.${host_l}' % env,
     'Sec-Fetch-Site': 'cross-site',
     'Sec-Fetch-Mode': 'cors',
     'Sec-Fetch-Dest': 'empty',
-    'Referer': 'http://%sdelivery.${host_part_2}.com/' % env,
+    'Referer': 'http://%sdelivery.${host_l}/' % env,
     'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
     data = '{"username":"%s","password":"%s"}' % (username, password)
-    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/user/login' % env
+    url = 'https://api-gate-%sdelivery.${host_l}/web/user/login' % env
     
     print('=== === === 开始登陆旧版业务后台 === === ===')
 
@@ -67,17 +67,17 @@ def raw_restore(token, robot_id, env):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
         'token': token,
         'Content-Type': 'application/json;charset=UTF-8',
-        'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
+        'Origin': 'http://%sdelivery.${host_l}' % env,
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Referer': 'http://%sdelivery.${host_part_2}.com/' % env,
+        'Referer': 'http://%sdelivery.${host_l}/' % env,
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
     data = '{"robotId":"%s"}' % robot_id
 
-    response = requests.post('https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/restore' % env, headers=headers, data=data)
+    response = requests.post('https://api-gate-%sdelivery.${host_l}/web/transport/robot/restore' % env, headers=headers, data=data)
 
     print(response)
     if response.status_code == 200:
@@ -94,17 +94,17 @@ def raw_arrive(token, robot_id, env):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
         'token': token,
         'Content-Type': 'application/json;charset=UTF-8',
-        'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
+        'Origin': 'http://%sdelivery.${host_l}' % env,
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Referer': 'http://%sdelivery.${host_part_2}.com/' % env,
+        'Referer': 'http://%sdelivery.${host_l}/' % env,
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
     data = '{"robotId":"%s"}' % robot_id
 
-    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/simulation/arrive' % env
+    url = 'https://api-gate-%sdelivery.${host_l}/web/transport/robot/simulation/arrive' % env
     print(url)
     print(data)
     response = requests.post(url, headers=headers, data=data)
@@ -125,11 +125,11 @@ def raw_status(token, robot_id, env):
         'sec-ch-ua-mobile': '?0',
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
         'token': token,
-        'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
+        'Origin': 'http://%sdelivery.${host_l}' % env,
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Referer': 'http://%sdelivery.${host_part_2}.com/' % env,
+        'Referer': 'http://%sdelivery.${host_l}/' % env,
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
@@ -139,7 +139,7 @@ def raw_status(token, robot_id, env):
         ('robotId', '%s' % robot_id),
     )
 
-    url = 'https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/info/list' % env
+    url = 'https://api-gate-%sdelivery.${host_l}/web/transport/robot/info/list' % env
     response = requests.get(url, headers=headers, params=params)
 
     print(response)
@@ -159,16 +159,16 @@ def raw_available(token, robot_id, available, env):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.36',
         'token': token,
         'Content-Type': 'application/json;charset=UTF-8',
-        'Origin': 'http://%sdelivery.${host_part_2}.com' % env,
+        'Origin': 'http://%sdelivery.${host_l}' % env,
         'Sec-Fetch-Site': 'cross-site',
         'Sec-Fetch-Mode': 'cors',
         'Sec-Fetch-Dest': 'empty',
-        'Referer': 'http://%sdelivery.${host_part_2}.com/' % env,
+        'Referer': 'http://%sdelivery.${host_l}/' % env,
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
     data = '{"available":%s,"robotIds":["%s"]}' % (available, robot_id)
-    url='https://api-gate-%sdelivery.${host_part_2}.com/web/transport/robot/config/available' % env
+    url='https://api-gate-%sdelivery.${host_l}/web/transport/robot/config/available' % env
     response = requests.post(url, headers=headers, data=data)
     if response.status_code == 200:
         return response.content.decode('utf-8')

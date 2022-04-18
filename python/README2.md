@@ -37,7 +37,7 @@ $ segway_showconfig
 ### 修改配置
 
 ```Bash
-segway_config username=xxx.xxx@ninebot.com password=******
+segway_config username=xxx.xxx@{host_n} password=******
 ```
 
 ## 功能列表
@@ -145,7 +145,7 @@ segway_query GXBOX-S2DGH2032C0003
 segway_query GXBOX-S2DGH2032C0003 0
 # sample
 $ segway_query GXBOX-S2DGH2032C0003 0
-http://robot-base.${host_part_2}.com/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX-S2DGH2032C0003_2020-12-14_14-13-23-175_M.zip
+http://robot-base.${host_l}/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX-S2DGH2032C0003_2020-12-14_14-13-23-175_M.zip
 ```
 
 ### 新查询日志后台
@@ -158,7 +158,7 @@ segway_query2 GXBOX-S1RLM2103C0006 logUrl logPath commandMessage
 "/data/logs"
 "指令已发出"
 ---------
-"http://robot-base.${host_part_2}.com/aws/web/file/download?bucketName=ota-robot-base&objectKey=log/GXBOX-S1RLM2103C0006_2021-09-01_16-10-20-002_M.zip"
+"http://robot-base.${host_l}/aws/web/file/download?bucketName=ota-robot-base&objectKey=log/GXBOX-S1RLM2103C0006_2021-09-01_16-10-20-002_M.zip"
 "/sdcard/ex/app"
 "指令已完成"
 ```

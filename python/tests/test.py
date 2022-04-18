@@ -16,7 +16,7 @@ from src.log.utils import get_name, get_time_part, unzip, open_with_app
 class TestDict(unittest.TestCase):
     def setUp(self):
         print('setUp...')
-        self.url = 'http://robot-base.${host_part_2}.com/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/S1RLM2047C0009_2020-12-04_16-37-27-950_M.zip'
+        self.url = 'http://robot-base.${host_l}/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/S1RLM2047C0009_2020-12-04_16-37-27-950_M.zip'
         self.name_expect = 'S1RLM2047C0009_2020-12-04_16-37-27-950_M.zip'
         self.config = Config('config.json').config
         self.timestamp = 1607071047.0
@@ -92,7 +92,7 @@ class TestDict(unittest.TestCase):
         self.assertFalse(match_url(url4, t1))
 
         t2_s = '2020-12-06_14-45-46'
-        url5 = 'http://robot-base.${host_part_2}.com/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX' \
+        url5 = 'http://robot-base.${host_l}/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX' \
                '-${PREFIX}0036_2020-12-06_14-45-46-941_M.zip '
         t2 = time.mktime(time.strptime(t2_s, '%Y-%m-%d_%H-%M-%S'))
         self.assertTrue(match_url(url5, t2))

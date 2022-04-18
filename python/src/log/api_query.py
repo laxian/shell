@@ -26,8 +26,8 @@ def raw_query(key, token):
         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) '
                       'Chrome/86.0.4240.198 Safari/537.36',
         'authToken': token,
-        'Origin': 'http://${host_part_1}.${host_part_2}.com',
-        'Referer': 'http://${host_part_1}.${host_part_2}.com/',
+        'Origin': 'http://${host_part_nc}.${host_l}',
+        'Referer': 'http://${host_part_nc}.${host_l}/',
         'Accept-Language': 'zh-CN,zh;q=0.9,en-US;q=0.8,en;q=0.7',
     }
 
@@ -45,7 +45,7 @@ def raw_query(key, token):
     )
 
     print('=== === === 开始查询 === === ===')
-    url = 'http://${host_part_1}-api.${host_part_2}.com/robot/log/management'
+    url = 'http://${host_part_nc}-api.${host_l}/robot/log/management'
     print(url)
     print("token %s, params %r" % (token, params))
 

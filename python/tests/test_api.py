@@ -13,7 +13,7 @@ from src.log.config import Config
 class TestDict(unittest.TestCase):
     def setUp(self):
         print('setUp...')
-        self.url = 'http://robot-base.${host_part_2}.com/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX' \
+        self.url = 'http://robot-base.${host_l}/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/GXBOX' \
                    '-${PREFIX}0036_2020-12-05_23-06-05-137_M.zip '
         self.name_expect = 'GXBOX-${PREFIX}0036_2020-12-05_23-06-05-137_M.zip'
         self.config = Config('config.json').config

@@ -1,11 +1,14 @@
 {
     "username": "${username}",
     "password": "${password}",
+    "username_biz": "{username_biz}",
+    "password_biz": "{password_biz}",
     "token": "${token}",
     "env": "release",
     "open_app": "code",
     "log_start_time": "2021-01-10_00:00:00",
     "retry_limit": 30,
     "retry_interval": 2,
-    "log_dir": "~/Downloads"
+    "log_dir": "~/Downloads",
+    "token2": "${token2}"
 }

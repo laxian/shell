@@ -16,6 +16,7 @@ from src.log.config import Config
 from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
 from src.log.api_login_old import api_restore, api_available, api_arrive, api_status
+from src.log.api_login_new import new_restore, new_available, new_status
 from src.log.utils import download, get_host_ip
 from src.log.api_simulate import api_broken, shield_nav, clear_tasks, oper_boxies
 
@@ -257,6 +258,33 @@ def segway_status2(args=None):
     else:
         api_status(sys.argv[1], env=sys.argv[2])
 
+def segway_restore_new(args=None):
+    if len(sys.argv) == 1:
+        print('segway_restore_new <robot_id> [dev|alpha|internal|release='']')
+    elif len(sys.argv) == 2:
+        new_restore(sys.argv[1])
+    else:
+        new_restore(sys.argv[1], env=sys.argv[2])
+
+def segway_available_new(args=None):
+    if len(sys.argv) == 1:
+        print('segway_available_new <robot_id> [true|false] [dev|alpha|internal|release='']')
+    elif len(sys.argv) == 2:
+        new_available(sys.argv[1], 'true')
+    elif len(sys.argv) == 3:
+        new_available(sys.argv[1], sys.argv[2])
+    else:
+        new_available(sys.argv[1], sys.argv[2], env=sys.argv[3])
+        
+def segway_status_new(args=None):
+    '''新业务后台机器人实时RM'''
+    if len(sys.argv) == 1:
+        new_status()
+    elif len(sys.argv) == 2:
+        new_status(sys.argv[1])
+    else:
+        new_status(sys.argv[1], env=sys.argv[2])
+
 def segway_share(args=None):
     """
     开启本地文件服务器，分享文件或目录
@@ -323,38 +351,52 @@ def segway_box(args=None):
         oper_boxies(sys.argv[1], list(sys.argv[2]), sys.argv[3], sys.argv[4])
 
 def usage(args=None):
-    print("""author ${username}
-version 0.1.0
+    print("""author: ${username}
+version 0.2.0
 Commands:
-    segway_adb adb 解密
+    
+    配置类：
+    segway_config 个性化配置：可配置项见配置部分
+    segway_showconfig 显示配置
+    
+    一键展现日志：
     segway_auto <robot_id> <log_path> <yyyy-mm-dd_HH:MM:SS|\d+(h|d|m)> (上传->查询->拉取->下载->打开)自动获取远程日志
         开始时间在配置中配置，如果没配置，则默认拉取24小时内的日志。否则：需要参数3.
         参数3可以使为空则为now；
         也可以指定'%Y-%m-%d_%H:%M:%S'格式的日志截止时间；
         也可以指定1d、2h、30m格式，分别对应1天、2小时、30分钟，暂不支持负数，在开始时间上加上此时间段为结束时间。
-    segway_config 个性化配置：可配置项见配置部分
+    
+    分步拉日志：
+    segway_login 手动登录刷新token，一般无需手动执行
+    segway_upload <robot_id> 上传指定robot_id的日志
     segway_download <url> 下载日志
     segway_fetch <url>  下载并打开日志
+    segway_query <robot_id> [index] 查询日志url
+    segway_query2 <robot_id> [option] 高级查询，输入segway_query2 获取帮助
+    segway_status <robot_id> 格式化打印机器人状态（导航）
+    
+    新业务后台接口：
+    segway_status_new [robot_id] [dev|alpha|...] 格式化打印机器人状态（业务）
+    segway_restore_new <robot_id> [dev|alpha|...]重置，一键初始化机器人
+    segway_available_new <robot_id> [false|true|] [dev|alpha|...]可用
+    
+    旧业务后台接口（可能不可用）：
+    segway_broken <robot_id> [env=dev] [error_code=110123] [msg=test] 模拟机器人进故障
+    segway_clear_tasks <robot_id> [env=dev] 中断并完成所有任务
+    segway_box <robot_id> 0123 ['open'|'close'] [env=dev] 开关箱
+    segway_shield <robot_id> [true|false] [env=dev] 屏蔽导航
+    segway_arrive <robot_id> [dev|alpha|...]到达
+    
+    本机工具：
+    segway_adb adb 解密
+    segway_share <file_path> 开启文件服务器，以url方式分享本地文件
+    
+    本地拉日志快捷命令：
     segway_nav GUI窗口，拉取nav日志 
-    segway_login 登录刷新token
     segway_pull <path> 本地拉取指定path日志并打开
     segway_pull_ex [Deprecated]本地拉取/sdcard/ex 日志并打开
     segway_pull_s2 本地拉取/sdcard/logs_folder/com.segway.robotic.app 日志并打开
     segway_pull_sys 本地拉取/data/logs 日志并打开
-    segway_query <robot_id> [index] 查询日志url
-    segway_query2 <robot_id> [option] 高级查询，输入segway_query2 获取帮助
-    segway_showconfig 显示配置
-    segway_upload <robot_id> 上传指定robot_id的日志
-    segway_status <robot_id> 格式化打印机器人状态（导航）
-    segway_status2 <robot_id> [dev|alpha|...] 格式化打印机器人状态（业务）
-    segway_restore <robot_id> [dev|alpha|...]重置
-    segway_available <robot_id> [false|true|] [dev|alpha|...]可用
-    segway_arrive <robot_id> [dev|alpha|...]到达
-    segway_share <file_path> 开启文件服务器，以url方式分享本地文件
-    segway_broken <robot_id> [env=dev] [error_code=110123] [msg=test] 模拟机器人进故障
-    segway_shield <robot_id> [true|false] [env=dev] 屏蔽导航
-    segway_clear_tasks <robot_id> [env=dev] 中断并完成所有任务
-    segway_box <robot_id> 0123 ['open'|'close'] [env=dev] 开关箱
     """)
 
 def segway(args=None):

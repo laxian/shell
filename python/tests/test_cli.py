@@ -16,7 +16,7 @@ from src.log.config import Config
 class TestDict(unittest.TestCase):
     def setUp(self):
         print('setUp...')
-        self.url = 'http://robot-base.${host_part_2}.com/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/S1RLM2047C0009_2020-12-04_16-37-27-950_M.zip'
+        self.url = 'http://robot-base.${host_l}/aws/web/file/download/?bucketName=ota-robot-base&objectKey=log/S1RLM2047C0009_2020-12-04_16-37-27-950_M.zip'
         self.name_expect = 'S1RLM2047C0009_2020-12-04_16-37-27-950_M.zip'
         self.config = Config('config.json').config
         self.timestamp = 1607071047.0
