@@ -144,7 +144,7 @@ def login4(cookies=None, env="dev"):
 
 def login_and_save_token(env="dev"):
     config = Config("config.json").config
-    if "token2" in config:
+    if "token2" in config and config["token2"]:
         return config["token2"]
     username = config["username_biz"]
     password = config["password_biz"]
@@ -390,9 +390,9 @@ if __name__ == "__main__":
     # print(new_arrive('EVT6-2-1'))
     # p("hello", robotId="EVT6-2-2")
 
-    # token = login_and_save_token()
-    # print(token)
+    token = login_and_save_token()
+    print(token)
     # robot_list()
     # new_status()
     # new_restore("EVT8-7")
-    new_available("EVT8-7")
+    # new_available("EVT8-7")
