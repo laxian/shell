@@ -11,6 +11,8 @@ def p(obj, *args, **kw):
 
 
 def check_response(response):
+    if response == b'':
+        raise TokenException('content is empty')
     j = json.loads(response)
     code = j["code"]
     if code == 4006 or code == 4007:
