@@ -11,8 +11,8 @@ def p(obj, *args, **kw):
 
 
 def check_response(response):
-    if response == b'':
-        raise TokenException('content is empty')
+    if response == b"":
+        raise TokenException("content is empty")
     j = json.loads(response)
     code = j["code"]
     if code == 4006 or code == 4007:
@@ -78,51 +78,29 @@ def login(username, password):
     return response.cookies
 
 
-def login4(cookies=None, env="dev"):
-    """业务后台登录
-
-    Args:
-        cookies (_type_, RequestsCookieJar): JWT cookies. Defaults to None.
-
-    Raises:
-        Exception: 重定向获取token失败，抛出异常
-
-    Returns:
-        _type_: str
-    """
-    env = env + "-" if env else ""
+def login5(cookies=None, env="dev"):
+    '''登录业务后台，获取token
+    '''
+    env = "-" + env if env else ""
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+        "Cache-Control": "max-age=0",
         "Connection": "keep-alive",
-        "Referer": "https://%s{host_part_sg}.{host_sr}/" % env,
-        "Sec-Fetch-Dest": "document",
-        "Sec-Fetch-Mode": "navigate",
-        "Sec-Fetch-Site": "same-site",
-        "Sec-Fetch-User": "?1",
+        "Referer": "http://account-test.{host_n}/login",
         "Upgrade-Insecure-Requests": "1",
-        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36",
-        "sec-ch-ua": '" Not A;Brand";v="99", "Chromium";v="100", "Google Chrome";v="100"',
-        "sec-ch-ua-mobile": "?0",
-        "sec-ch-ua-platform": '"macOS"',
+        "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36",
     }
 
-    url = (
-        "https://%scustomer-{host_part_sg}.{host_sr}/oauth2/login?domain=https://%s{host_part_sg}.{host_sr}/&feCallBackUrl=/home_page"
-        % (env, env)
-    )
+    url = "http://account-test.{host_n}/oauth/authorize?client_id=GX_customer_admin&response_type=code&redirect_uri=https://usercenter%s.{host_sr}/oauth2/callback&state=aHR0cHM6Ly9kZXYtc2Vnd2F5Z28uc2Vnd2F5cm9ib3RpY3MuY29tLyMv" % env
     response = requests.get(
         url,
         headers=headers,
         cookies=cookies,
         allow_redirects=False,
     )
-    print(response)
-    print(response.cookies)
-    print(response.headers)
-    print(response.url)
 
-    redirect = response.headers["Location"]
+    redirect = response.headers["Location"] if "Location" in response.headers else None
     print(redirect)
     token = None
     while True:
@@ -133,12 +111,16 @@ def login4(cookies=None, env="dev"):
             cookies=cookies,
             allow_redirects=False,
         )
+        print(response.cookies)
+        print(response.headers)
+        print(response.url)
         cks = response.cookies.get_dict()
+        
         if "token" in cks:
             print("token: %s" % cks["token"])
             token = cks["token"]
             break
-        redirect = response.headers["Location"]
+        redirect = response.headers["Location"] if "Location" in response.headers else None
         if not redirect:
             raise Exception("token not found")
     return token
@@ -151,7 +133,7 @@ def login_and_save_token(env="dev"):
     username = config["username_biz"]
     password = config["password_biz"]
     cookies = login(username, password)
-    token = login4(cookies)
+    token = login5(cookies)
     print(token)
     if token:
         config["token2"] = token
@@ -189,7 +171,7 @@ def robot_list(token, env="dev"):
     }
 
     url = "https://api-gate-%sdelivery.${host_l}/web/transport/c/robot/down/list" % env
-    
+
     response = requests.get(
         url,
         headers=headers,
@@ -266,7 +248,7 @@ def status_parser(datas, robotId=None):
     else:
         status = datas["data"]["list"]
         for robot in datas["data"]["list"]:
-            print('------------ robot status ------------')
+            print("------------ robot status ------------")
             pretty_status(robot)
 
 
@@ -340,7 +322,7 @@ def new_restore(token, robotId, env="dev"):
     }
 
     url = "https://api-gate-%sdelivery.${host_l}/web/transport/c/robot/restore" % env
-    
+
     response = requests.post(
         url,
         headers=headers,
