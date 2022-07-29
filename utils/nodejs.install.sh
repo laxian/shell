@@ -3,6 +3,12 @@
 #------------------------------------------------------------------
 # nodejs install script，for Linux and Mac，any arch
 # by weixian.zhou
+# uninstall: 
+# [Danger] sudo rm -rf /opt/nodejs ; rm ~/.bashrc ; sed -i '/.bashrc/c\'  ~/.zshrc
+# or uninstall by hand:
+# 1. delete /opt/nodejs
+# 2. remove ~/.bashrc export statements
+# 3. remove ~/.zshrc source statements
 #------------------------------------------------------------------
 
 INSTALL_DIR=/opt
@@ -42,6 +48,7 @@ if [ "$(command -v node)" ]; then
 		log "you exited install"
 		exit_clean 0
 	fi
+	unset goahead
 fi
 
 _ARCH=`arch`
@@ -99,8 +106,8 @@ fi
 log "start install, need admin password"
 if [ -d $INSTALL_DIR/nodejs ]; then
 	log "$INSTALL_DIR/nodejs exists, make sure override it? yes or skip or cancel?"
-	read goahead </dev/tty
 	while :; do
+		read goahead </dev/tty
 		log "you input $goahead"
 		if [[ $goahead == 'yes' || $goahead == 'y' ]]; then
 			log "[overwrite] mv $DIRNAME nodejs to $INSTALL_DIR"
@@ -118,22 +125,53 @@ if [ -d $INSTALL_DIR/nodejs ]; then
 			log "you canceled install, exit"
 			exit_clean 3
 		else
-			unset goahead
 			log "unsupport input, input again!"
+			unset goahead
 		fi
 	done
+	unset goahead
 else
 	log "install $DIRNAME to $INSTALL_DIR/"
 	sudo mv $DIRNAME $INSTALL_DIR/nodejs
 fi
 
+if [ ! -d "$INSTALL_DIR/nodejs" ]; then
+	log "$INSTALL_DIR/nodejs not exists, exit"
+	exit_clean 5
+fi
+
 log "add to PATH"
-grep "NODE_DIR=/opt/nodejs" ~/.bashrc || echo -e "\nexport NODE_DIR=/opt/nodejs" >> ~/.bashrc
-grep "PATH=\$NODE_DIR/bin:\$PATH" ~/.bashrc || echo "export PATH=\$NODE_DIR/bin:\$PATH" >> ~/.bashrc
+
+PROFILE=~/.bashrc
+if [ -f "~/.bashrc" ]; then
+	echo "File \"~/.bashrc\" exists"
+	PROFILE="~/.bashrc"
+elif [[ -f ~/.bash_profile ]];then
+	PROFILE="~/.bash_profile"
+else
+	log "no bash profile found"
+fi
+log "use profile ${PROFILE}"
+touch ${PROFILE}
+
+grep "NODE_DIR=/opt/nodejs" ${PROFILE} >/dev/null || echo -e "\nexport NODE_DIR=/opt/nodejs" >> ${PROFILE}
+grep "PATH=\$NODE_DIR/bin:\$PATH" ${PROFILE} >/dev/null || echo "export PATH=\$NODE_DIR/bin:\$PATH" >> ${PROFILE}
+
+if [[ $SHELL == '/bin/zsh' ]]; then
+	log "found zsh, add to zsh? y/n"
+	read -t 3 goahead </dev/tty
+	if [[ $goahead == 'yes' || $goahead == 'y' ]]; then
+		grep "source /Users/leochou/.bashrc" ~/.zshrc || echo "source ${PROFILE}" >> ~/.zshrc
+		log "add to zsh done"
+	else
+		log "skip add to zsh"
+	fi
+	unset goahead
+fi
 
 log "clean..."
-cd .. && rm -rf tmp
-source ~/.bashrc
+cd .. && rm -rf ./tmp
+source ${PROFILE}
 node -v
 
 if [ $? == 0 ]; then
