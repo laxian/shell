@@ -1,24 +1,35 @@
 #!/usr/bin/env bash
 
-#----------------------
+#------------------------------------------------------------------
 # nodejs install script，for Linux and Mac，any arch
 # by weixian.zhou
-#----------------------
+#------------------------------------------------------------------
 
+INSTALL_DIR=/opt
 
 function log () {
 	echo "=== $1 ==="
 }
 
-# NODEJS_VERSION="v16.16.0"
-NODEJS_VERSION=`curl -s https://nodejs.org/en/download/ \
-| grep tar.gz \
-| sed -n 's#.*\(https\?:\/\/[a-zA-Z0-9/\.-]\+\).*#\1#;p' \
-| head -1 \
-| sed 's#.*\(v[0-9\.]\+\).*#\1#' \
-| sed 's;\.$;;'`
-log "Newest version is ${NODEJS_VERSION}"
+function exit_clean () {
+	cd .. && rm -rf tmp
+	exit $1
+}
 
+function get_lts_version () {
+	NODEJS_VERSION=`curl -s https://nodejs.org/en/download/ \
+	| grep tar.gz \
+	| sed -n 's#.*\(https\?:\/\/[a-zA-Z0-9/\.-]\+\).*#\1#;p' \
+	| head -1 \
+	| sed 's#.*\(v[0-9\.]\+\).*#\1#' \
+	| sed 's;\.$;;'`
+	echo ${NODEJS_VERSION}
+	return 0
+}
+
+get_lts_version
+
+# NODEJS_VERSION="v16.16.0"
 if [ "$(command -v node)" ]; then
 	node_version=`node -v`
 	log "nodejs-${node_version} exists on system"
@@ -29,7 +40,7 @@ if [ "$(command -v node)" ]; then
 		has_node=1
 	else
 		log "you exited install"
-		exit 0
+		exit_clean 0
 	fi
 fi
 
@@ -48,8 +59,15 @@ case "`uname`" in
 esac
 log "Your System is $SYS"
 
+if [ -f $FILENAME ]; then
+	log "$FILENAME already exists, copy it"
+	mkdir tmp && cd tmp && cp ../$FILENAME .
+else
+	[ -d ./tmp ] || mkdir tmp && cd tmp
+fi
+
 URL=https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-${SYS}-${ARCH}.tar.xz
-INSTALL_DIR=/opt
+log "binary url: $URL"
 
 # node-v16.15.1-linux-arm64.tar.xz
 FILENAME=${URL##*/}
@@ -57,23 +75,16 @@ DIRNAME=${FILENAME/.tar.xz/}
 
 echo $DIRNAME
 
-[ -d ./tmp ] || mkdir tmp
-
 if [ -f $FILENAME ]; then
 	log "File ${FILENAME} exists"
-	cp $FILENAME tmp/
 else
 	log "Downloading...${URL}"
 	curl -SLO $URL
 	if [ $? != 0 ]; then
 		log "download nodejs error"
-		exit 1
-	else
-		cp $FILENAME tmp/
+		exit_clean 1
 	fi
 fi
-
-cd tmp
 
 log "start uncompress"
 tar -xf $FILENAME
@@ -81,8 +92,8 @@ tar -xf $FILENAME
 xv_result=$?
 if [[ $xv_result != 0 ]];then
 	log "Uncompress $FILENAME ERROR, exit $xv_result, please try again"
-	rm ../$FILENAME
-	exit 4
+	rm $FILENAME
+	exit_clean 4
 fi
 
 log "start install, need admin password"
@@ -100,12 +111,12 @@ if [ -d $INSTALL_DIR/nodejs ]; then
 			resolved=2
 			if [ has_node == 1 ]; then
 				log "you skipped, use old node version"
-				exit 2
+				exit_clean 2
 			fi
 			break
 		elif [[ $goahead == 'cancel' ]]; then
 			log "you canceled install, exit"
-			exit 3
+			exit_clean 3
 		else
 			unset goahead
 			log "unsupport input, input again!"
@@ -121,8 +132,7 @@ grep "NODE_DIR=/opt/nodejs" ~/.bashrc || echo -e "\nexport NODE_DIR=/opt/nodejs"
 grep "PATH=\$NODE_DIR/bin:\$PATH" ~/.bashrc || echo "export PATH=\$NODE_DIR/bin:\$PATH" >> ~/.bashrc
 
 log "clean..."
-cd ..
-rm -rf tmp
+cd .. && rm -rf tmp
 source ~/.bashrc
 node -v
 
