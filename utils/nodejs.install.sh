@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash -e
 
 #------------------------------------------------------------------
 # nodejs install script，for Linux and Mac，any arch
@@ -13,12 +13,17 @@
 
 INSTALL_DIR=/opt
 
+workdir=$(
+        cd $(dirname $0)
+        pwd
+)
+
 function log () {
 	echo "=== $1 ==="
 }
 
 function exit_clean () {
-	cd .. && rm -rf tmp
+	cd $workdir && rm -rf $workdir/tmp
 	exit $1
 }
 
@@ -32,6 +37,8 @@ function get_lts_version () {
 	echo ${NODEJS_VERSION}
 	return 0
 }
+
+trap "rm -rf ${workdir}/tmp; exit_clean 255" SIGINT
 
 get_lts_version
 
@@ -58,7 +65,6 @@ log "Your CPU Arch is ${ARCH}"
 
 # System support linux or Mac(darwin)
 SYS=linux
-darwin=false
 case "`uname`" in
   Darwin* )
     SYS=darwin
@@ -66,19 +72,19 @@ case "`uname`" in
 esac
 log "Your System is $SYS"
 
-if [ -f $FILENAME ]; then
-	log "$FILENAME already exists, copy it"
-	mkdir tmp && cd tmp && cp ../$FILENAME .
-else
-	[ -d ./tmp ] || mkdir tmp && cd tmp
-fi
-
 URL=https://nodejs.org/dist/${NODEJS_VERSION}/node-${NODEJS_VERSION}-${SYS}-${ARCH}.tar.xz
 log "binary url: $URL"
 
 # node-v16.15.1-linux-arm64.tar.xz
 FILENAME=${URL##*/}
 DIRNAME=${FILENAME/.tar.xz/}
+
+if [ -f $FILENAME ]; then
+	log "$FILENAME already exists, copy it"
+	mkdir tmp && cd tmp && cp ../$FILENAME .
+else
+	[ -d ./tmp ] || mkdir tmp && cd tmp
+fi
 
 echo $DIRNAME
 
@@ -169,8 +175,6 @@ if [[ $SHELL == '/bin/zsh' ]]; then
 	unset goahead
 fi
 
-log "clean..."
-cd .. && rm -rf ./tmp
 source ${PROFILE}
 node -v
 
@@ -179,3 +183,6 @@ if [ $? == 0 ]; then
 else
 	log "install failed"
 fi
+
+log "clean..."
+exit_clean 0
