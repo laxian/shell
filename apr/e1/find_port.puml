@@ -1,0 +1,70 @@
+@startuml
+
+<style>
+activityDiagram {
+  BackgroundColor #33668E
+  BorderColor #33668E
+  FontColor #FFF
+  FontName arial
+
+  diamond {
+    BackgroundColor #ccf
+    LineColor #00FF00
+    FontColor green
+    FontName arial
+    FontSize 15
+  }
+  arrow {
+    FontColor gold
+    FontName arial
+    FontSize 15
+  }
+  partition {
+    LineColor red
+    FontColor green
+    RoundCorner 10
+    BackgroundColor PeachPuff
+  }
+  note {
+    FontColor Blue
+    LineColor Navy
+    BackgroundColor #ccf
+  }
+}
+document {
+   BackgroundColor transparent
+}
+</style>
+
+start
+
+if (静态端口配置非空？) then (yes)
+  if (测试远程端口是否占用？) then (yes)
+	label dynamic
+  else (no)
+	:使用静态端口;
+	stop
+  endif
+else (no)
+endif
+
+:使用动态端口
+let PORT=<MIN_PORT>;
+
+while (true)
+	if (PORT > <MAX_PORT>) then (yes)
+		:exit 1;
+		stop
+	elseif (PORT 未占用) then (yes)
+		break
+	else (no)
+		:PORT++;
+	endif
+endwhile
+
+:连接端口
+保存配置（可查）;
+
+stop
+
+@enduml

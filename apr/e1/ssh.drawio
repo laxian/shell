@@ -1,0 +1,67 @@
+<mxfile host="65bd71144e">
+    <diagram id="-7RdAi2UDS6-vGZNOUGU" name="第 1 页">
+        <mxGraphModel dx="1678" dy="585" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+            <root>
+                <mxCell id="0"/>
+                <mxCell id="1" parent="0"/>
+                <mxCell id="3" value="跳板服务器" style="swimlane;fillColor=#60a917;fontColor=#ffffff;strokeColor=#2D7600;swimlaneFillColor=#009900;" parent="1" vertex="1">
+                    <mxGeometry x="150" y="180" width="140" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="12" value="IP: xxx.xx.xx.xx" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="3" vertex="1">
+                    <mxGeometry x="15" y="140" width="100" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="5" style="edgeStyle=none;html=1;entryX=1;entryY=0.5;entryDx=0;entryDy=0;strokeWidth=10;" parent="1" source="4" target="3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="4" value="动态IP设备" style="swimlane;startSize=23;fillColor=#999900;strokeColor=#23445d;swimlaneFillColor=#FFFF99;" parent="1" vertex="1">
+                    <mxGeometry x="480" y="180" width="140" height="300" as="geometry"/>
+                </mxCell>
+                <mxCell id="10" value="&lt;font color=&quot;#1a1a1a&quot;&gt;user1@localhost&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="4" vertex="1">
+                    <mxGeometry x="15" y="140" width="110" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="6" value="ssh -NR port1:localhost:port&amp;nbsp;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="315" y="300" width="170" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="8" style="edgeStyle=none;html=1;entryX=0;entryY=0.25;entryDx=0;entryDy=0;strokeWidth=10;" parent="1" source="7" target="3" edge="1">
+                    <mxGeometry relative="1" as="geometry"/>
+                </mxCell>
+                <mxCell id="7" value="" style="fontColor=#0066CC;verticalAlign=top;verticalLabelPosition=bottom;labelPosition=center;align=center;html=1;outlineConnect=0;fillColor=#CCCCCC;strokeColor=#6881B3;gradientColor=none;gradientDirection=north;strokeWidth=2;shape=mxgraph.networks.pc;" parent="1" vertex="1">
+                    <mxGeometry x="-156" y="220" width="100" height="70" as="geometry"/>
+                </mxCell>
+                <mxCell id="9" value="ssh -p port1 user1@xxx.xx.xx.xx" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;" parent="1" vertex="1">
+                    <mxGeometry x="-56" y="230" width="190" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="13" value="&lt;font color=&quot;#ffffff&quot;&gt;建立远程转发&lt;/font&gt;" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontColor=#1A1A1A;" parent="1" vertex="1">
+                    <mxGeometry x="350" y="340" width="90" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="42" value="6700~6709" style="swimlane;startSize=20;horizontal=0;swimlaneFillColor=#6666FF;" vertex="1" parent="1">
+                    <mxGeometry x="-180" y="730" width="100" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="43" value="6710~6749" style="swimlane;startSize=20;horizontal=0;swimlaneFillColor=#FF3333;" vertex="1" parent="1">
+                    <mxGeometry x="-80" y="730" width="300" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="44" value="6750~6799" style="swimlane;startSize=20;horizontal=0;swimlaneFillColor=#66FF66;" vertex="1" parent="1">
+                    <mxGeometry x="220" y="730" width="400" height="100" as="geometry"/>
+                </mxCell>
+                <mxCell id="46" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;direction=south;" vertex="1" parent="1">
+                    <mxGeometry x="-175" y="690" width="120" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="47" value="静态端口区" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=17;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;" vertex="1" parent="1">
+                    <mxGeometry x="-180" y="630" width="146" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="48" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;direction=south;" vertex="1" parent="1">
+                    <mxGeometry x="-34" y="690" width="254" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="49" value="动态端口区" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=17;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;" vertex="1" parent="1">
+                    <mxGeometry x="20" y="630" width="146" height="50" as="geometry"/>
+                </mxCell>
+                <mxCell id="50" value="" style="shape=curlyBracket;whiteSpace=wrap;html=1;rounded=1;direction=south;" vertex="1" parent="1">
+                    <mxGeometry x="240" y="690" width="380" height="20" as="geometry"/>
+                </mxCell>
+                <mxCell id="51" value="守护端口区&lt;br&gt;守护端口-50=被守护端口" style="strokeWidth=1;shadow=0;dashed=0;align=center;html=1;shape=mxgraph.mockup.text.stickyNote2;fontColor=#666666;mainText=;fontSize=17;whiteSpace=wrap;fillColor=#ffffcc;strokeColor=#F62E00;" vertex="1" parent="1">
+                    <mxGeometry x="298.5" y="610" width="263" height="70" as="geometry"/>
+                </mxCell>
+            </root>
+        </mxGraphModel>
+    </diagram>
+</mxfile>
