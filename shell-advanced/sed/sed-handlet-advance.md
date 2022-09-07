@@ -30,6 +30,7 @@
 
 ```Bash
 seq 9 | sed -n '1!G;h;$!d;p'
+seq 9 | sed -n '1!G;h;$p'
 # outputs
 9
 8
