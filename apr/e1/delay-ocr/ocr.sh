@@ -9,13 +9,23 @@ if [ $# -eq 0 ]; then
 	cat << EOF
 	Usage: ocr.sh <path-to-video-file> [path-to-output]
 EOF
+	exit 1
 fi
 
 VIDEO=$1
-OUTPUT_DIR=${VIDEO%.*}
-OUTPUT_DIR=${OUTPUT_DIR:-tmp}
 
-echo $OUTPUT_DIR
+if [ ! -f "$VIDEO" ]; then
+	echo "File \"$VIDEO\" do not exists, exit"
+	exit 2
+fi
+
+if [[ -n $2 ]]; then
+	OUTPUT_DIR=$2
+	echo "output dir: $OUTPUT_DIR"
+else
+	OUTPUT_DIR=${VIDEO%.*}
+fi
+OUTPUT_DIR=${OUTPUT_DIR:-tmp}
 
 if [ -d "${OUTPUT_DIR}" ]; then
 	echo "${OUTPUT_DIR} already exists, skipping or overwrite it(y/n)?"
@@ -24,7 +34,7 @@ if [ -d "${OUTPUT_DIR}" ]; then
 		echo "You input YES, continue..."
 	else
 		echo "You input NO, exit"
-		exit 1
+		exit 3
 	fi
 else
 	echo "creating directory ${OUTPUT_DIR}"
@@ -35,7 +45,7 @@ if [ "$(command -v ffmpeg)" ]; then
 	ffmpeg -i $1 -r 5 -f image2 $OUTPUT_DIR/1_frame_%05d.bmp
 else
 	echo "ffmpeg not found, exit"
-	exit 1
+	exit 4
 fi
 
 clear
