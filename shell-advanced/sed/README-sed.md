@@ -14,7 +14,7 @@
 
 - [sed 行定位匹配](https://github.com/laxian/shell/blob/dev/shell-advanced/sed/sed-addresses.md)
 
-- [sed 模式空间和保持空间](https://github.com/laxian/shell/blob/dev/shell-advanced/sed/sed-handlet-advance)
+- [sed 模式空间和保持空间](https://github.com/laxian/shell/blob/dev/shell-advanced/sed/sed-handlet-advance.md)
 
 ## Term
 
