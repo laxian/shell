@@ -1,5 +1,9 @@
 #!/bin/bash
 
+workdir=$(
+    cd $(dirname $0)
+    pwd
+)
 
 if [ $# -eq 0 ]; then
 	cat << EOF
@@ -7,7 +11,9 @@ if [ $# -eq 0 ]; then
 EOF
 fi
 
-OUTPUT_DIR=${2:-tmp}
+VIDEO=$1
+OUTPUT_DIR=${VIDEO%.*}
+OUTPUT_DIR=${OUTPUT_DIR:-tmp}
 
 echo $OUTPUT_DIR
 
@@ -38,5 +44,5 @@ echo "Start ocr..."
 # works on Mac OS X, but grep on linux do not support \d
 # python paddle_ocr.py $OUTPUT_DIR | grep -E "^(\d{2}[:.]){3}\d{3},(\d{2}[:.]){3}\d{3},\d{2,}$"
 # works on Linux
-python paddle_ocr.py $OUTPUT_DIR | grep -E "([0-9]{2}[:.]){3}[0-9]{3},([0-9]{2}[:.]){3}[0-9]{3},[0-9]{2,}"
+python $workdir/paddle_ocr.py $OUTPUT_DIR | grep -E "([0-9]{2}[:.]){3}[0-9]{3},([0-9]{2}[:.]){3}[0-9]{3},[0-9]{2,}"
 #| xargs -n2 | sed 's/ /,/'
