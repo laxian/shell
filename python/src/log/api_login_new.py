@@ -27,10 +27,12 @@ def relogin(h=p, **kw):
     def logging_decorator(func):
         @wraps(func)
         def wrapped_function(*args, **kwargs):
+            print(func)
+            print(args, kwargs)
             token = (
                 login_and_save_token(args[3])
                 if len(args) > 3
-                else login_and_save_token()
+                else login_and_save_token(kwargs['env']) if 'env' in kwargs else login_and_save_token()
             )
             # print("%s %s %s" % (token, args, kwargs))
             content = func(token, *args, **kwargs)
@@ -49,22 +51,27 @@ def relogin(h=p, **kw):
     return logging_decorator
 
 
-def login(username, password):
+def login(username, password, env="dev"):
+    url_seg = ''
+    if env == "dev":
+        url_seg = "-test"
+        
+    print("url_seg: %s" % url_seg)
 
     """JWT登录
 
     Returns:
         _type_: RequestsCookieJar
     """
-    url = "http://account-test.{host_n}/login"
+    url = "http://account%s.{host_n}/login" % url_seg
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
         "Cache-Control": "max-age=0",
         "Connection": "keep-alive",
         "Content-Type": "application/x-www-form-urlencoded",
-        "Origin": "http://account-test.{host_n}",
-        "Referer": "http://account-test.{host_n}/login",
+        "Origin": "http://account%s.{host_n}" % url_seg,
+        "Referer": "http://account%s.{host_n}/login" % url_seg,
     }
     data = "username=%s&password=%s" % (username, password)
     response = requests.request(
@@ -81,18 +88,23 @@ def login(username, password):
 def login5(cookies=None, env="dev"):
     '''登录业务后台，获取token
     '''
+    url_seg = ''
+    if env == "dev":
+        url_seg = "-test"
+    print("url_seg: %s" % url_seg)
     env = "-" + env if env else ""
+        
     headers = {
         "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9",
         "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
         "Cache-Control": "max-age=0",
         "Connection": "keep-alive",
-        "Referer": "http://account-test.{host_n}/login",
+        "Referer": "http://account%s.{host_n}/login" % env,
         "Upgrade-Insecure-Requests": "1",
         "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.127 Safari/537.36",
     }
 
-    url = "http://account-test.{host_n}/oauth/authorize?client_id=GX_customer_admin&response_type=code&redirect_uri=https://usercenter%s.{host_sr}/oauth2/callback&state=aHR0cHM6Ly9kZXYtc2Vnd2F5Z28uc2Vnd2F5cm9ib3RpY3MuY29tLyMv" % env
+    url = "http://account%s.{host_n}/oauth/authorize?client_id=GX_customer_admin&response_type=code&redirect_uri=https://usercenter%s.{host_sr}/oauth2/callback&state=aHR0cHM6Ly9kZXYtc2Vnd2F5Z28uc2Vnd2F5cm9ib3RpY3MuY29tLyMv" % (url_seg, env)
     response = requests.get(
         url,
         headers=headers,
@@ -127,13 +139,14 @@ def login5(cookies=None, env="dev"):
 
 
 def login_and_save_token(env="dev"):
+    print("=== env: %s" % env)
     config = Config("config.json").config
     if "token2" in config and config["token2"]:
         return config["token2"]
     username = config["username_biz"]
     password = config["password_biz"]
-    cookies = login(username, password)
-    token = login5(cookies)
+    cookies = login(username, password, env)
+    token = login5(cookies, env)
     print(token)
     if token:
         config["token2"] = token
@@ -152,6 +165,16 @@ def clear_token():
 
 @relogin()
 def robot_list(token, env="dev"):
+    res = json.loads(raw_robot_list(token, env))
+    if res:
+        robots = [l['robotId'] for l in res["data"]]
+        for robot in robots:
+            print(robot)
+    else:
+        print(res)
+
+
+def raw_robot_list(token, env="dev"):
     env = env + "-" if env else ""
     headers = {
         "Accept": "application/json, text/plain, */*",
@@ -287,12 +310,13 @@ def new_status(token, robotId=None, env="dev"):
             "https://api-gate-%sdelivery.${host_l}/business-order/web/transport/c/robot/rm"
             % env
         )
-    # print(url)
+    print(url)
     response = requests.get(
         url,
         headers=headers,
         params=params,
     )
+    print(response)
     return response.content.decode("utf-8")
 
 

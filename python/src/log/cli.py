@@ -16,7 +16,7 @@ from src.log.config import Config
 from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
 from src.log.api_login_old import api_restore, api_available, api_arrive, api_status
-from src.log.api_login_new import new_restore, new_available, new_status
+from src.log.api_login_new import new_restore, new_available, new_status, robot_list
 from src.log.utils import download, get_host_ip
 from src.log.api_simulate import api_broken, shield_nav, clear_tasks, oper_boxies
 
@@ -276,6 +276,16 @@ def segway_available_new(args=None):
     else:
         new_available(sys.argv[1], sys.argv[2], env=sys.argv[3])
         
+def segway_robots(args=None):
+    '''新业务后台机器人列表'''
+    if len(sys.argv) == 1:
+        robots = robot_list()
+        print(robots)
+    elif len(sys.argv) == 2:
+        robots = robot_list(env=sys.argv[1])
+        print('================================')
+        print(robots)
+        
 def segway_status_new(args=None):
     '''新业务后台机器人实时RM'''
     if len(sys.argv) == 1:
@@ -379,6 +389,7 @@ Commands:
     segway_status_new [robot_id] [dev|alpha|...] 格式化打印机器人状态（业务）
     segway_restore_new <robot_id> [dev|alpha|...]重置，一键初始化机器人
     segway_available_new <robot_id> [false|true|] [dev|alpha|...]可用
+    segway_robots [dev|alpha|...]可用
     
     旧业务后台接口（可能不可用）：
     segway_broken <robot_id> [env=dev] [error_code=110123] [msg=test] 模拟机器人进故障
