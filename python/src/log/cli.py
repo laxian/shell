@@ -83,6 +83,7 @@ def segway_upload(args=None):
 
     config = Config("config.json").config
     log_start_time_f = config["log_start_time"]
+    tick = time.time()
     if not log_start_time_f:
         # 默认拉取24小时日志
         print("拉取24小时日志")
