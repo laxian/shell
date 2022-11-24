@@ -364,7 +364,7 @@ Commands:
     segway_robots [dev|alpha|...]可用
     
     新业务业务后台-S1-国内
-    segway_s1 餐厅机器人列表+实时状态
+    segway_s1 [dev|release='']餐厅机器人列表+实时状态
     
     本机工具：
     segway_adb adb 解密
