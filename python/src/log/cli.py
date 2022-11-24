@@ -17,6 +17,7 @@ from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
 from src.log.api_login_new import new_restore, new_available, new_status, robot_list
 from src.log.utils import download, get_host_ip
+from src.log.S1.api_s1_cn import s1_list
 
 
 def segway_login(args=None):
@@ -295,6 +296,14 @@ def segway_status2(args=None):
         new_status(sys.argv[1], env=sys.argv[2])
 
 
+def segway_s1(args=None):
+    """S1新业务后台机器人实时状态"""
+    if len(sys.argv) == 1:
+        s1_list()
+    elif len(sys.argv) >= 2:
+        s1_list(env=sys.argv[1])
+
+
 def segway_share(args=None):
     """
     开启本地文件服务器，分享文件或目录
@@ -353,6 +362,9 @@ Commands:
     segway_restore <robot_id> [dev|alpha|...]重置，一键初始化机器人
     segway_available <robot_id> [false|true|] [dev|alpha|...]可用
     segway_robots [dev|alpha|...]可用
+    
+    新业务业务后台-S1-国内
+    segway_s1 餐厅机器人列表+实时状态
     
     本机工具：
     segway_adb adb 解密

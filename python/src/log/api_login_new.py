@@ -14,11 +14,13 @@ def check_response(response):
     if response == b"":
         raise TokenException("content is empty")
     j = json.loads(response)
-    code = j["code"]
+    code = j["code"] if 'code' in j else j["resultCode"]
     if code == 4006 or code == 4007:
-        raise TokenException(j["message"])
-    elif code != 200:
-        raise Exception(j["message"])
+        print('################################2')
+        raise TokenException(j["message"] if 'message' in j else j['resultDesc'])
+    elif code != 200 and code != 9000:
+        print('################################3')
+        raise Exception(j["message"] if 'message' in j else j['resultDesc'])
     else:
         return j
 
@@ -40,6 +42,8 @@ def relogin(h=p, **kw):
                 j = check_response(content)
                 return h(j, *args, **kwargs)
             except TokenException as ex:
+                print('################################4')
+                print(wrapped_function)
                 clear_token()
                 return wrapped_function(*args, **kwargs)
             except Exception as ex:
@@ -52,6 +56,7 @@ def relogin(h=p, **kw):
 
 
 def login(username, password, env="dev"):
+    print('=== login1 ===')
     url_seg = ''
     if env == "dev":
         url_seg = "-test"
@@ -86,6 +91,7 @@ def login(username, password, env="dev"):
 
 
 def login5(cookies=None, env="dev"):
+    print('=== login5 ===')
     '''登录业务后台，获取token
     '''
     url_seg = ''
