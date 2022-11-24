@@ -29,9 +29,11 @@ pallet_type = {
     -1: "--",
     0: "圆盘",
     1: "方盘",
+    2: "圆盘带壳",
+    3: "方盘带壳",
 }
 
-task_status = {-1: "--", 2: "未知", 1: "闲置"}
+task_status = {-1: "--", 2: "未知", 1: "闲置", 3: "不明"}
 
 
 def status_parser(datas, robotId=None, **kwargs):
