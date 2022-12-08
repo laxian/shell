@@ -41,7 +41,7 @@ setup(
         "src.log": ["config.json"],
     },
     install_requires=[
-        'certifi==2020.11.8',
+        'certifi==2022.12.7',
         'chardet==3.0.4',
         'idna==2.10',
         'requests==2.25.0',
