@@ -10,11 +10,13 @@ from src.log.adb_auth import adb_auth
 from src.log.adb_ex import dump_ex_log, dump_s2_log, dump_sys_log, pull_log_from_dir
 from src.log.api_login import login_and_save_token
 from src.log.api_query import query_with_retry, query_model_with_retry
+from src.log.ore.api_query import query_with_retry as query_with_retry_ore, query_model_with_retry as query_model_with_retry_ore
 from src.log.api_status import status_with_retry
 from src.log.api_upload import upload_with_retry
 from src.log.config import Config
 from src.log.dumpnavLogs import nav_log_gui
 from src.log.schedule import fetch_and_open, schedule
+from src.log.ore.schedule import schedule as schedule_ore
 from src.log.api_login_new import new_restore, new_available, new_status, robot_list
 from src.log.utils import download, get_host_ip
 from src.log.S1.api_s1_cn import s1_list
@@ -185,6 +187,93 @@ def segway_query2():
                     print(
                         json.dumps(u[k], sort_keys=True, indent=4, ensure_ascii=False)
                     )
+                    
+
+def segway_query_ore():
+    if len(sys.argv) == 3:
+        robot_id = sys.argv[1]
+        index = int(sys.argv[2])
+    elif len(sys.argv) == 2:
+        robot_id = sys.argv[1]
+        index = -1
+    else:
+        print("Usage: segway_query_ore <robot_id> [index]")
+        return
+    result = query_with_retry_ore(robot_id, index)
+    if result:
+        for u in result:
+            print(u)
+    else:
+        print("没有查询到url")
+
+
+def segway_query2_ore():
+    all_keys = [
+        "ackTime",
+        "commandId",
+        "commandMessage",
+        "commandStatus",
+        "createBy",
+        "createTime",
+        "endTime",
+        "environment",
+        "id",
+        "logName",
+        "logPath",
+        "logType",
+        "logUrl",
+        "responseTime",
+        "robotId",
+        "startTime",
+    ]
+    if len(sys.argv) > 1:
+        robot_id = sys.argv[1]
+    else:
+        print(
+            """Usage: segway_query2_ore <robot_id> [option]
+        option: 
+        %s
+        Samples:
+        查询logPath=/sdcard/ex的日志，打印logPath和logUrl
+        segway_query2_ore <id> logPath=/sdcard/ex logUrl
+        """
+            % all_keys
+        )
+        return
+    result = query_model_with_retry_ore(robot_id)
+    if len(sys.argv) == 2:
+        if result:
+            for u in result:
+                print(json.dumps(u, sort_keys=True, indent=4, ensure_ascii=False))
+        else:
+            print("没有查询到url")
+    else:
+        args = []
+        for arg in sys.argv[2:]:
+            if "=" in arg:
+                k, v = arg.split("=")
+                result = [
+                    item for item in result if k in item.keys() and v == item.get(k)
+                ]
+                args.append(k)
+            else:
+                args.append(arg)
+        for u in result:
+            # 对每一个model遍历输入的keys，如有一命中，即为命中
+            hit = False
+            print("---------")
+            for k in args:
+                if k in all_keys and k in u:
+                    hit = True
+                    break
+            # 不含key的，不显示
+            if not hit:
+                continue
+            for k in args:
+                if k in u:
+                    print(
+                        json.dumps(u[k], sort_keys=True, indent=4, ensure_ascii=False)
+                    )
 
 
 def segway_auto(args=None):
@@ -304,6 +393,21 @@ def segway_s1(args=None):
         s1_list(env=sys.argv[1])
 
 
+def segway_ore(args=None):
+    if len(sys.argv) < 3:
+        print(
+            """
+        上传查询下载打开日志[ore环境]
+        Usage: segway_auto <robot_id> <path>
+        """
+        )
+        return
+    elif len(sys.argv) == 3:
+        schedule_ore(sys.argv[1], sys.argv[2])
+    else:
+        schedule_ore(sys.argv[1], sys.argv[2], sys.argv[3])
+
+
 def segway_share(args=None):
     """
     开启本地文件服务器，分享文件或目录
@@ -347,6 +451,11 @@ Commands:
         参数3可以使为空则为now；
         也可以指定'%Y-%m-%d_%H:%M:%S'格式的日志截止时间；
         也可以指定1d、2h、30m格式，分别对应1天、2小时、30分钟，暂不支持负数，在开始时间上加上此时间段为结束时间。
+    segway_ore <robot_id> <log_path> <yyyy-mm-dd_HH:MM:SS|\d+(h|d|m)> (上传->查询->拉取->下载->打开)自动获取远程日志
+        开始时间在配置中配置，如果没配置，则默认拉取24小时内的日志。否则：需要参数3.
+        参数3可以使为空则为now；
+        也可以指定'%Y-%m-%d_%H:%M:%S'格式的日志截止时间；
+        也可以指定1d、2h、30m格式，分别对应1天、2小时、30分钟，暂不支持负数，在开始时间上加上此时间段为结束时间。
     
     分步拉日志：
     segway_login 手动登录刷新token，一般无需手动执行
@@ -355,6 +464,8 @@ Commands:
     segway_fetch <url>  下载并打开日志
     segway_query <robot_id> [index] 查询日志url
     segway_query2 <robot_id> [option] 高级查询，输入segway_query2 获取帮助
+    segway_query_ore <robot_id> [index] 查询日志url
+    segway_query2_ore <robot_id> [option] 高级查询，输入segway_query2_ore 获取帮助
     segway_status <robot_id> 格式化打印机器人状态（导航）
     
     新业务后台接口：
