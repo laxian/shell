@@ -8,9 +8,9 @@ if [[ $use_aliyun_maven = true ]]; then
 fi
 if [[ $JOB_NAME == "Gx_Service" ]]; then
     sed -i "s;3.+;5.3.0;g" build.gradle
-    echo "/opt/app/android-sdk/ndk/22.0.7026061" >>local.properties
+    echo "ndk.dir=/opt/app/android-sdk/ndk/22.0.7026061" >>local.properties
 fi
-if [[ $JOB_NAME = "nav_app-debug" ]] || [[ $JOB_NAME = "r1_app-debug" ]] || [[ $JOB_NAME = "ai_service_app-debug" ]]; then
+if [[ $JOB_NAME = "nav_app-debug" ]] || [[ $JOB_NAME = "r1_app-debug" ]] || [[ $JOB_NAME = "d2_app-debug" ]] || [[ $JOB_NAME = "ai_service_app-debug" ]]; then
     echo "sdk.dir=/opt/app/android-sdk" >local.properties
     echo "ndk.dir=/opt/app/android-sdk/ndk/16.1.4479499" >>local.properties
     git submodule update --init --recursive

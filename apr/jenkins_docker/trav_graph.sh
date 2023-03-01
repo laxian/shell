@@ -28,11 +28,6 @@ echo $sign
 echo $module
 echo $use_aliyun_maven
 
-VARIANT_ALL="all"
-VARIANT_ALPHA="alpha"
-VARIANT_DEBUG="debug"
-VARIANT_RELEASE="release"
-
 # 切换到参数指定分支
 [ -n "$br" ] && git checkout -f $br && git reset --hard HEAD
 # gitlabBranch 是gitlab触发的构建内置的环境变量，和br不同时存在
@@ -45,47 +40,54 @@ GIT_BRANCH=$(git name-rev --name-only HEAD)
 echo $GIT_BRANCH
 echo $GIT_REV
 
-# 显示最近3条git提交log
-# COMMIT=$(git log --no-merges -n 3 | sed '/\(commit\|Author\|Date\|Merge:\|Merge branch\|See merge\|^[ ]*$\)/d' | tr -d ' ' | sed -n '=;p' | sed -n '{N;s/\n/. /;p;d}')
-COMMIT=$(git log --no-merges --oneline -3 | cut -d' ' -f2- | nl -w2 -s'. ')
 # gradle执行前的一些操作，如果有，加在这里
 . ./before_build.sh
 
-# 开始构建
-# $workdir/gradlew clean
-if [ $variant == $VARIANT_RELEASE ]; then
-        $workdir/gradlew :$module:assembleRelease 2> error
-elif [ $variant == $VARIANT_ALPHA ]; then
-        $workdir/gradlew :$module:assembleAlpha 2> error
-elif [ $variant == $VARIANT_DEBUG ]; then
-        $workdir/gradlew :$module:assembleDebug 2> error
+if [ task = "graph" ]; then
+        ./graph.sh
 else
-        $workdir/gradlew build -xlint 2> error
+        VARIANT_ALL="all"
+        VARIANT_ALPHA="alpha"
+        VARIANT_DEBUG="debug"
+        VARIANT_RELEASE="release"
+
+        # 开始构建
+        # $workdir/gradlew clean
+        if [ $variant == $VARIANT_RELEASE ]; then
+                $workdir/gradlew :$module:assembleRelease 2> error
+        elif [ $variant == $VARIANT_ALPHA ]; then
+                $workdir/gradlew :$module:assembleAlpha 2> error
+        elif [ $variant == $VARIANT_DEBUG ]; then
+                $workdir/gradlew :$module:assembleDebug 2> error
+        else
+                $workdir/gradlew build -xlint 2> error
+        fi
+
+        build_result=$?
+
+        tokens=$(cat ./private/token)
+        . $workdir/utils/notify.sh
+        # gradle失败后直接报错退出
+        if [ $build_result != 0 ]; then
+                err_msg="$JOB_NAME 构建失败:\n$GIT_BRANCH\n${BUILD_URL}console"
+                set
+                if [[ -n $gitlabActionType ]]; then
+                        err_msg="$err_msg\n$gitlabActionType by $gitlabUserName"
+                fi
+                if [[ -f error ]]; then
+                        error_content=`sed -n '/What went wrong/{N;p;q}' error`
+                        err_msg="$err_msg\n$error_content"
+                        rm error
+                fi
+                
+                
+                for token in $tokens; do
+                        wechat_notify $token "$err_msg"
+                done
+                exit 1
+        fi
 fi
 
-build_result=$?
-
-tokens=$(cat ./private/token)
-. $workdir/utils/notify.sh
-# gradle失败后直接报错退出
-if [ $build_result != 0 ]; then
-        err_msg="$JOB_NAME 构建失败:\n$GIT_BRANCH\n${BUILD_URL}console"
-        set
-        if [[ -n $gitlabActionType ]]; then
-                err_msg="$err_msg\n$gitlabActionType by $gitlabUserName"
-        fi
-        if [[ -f error ]]; then
-                error_content=`sed -n '/What went wrong/{N;p;q}' error`
-                err_msg="$err_msg\n$error_content"
-                rm error
-        fi
-        
-        
-        for token in $tokens; do
-                wechat_notify $token "$err_msg"
-        done
-        exit 1
-fi
 
 time=$(date "+%Y-%m-%d_%H_%M_%S")
 # apkdir=app/build/outputs/apk/
@@ -115,6 +117,9 @@ if [ $sign == 'true' ]; then
         done
         popd
 fi
+
+# 显示最近3条git提交log
+COMMIT=$(git log --no-merges -n 3 | sed '/\(commit\|Author\|Date\|Merge:\|Merge branch\|See merge\|^[ ]*$\)/d' | tr -d ' ' | sed -n '=;p' | sed -n '{N;s/\n/. /;p;d}')
 
 # 微信通知
 urls="apks:\n$JOB_NAME\n$GIT_BRANCH\n$GIT_REV\n$COMMIT\n"
