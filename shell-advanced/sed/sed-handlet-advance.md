@@ -6,7 +6,8 @@
 	- [添加行号](#添加行号)
 	- [字符集替换，1-5，替换成A-E](#字符集替换1-5替换成a-e)
 	- [Python2 print convert to Python3 print](#python2-print-convert-to-python3-print)
-	- [将LoadingButton行后第一次匹配到的mdw_isSupportLanguage替换成pbTextSubClass](#将loadingbutton行后第一次匹配到的mdw_issupportlanguage替换成pbtextsubclass)
+	- [将LoadingButton行后第一次匹配到的mdw\_isSupportLanguage替换成pbTextSubClass](#将loadingbutton行后第一次匹配到的mdw_issupportlanguage替换成pbtextsubclass)
+	- [将7600001配置项的transactAction值改由16为48](#将7600001配置项的transactaction值改由16为48)
 	- [regex](#regex)
 	- [REF](#ref)
 
@@ -127,6 +128,14 @@ sed -i 's/\([^#]*[[:space:]]*\)print[[:space:]]\(.*\)/\1print(\2)/' `find . -nam
 
 ```Bash
 sed -n '/LoadingBu/{:x N;s/mdw_isSupportLanguage=\"true\"/pbTextSubClass=\"com.segway.robotic.module.widgets.SRTextView\"/;T x}'
+```
+
+## 将7600001配置项的transactAction值改由16为48
+
+本质上，下面的代码，会在匹配到7600001后，开始尝试读取下一行，并将`transactAction": 16`替换为`transactAction": 48`，直到成功
+
+```Bash
+sed -i '/7600001/{:x N;s/transactAction\": 16/transactAction\": 48/;T x}' /sdcard/GX/robot_error_R1.json
 ```
 
 ## regex

@@ -11,7 +11,9 @@ ISSUE:
 - [x] sed 命令行选项说明
 - [x] sed 定位规则
 - [x] sed README-sed
+- [x] paste 用法
 - [ ] grep高级用法整理
+- [ ] find用法整理
 - [ ] 变量模式匹配
 - [ ] 正则应用
 - [ ] shell里的奇怪符号
