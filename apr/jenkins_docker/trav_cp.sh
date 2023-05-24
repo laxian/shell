@@ -34,9 +34,9 @@ VARIANT_DEBUG="debug"
 VARIANT_RELEASE="release"
 
 # 切换到参数指定分支
-[ -n "$br" ] && git checkout -f $br && git reset --hard HEAD
+[ -n "$br" ] && git checkout -f $br && git reset --hard origin/$br
 # gitlabBranch 是gitlab触发的构建内置的环境变量，和br不同时存在
-[ -n "$gitlabBranch" ] && git checkout -f $gitlabBranch && git reset --hard HEAD
+[ -n "$gitlabBranch" ] && git checkout -f $gitlabBranch && git reset --hard origin/$gitlabBranch
 #WORKSPACE=.
 JENKINS_HOME=/var/jenkins_home
 GIT_REV=$(git rev-parse --short HEAD)
@@ -112,6 +112,21 @@ if [ $sign == 'true' ]; then
                 # 如果带unsigned，去掉
                 mv $apk ${apk//-unsigned/}
                 $workdir/sign.sh $apk "${apk//.apk/}-signed.apk"
+        done
+        popd
+elif [ "$sign" == 'release' ];then
+        pushd $outdir
+        for apk in $(ls $outdir/*.apk); do
+                # 如果不带git hash，加上
+                if [ ! $(echo $apk | grep $GIT_REV) ]; then
+                        apk_old=$apk
+                        apk="${apk//.apk/}-$GIT_REV.apk"
+                        mv $apk_old $apk
+                        unset apk_old
+                fi
+                # 如果带unsigned，去掉
+                mv $apk ${apk//-unsigned/}
+                $workdir/rl.sh $apk "${apk//.apk/}-signed.apk"
         done
         popd
 fi
