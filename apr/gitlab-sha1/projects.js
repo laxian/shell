@@ -1,6 +1,6 @@
 const request = require('request');
  
-const url = 'http://10.10.81.54:8888/api/v4/projects?limit=100&skip_pagination=true&skip_namespace=true&compact_mode=true';
+const url = 'http://${host}:8888/api/v4/projects?limit=100&skip_pagination=true&skip_namespace=true&compact_mode=true';
 const options = {
   headers: {
     'PRIVATE-TOKEN': '${gitlab_access_token}'

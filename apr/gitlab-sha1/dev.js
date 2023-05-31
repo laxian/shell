@@ -23,7 +23,7 @@ for (const proj of projs) {
 	  branch = 'dev-gx';
 	}
 
-	const url = `http://10.10.81.54:8888/api/v4/projects/${id}/repository/branches/${branch}`;
+	const url = `http://${host}:8888/api/v4/projects/${id}/repository/branches/${branch}`;
 	// console.log(url);
 	const options = {
 	  headers: {

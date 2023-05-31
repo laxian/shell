@@ -24,7 +24,7 @@ fs.readFile('./starred_proj_names.txt', 'utf8', (err, data) => {
       branch = 'release_gx'
     }
   
-    const url = `http://10.10.81.54:8888/api/v4/projects/${id}/repository/branches/${branch}`;
+    const url = `http://${host}:8888/api/v4/projects/${id}/repository/branches/${branch}`;
     const options = {
       headers: {
         'PRIVATE-TOKEN': '${gitlab_access_token}'

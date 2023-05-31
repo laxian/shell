@@ -1,6 +1,6 @@
 const request = require('request');
  
-const url = 'http://10.10.81.54:8888/api/v4/projects/57/repository/branches/release';
+const url = 'http://${host}:8888/api/v4/projects/57/repository/branches/release';
 const options = {
   headers: {
     'PRIVATE-TOKEN': '${gitlab_access_token}'
