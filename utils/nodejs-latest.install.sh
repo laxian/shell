@@ -28,7 +28,7 @@ function exit_clean () {
 }
 
 function get_lts_version () {
-	NODEJS_VERSION=`curl -s https://nodejs.org/en/download/ \
+	NODEJS_VERSION=`curl -sSL0 https://nodejs.org/en/download/ \
 	| grep node-v \
 	| sed -n 's#.*\(node-v[0-9.]\+\.tar\.gz\).*#\1#;p' \
 	| head -1 \
