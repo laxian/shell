@@ -18,3 +18,6 @@ init:
 browser:
 	node rl.js | xargs -n2 -II echo "I </br>"| browser
 	node dev.js | xargs -n2 -II echo "I </br>"| browser
+
+mail:
+	python mail2.py 'S2_Interaction_Release_' | browser
