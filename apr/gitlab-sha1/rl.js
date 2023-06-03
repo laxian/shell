@@ -1,7 +1,9 @@
 const fs = require('fs');
 
 // const data = fs.readFileSync('./starred_proj_names.txt', 'utf8');
-const projs = [{"name":"AppRestaurant","id":475},{"name":"robotRemoteOta","id":318},{"name":"app-apr-mirror","id":302},{"name":"app-apr-food-deliver","id":236},{"name":"GxAppService","id":135},{"name":"VisionService","id":85},{"name":"ConnectionService","id":84},{"name":"VoiceService","id":83},{"name":"ControlService","id":82},{"name":"GxSystemDevKit","id":75},{"name":"SegwayProvision","id":61},{"name":"GX_Service","id":57}]
+// DEBUG ERROR DATA
+// const projs = [{"name":"AppRestaurant","id":475},{"name":"robotRemoteOta","id":318},{"name":"app-apr-mirror","id":302},{"name":"app-apr-food-deliver","id":236},{"name":"GxAppService","id":135},{"name":"VisionService","id":85},{"name":"ConnectionService","id":84},{"name":"VoiceService","id":83},{"name":"ControlService","id":82},{"name":"GxSystemDevKit","id":75},{"name":"SegwayProvision","id":61},{"name":"GX_Service","id":57}]
+const projs = [{"name":"AppRestaurant","id":475},{"name":"robotRemoteOta","id":318},{"name":"app-apr-mirror","id":302},{"name":"app-apr-food-deliver","id":236},{"name":"GxAppService","id":135},{"name":"VisionService","id":85},{"name":"ConnectionService","id":84},{"name":"VoiceService","id":83},{"name":"ControlService","id":82},{"name":"GXMonitor","id":81},{"name":"GxSystemDevKit","id":75},{"name":"SegwayProvision","id":61},{"name":"GX_Service","id":57}]
 
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 

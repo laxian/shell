@@ -16,7 +16,7 @@ server = poplib.POP3_SSL(pop3_server)
 server.user(download_email)
 server.pass_(password)
 
-filter_str = "Interaction_System_DEV"
+filter_str = "D2_System_Dev_1.1.551"
 if len(sys.argv) > 1:
     filter_str = sys.argv[1]
 

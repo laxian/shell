@@ -1,3 +1,5 @@
+#!/usr/bin/env node
+
 const fs = require('fs');
 
 // const data = fs.readFileSync('./starred_proj_names.txt', 'utf8');
@@ -24,6 +26,9 @@ for (const proj of projs) {
 	const pname = proj.name;
       
 	let branch = 'release';
+	if (process.argv.length > 2) {
+		branch = process.argv[2]
+	}
 	const url = `http://${nav_host}:8888/api/v4/projects/${id}/repository/branches/${branch}`;
 	// console.log(url);
 	const options = {
