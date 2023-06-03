@@ -17,7 +17,7 @@
 [ $br == 'dev' ] && resp=$(node dev.js) || resp=$(node rl.js)
 
 if [ $br == 'dev' ]; then
-	resp=$(node dev.js)
+	resp=$(node rl.js dev)
 	resp2=$(node rl_algo.js dev)
 	resp="$resp\n$resp2"
 elif [ $br == 'release' ]; then
@@ -36,6 +36,14 @@ elif [ $br == 'check_s2nav' ]; then
 	resp=$(./check.sh S1)
 elif [ $br == 'check_s1' ]; then
 	resp=$(./check.sh S1)
+elif [ $br == 'check_d2_dev' ]; then
+	resp=$(./check.sh D2 dev)
+elif [ $br == 'check_s2_dev' ]; then
+	resp=$(./check.sh S2 dev)
+elif [ $br == 'check_s2nav_dev' ]; then
+	resp=$(./check.sh S1 dev)
+elif [ $br == 'check_s1_dev' ]; then
+	resp=$(./check.sh S1 dev)
 else
 	exit
 fi

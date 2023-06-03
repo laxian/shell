@@ -8,34 +8,40 @@ branch=${2:-release}
 # python mail2.py 'GX_Navigation_release_' | browser
 # python mail2.py 'D2_release_' | browser
 
-if [ $project = "D2" ]; then
-	filter='D2_release_'
-elif [ $project == "S2" ]; then
-	filter='S2_Interaction_Release_'
-elif [ $project == "S2NAV" ]; then
-	filter='GX_Navigation_release_'
-elif [ $project == "S1" ]; then
-	filter='S1D_release_1'
+if [ $branch == 'release' ]; then
+	if [ $project = "D2" ]; then
+		filter='D2_release_'
+	elif [ $project == "S2" ]; then
+		filter='S2_Interaction_Release_'
+	elif [ $project == "S2NAV" ]; then
+		filter='GX_Navigation_release_'
+	elif [ $project == "S1" ]; then
+		filter='S1D_release_1'
+	else
+		echo not supported $project, exit
+		exit 1
+	fi
+elif [ $branch == 'dev' ]; then
+	# 邮件命名太乱，DEV暂不支持
+	if [ $project = "D2" ]; then
+		filter='D2_System_Dev_'
+	elif [ $project == "S2" ]; then
+		filter='Interaction_System_DEV_'
+	elif [ $project == "S2NAV" ]; then
+		filter='Navigation_System_DEV_'
+	elif [ $project == "S1" ]; then
+		filter='S1D_System_dev_'
+	else
+		echo not supported $project, exit
+		exit 1
+	fi
 else
-	echo not supported $project, exit
+	echo not supported $branch, exit
 	exit 1
 fi
 
-# 邮件命名太乱，DEV暂不支持
-
-# if [ $branch == "release" ]; then
-# 	branch="release"
-# 	repo=$(node rl.js)
-# 	mail=$(python3 mail3.py)
-# elif [ $branch == "dev" ]; then
-# 	branch="dev"
-# else
-# 	echo not supported, exit
-# 	exit 1
-# fi
-
-repo=$(node rl.js)
-repo2=$(node rl_algo.js)
+repo=$(node rl.js $branch)
+repo2=$(node rl_algo.js $branch)
 repo=$repo$repo2
 # echo "$repo"
 page=$(python3 mail3.py $filter page)
