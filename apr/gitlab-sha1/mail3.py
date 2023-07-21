@@ -47,8 +47,8 @@ for num in d:
         if not email_message.is_multipart():
             continue
     else:
-        pass
-        # print(email_message)
+        print(raw_email)
+        continue
     # 解码邮件主题
     subject = decode_header(email_message["Subject"])[0][0]
     fromaddr = decode_header(email_message["From"])[0][0]
@@ -74,14 +74,9 @@ for num in d:
         li_list=['<html>']
         li_list.append('<h1>'+subject+'</h1>')
         li_list.append('<ul>')
-        first_line=None
         for l in page.split('\n'):
-            if first_line:
-                line = first_line + l
-                first_line = None
-                li_list.append(line)
-            elif "<li" in l:
-                first_line=l
+            if '<li' in l:
+                li_list.append(l)
         li_list.append('</ul></html>')
         if mode == 'page':
             print("\r\n".join(li_list))

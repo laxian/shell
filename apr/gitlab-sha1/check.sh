@@ -42,9 +42,10 @@ fi
 
 repo=$(node rl.js $branch)
 repo2=$(node rl_algo.js $branch)
-repo=$repo$repo2
+repo="$repo $repo2"
 # echo "$repo"
 page=$(python3 mail3.py $filter page)
+# echo "$page">page
 # page=$(cat page)
 # echo --------------------------------
 # echo "$page"
@@ -55,11 +56,19 @@ mail=$(cat <<<"$page" | sed -n 's/.*\w.\w.\w\+\.\([0-9a-f]\{7,\}\).*/\1/p' | sor
 
 for sha1 in $mail; do
 	# echo "================================================$sha1"
-	info=$(echo "$page" | sed -nE "/$sha1/s/\s+<li>(\w+):\s+'?(.*)'?<\/li>/\1 \2/p")
+	info=$(echo "$page" | sed -nE "/$sha1/s/\s+<li>(\w+):\s+'?(.*)'?(<\/li>)?/\1 \2/p")
 	[ -z info ] && info="$sha1"
 	if grep -q "$sha1" <<<"$repo"; then
 		echo "> [✅] $info"
 	else
-		echo "> [❌]<font color="error">$info in mail NOT FOUND in latest repo! </font>\n"
+		name=${info% *}
+		if [[ $name == "SegwayApp" ]]; then
+			name="app-apr-food-deliver"
+		fi
+		
+		repoInfo=$(for n in `echo "$repo"`;do
+			echo $n
+			done | xargs -n2 | grep "$name")
+		echo "> [❌]<font color="error">mail: $info ≠ repo: $repoInfo</font>\n"
 	fi
 done
