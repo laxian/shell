@@ -29,9 +29,9 @@ echo $module
 echo $use_aliyun_maven
 
 # 切换到参数指定分支
-[ -n "$br" ] && git checkout -f $br && git reset --hard HEAD
+[ -n "$br" ] && git checkout -f $br && git reset --hard origin/$br
 # gitlabBranch 是gitlab触发的构建内置的环境变量，和br不同时存在
-[ -n "$gitlabBranch" ] && git checkout -f $gitlabBranch && git reset --hard HEAD
+[ -n "$gitlabBranch" ] && git checkout -f $gitlabBranch && git reset --hard origin/$gitlabBranch
 #WORKSPACE=.
 JENKINS_HOME=/var/jenkins_home
 GIT_REV=$(git rev-parse --short HEAD)
