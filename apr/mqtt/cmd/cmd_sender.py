@@ -1,8 +1,7 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 
-
-#
-#
+# python cmd_client.py
 
 import paho.mqtt.client as mqtt
 import ssl
@@ -10,15 +9,13 @@ import uuid
 from cmd_message import CmdMessage  # 导入 CmdMessage 类
 from cmd_inner_message import CmdMessageInner  # 导入 CmdMessageInner 类
 from rsa import (
-    rsa_decrypt,
     rsa_sign_sha1,
-    rsa_encrypt,
     load_private_key_from_file,
     load_public_key_from_file,
 )  # 导入 CmdMessageInner 类
 
 from dec import decryption
-from aes2 import aes_encrypt, aes_decrypt, aes_decrypt_java, aes_encrypt_java
+from aes2 import aes_decrypt_java, aes_encrypt_java
 import os
 import sys
 import json
@@ -104,10 +101,6 @@ def make_message(cmd):
     inner.set_command(cmd)
     inner_str = json.dumps(inner.to_dict())
     print(inner_str)
-    # print(type(aes_encrypt(inner_str.encode(), aeskey.encode())))
-    # en_inner_str = base64.b64decode(
-    #     aes_encrypt(inner_str.encode(), aeskey.encode())
-    # )
     en_inner_str = aes_encrypt_java(inner_str, aeskey)
     print(f"Encrypted inner message: {en_inner_str}")
     print(en_inner_str)
@@ -141,8 +134,26 @@ def send_verify():
     client.publish(pub_topic, payload=json.dumps(message_payload.to_dict()), qos=1)
 
 
-if __name__ == "__main__":
+def close_connection():
+    if client is None:
+        return
+    client.unsubscribe(sub_topic)
+    client.disconnect()
+    client.loop_stop()
 
+
+def subscribe_robot(robot_id):
+    global sub_topic, pub_topic
+    sub_topic = sub_topic.replace("{robotId}", robot_id)
+    pub_topic = pub_topic.replace("{robotId}", robot_id)
+    print(f"Subscribing to {sub_topic}")
+    print(f"Publishing to {pub_topic}")
+    client.subscribe(sub_topic)
+
+
+def connect_to_broker():
+
+    global client
     # 创建MQTT客户端
     client = mqtt.Client(client_id)
     client.username_pw_set(username, password)
@@ -162,39 +173,37 @@ if __name__ == "__main__":
     # 循环处理消息
     client.loop_start()
 
+
+if __name__ == "__main__":
+
+    connect_to_broker()
+
     # 持续运行，等待消息
     try:
         while True:
-            cmd = input("->  ")
+            cmd = input(f"{robot_id} -> " if robot_id else "->  ")
             if cmd == "exit":
-                    if robot_id :
-                        client.unsubscribe(sub_topic)
-                    client.disconnect()
-                    client.loop_stop()
-                    print("Disconnected and stopped the loop.")
-                    exit(0)
+                close_connection()
+                print("Disconnected and stopped the loop.")
+                exit(0)
             if client.is_connected():
                 if robot_id is None:
                     if cmd.startswith("S"):
                         robot_id = cmd.strip()
-                        sub_topic = sub_topic.replace("{robotId}", robot_id)
-                        pub_topic = pub_topic.replace("{robotId}", robot_id)
-                        print(f"Subscribing to {sub_topic}")
-                        print(f"Publishing to {pub_topic}")
-                        client.subscribe(sub_topic)
+                        subscribe_robot(robot_id)
                     else:
                         print("Please input robot id first.")
                 elif cmd == "q":
                     client.unsubscribe(sub_topic)
                     robot_id = None
+                elif not cmd:
+                    pass
                 else:
                     send_message(client, cmd)
             else:
                 print("Not connected to broker.")
                 print("Reconnecting...")
     except KeyboardInterrupt:
-        client.unsubscribe(sub_topic)
-        client.disconnect()
-        client.loop_stop()
+        close_connection()
         print("Disconnected and stopped the loop.")
         print(aeskey)
