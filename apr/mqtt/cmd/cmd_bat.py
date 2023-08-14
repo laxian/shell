@@ -20,6 +20,7 @@ import os
 import sys
 import json
 import base64
+import time
 
 
 sys.path.append(".")
@@ -37,7 +38,7 @@ broker_address = "${host}"
 broker_port = 13080
 sub_topic = "robot/{robotId}/log/cmd/send"
 pub_topic = "robot/{robotId}/log/cmd/command"
-robot_id = None
+robot_id = ""
 
 # SSL证书和密钥文件
 ca_file = "../ca_crt"
@@ -45,6 +46,20 @@ client_cert = "../client_crt"
 client_key = "../client_key"
 
 aeskey = None
+
+robots = ["S3RAM2252C0020","S3RAM2320C0011","S3RAM2325C0117","S3RAM2320C0003","S3RAM2252C0028","S3RAM2236C0011","S3RAM2252C0007","S3RAM2225C0037","S3RAM2225C0060","S3RAM2212C0017","S3RAM2245C0085","S3RAM2252C0090","S3RAM2245C0032","S3RAM2252C0098"]
+# command = "settings get secure robot_id"
+command = "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml"
+# command = """
+# sed -i 's#<int name="preference_key_volume" value="[0-9]\{1,3\}" />#<int name="preference_key_volume" value="66" />#' data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml 
+# """
+# command = """
+# sed -i 's#<int name="preference_key_volume" value="[0-9]\{1,3\}" />#<int name="preference_key_volume" value="66" />#' data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml && \
+# kill -9 $(busybox awk 'NR==1 {print $3}' sdcard/logs_folder/com.segway.robotic.app/$(ls -t sdcard/logs_folder/com.segway.robotic.app/|head -n1)) && \
+# sleep 3 && \
+# input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550 && \
+# input tap 370 290;input tap 510 290;input tap 650 290;input tap 370 370
+# """
 
 
 # 连接回调
@@ -55,7 +70,7 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_subscribe(client, userdata, mid, granted_qos):
-    print(f"Subscribed with result code {mid}")
+    print(f"---------------- Subscribed {client} {userdata} {mid} {granted_qos} {sub_topic} ----------------")
     send_verify()
 
 
@@ -75,7 +90,7 @@ def on_message(client, userdata, msg):
             private_key,
         )
         print(aeskey)
-        send_message(client, "settings get secure robot_id")
+        send_once(command)
     elif json_object["commandType"] == "doRSA":
         print("---------------- doRSA ack ----------------")
         content = json_object["responce"]
@@ -92,9 +107,20 @@ def on_message(client, userdata, msg):
         else:
             print("---------------- execute ----------------")
             print(content)
+            clean_and_unsubscribe()
 
     else:
         print(f"Received message: {json_object['commandType']}")
+
+
+def clean_and_unsubscribe():
+    global sub_topic
+    print(f"---------------- UNSUB {sub_topic} ----------------")
+    client.unsubscribe(sub_topic)
+    global robot_id, pub_topic
+    sub_topic = sub_topic.replace(robot_id, "{robotId}")
+    pub_topic = pub_topic.replace(robot_id, "{robotId}")
+    robot_id = None
 
 
 def make_message(cmd):
@@ -113,7 +139,7 @@ def make_message(cmd):
 def send_message(client, msg):
     message_payload = make_message(msg)
     payload = json.dumps(message_payload.to_dict())
-    print("================================ SEND ===================================")
+    print(f"================================ SEND {robot_id} ===================================")
     print(payload)
     print("============================== SEND END =================================")
     client.publish(pub_topic, payload=payload, qos=1)
@@ -122,6 +148,7 @@ def send_message(client, msg):
 def send_verify():
     # 发布消息
     # message_payload = '{"commandId":1,"commandType":"doRSA","mCmdMessageInner":"pwd"}'
+    print(f"send message {pub_topic}")
     message_payload = CmdMessage(command_type="doRSA")
     hash = str(uuid.uuid4())
     # hash = '4558ac1466f54c13'
@@ -148,7 +175,7 @@ def subscribe_robot(robot_id):
     global sub_topic, pub_topic
     sub_topic = sub_topic.replace("{robotId}", robot_id)
     pub_topic = pub_topic.replace("{robotId}", robot_id)
-    print(f"Subscribing to {sub_topic}")
+    print(f"Subscribing to {sub_topic} {robot_id}")
     print(f"Publishing to {pub_topic}")
     client.subscribe(sub_topic)
 
@@ -176,35 +203,40 @@ def connect_to_broker():
     client.loop_start()
 
 
+def send_once(cmd):
+    send_message(client, cmd)
+
+
 if __name__ == "__main__":
 
     connect_to_broker()
 
     # 持续运行，等待消息
     try:
+        for robot in robots:
+            print('\n')
+            print('\n')
+            print('---> handle robot: ' + robot)
+            robot_id = robot
+            subscribe_robot(robot)
+            while robot_id is not None:
+                try:
+                    # sleep for 1 second
+                    time.sleep(1)
+                    # print(f"--> waiting {robot_id} to finish...")
+                    # skip = input("Press s to continue...")
+                    # if skip is not None and skip == 's':
+                    #     clean_and_unsubscribe()
+                    #     break
+                    # pass
+                    print(".")
+                except KeyboardInterrupt:
+                    print(f"Interrupted by user, skipping...{robot_id}")
+                    clean_and_unsubscribe()
+                    break
+        print(f"Finished!")
         while True:
-            cmd = input(f"{robot_id} -> " if robot_id else "->  ")
-            if cmd == "exit":
-                close_connection()
-                print("Disconnected and stopped the loop.")
-                exit(0)
-            if client.is_connected():
-                if robot_id is None:
-                    if cmd.startswith("S"):
-                        robot_id = cmd.strip()
-                        subscribe_robot(robot_id)
-                    else:
-                        print("Please input robot id first.")
-                elif cmd == "q":
-                    client.unsubscribe(sub_topic)
-                    robot_id = None
-                elif not cmd:
-                    pass
-                else:
-                    send_message(client, cmd)
-            else:
-                print("Not connected to broker.")
-                print("Reconnecting...")
+            pass
     except KeyboardInterrupt:
         close_connection()
         print("Disconnected and stopped the loop.")
