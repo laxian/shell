@@ -3,7 +3,11 @@
 # This script is used to get the pose of the robot
 
 function pos_of_num () {
-	echo `sed -n "$1 p" private/pos|cut -d',' -f2`
+	local line_num=$1
+	if [[ $line_num -eq 0 ]]; then
+		line_num=10
+	fi
+	echo `sed -n "$line_num p" private/pos|cut -d',' -f2`
 }
 
 function cmd_of_num () {

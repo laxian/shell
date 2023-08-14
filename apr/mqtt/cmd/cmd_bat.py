@@ -49,13 +49,13 @@ client_key = "../client_key"
 
 aeskey = None
 
-robots = ["S3RAM2245C0032","S3RAM2325C0123"]
+robots = ["S3RAM2319C0004","S3RAM2225C0007","S3RAM2245C0085","S3RAM2325C0091","S3RAM2245C0041","S3RAM2212C0012","S3RAM2252C0028","S3RAM2236C0011","S3RAM2225C0060"]
 # robots = ["S3RAM2252C0020","S3RAM2320C0011","S3RAM2325C0117","S3RAM2320C0003","S3RAM2252C0028","S3RAM2236C0011","S3RAM2252C0007","S3RAM2225C0037","S3RAM2225C0060","S3RAM2212C0017","S3RAM2245C0085","S3RAM2252C0090","S3RAM2245C0032","S3RAM2252C0098"]
 # command = "settings get secure robot_id"
 # command = "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml"
-command = """
-sed -i 's#<int name="preference_key_volume" value="[0-9]\{1,3\}" />#<int name="preference_key_volume" value="66" />#' data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml 
-"""
+# command = """
+# sed -i 's#<int name="preference_key_volume" value="[0-9]\{1,3\}" />#<int name="preference_key_volume" value="66" />#' data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml 
+# """
 command = """
 sed -i 's#<int name="preference_key_volume" value="[0-9]\{1,3\}" />#<int name="preference_key_volume" value="66" />#' data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml && \
 kill -9 $(busybox awk 'NR==1 {print $3}' sdcard/logs_folder/com.segway.robotic.app/$(ls -t sdcard/logs_folder/com.segway.robotic.app/|head -n1)) && \
@@ -71,7 +71,7 @@ commands = [
 ]
 index = 0
 
-nnnn =  "input tap 650 450;input tap 650 450;input tap 650 450;input tap 650 450"
+default_pos =  "input tap 650 450;input tap 650 450;input tap 650 450;input tap 650 450"
 
 # 连接回调
 def on_connect(client, userdata, flags, rc):
@@ -87,7 +87,7 @@ def on_subscribe(client, userdata, mid, granted_qos):
 
 # 消息接收回调
 def on_message(client, userdata, msg):
-    global index
+    global index, default_pos
     json_object = json.loads(msg.payload.decode("utf-8"))
     content = json_object["responce"]
     if json_object["commandType"] == "verified":
@@ -129,19 +129,21 @@ def on_message(client, userdata, msg):
                 if match:
                     extracted_number = match.group()
                     print("Extracted number:", extracted_number)
+                    pos_cmds = cmds(extracted_number)
+                    commands[1] = commands[1].replace(default_pos, pos_cmds)
+                    default_pos = pos_cmds
+                    print(commands[1])
                 else:
                     print("No matching pattern found.")
-                    raise Exception("No matching pattern found.")
-                pos_cmds = cmds(extracted_number)
-                commands[1] = commands[1].replace(nnnn, pos_cmds)
-                print(commands[1])
-                commands[1] = "settings get secure robot_id"
                 print(f'index is: {index}')
                 send_message(client, commands[index])
                 index += 1
                 return
             else:
-                pass
+                time.sleep(1)
+                print(f'index is: {index}')
+                send_message(client, commands[index])
+                index += 1
             
             if index >= len(commands):
                 clean_and_unsubscribe()
