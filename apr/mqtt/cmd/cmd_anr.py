@@ -24,6 +24,11 @@ import time
 # import subprocess
 from get_pose_command import cmds
 
+import io
+
+# 实时刷新缓冲区
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, line_buffering=True)
+
 
 sys.path.append(".")
 
@@ -49,7 +54,7 @@ client_key = "../client_key"
 
 aeskey = None
 
-robots = ["S3RAM2325C0045","S3RAM2245C0084","S3RAM2245C0010","S3RAM2244C0080","S3RAM2245C0040","S3RAM2325C0086"]
+robots = ["S3RAM2225C0042"]
 # robots = ["S3RAM2252C0020","S3RAM2320C0011","S3RAM2325C0117","S3RAM2320C0003","S3RAM2252C0028","S3RAM2236C0011","S3RAM2252C0007","S3RAM2225C0037","S3RAM2225C0060","S3RAM2212C0017","S3RAM2245C0085","S3RAM2252C0090","S3RAM2245C0032","S3RAM2252C0098"]
 # command = "settings get secure robot_id"
 # command = "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml"
@@ -64,10 +69,11 @@ input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550;input tap 70
 input tap 650 450;input tap 650 450;input tap 650 450;input tap 650 450
 """
 
+# anr = 'ls data/logs/anr'
+anr = 'grep am_anr -rI /data/logs/logcks'
+
 commands = [
-    "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml|grep preference_key_admin_password",
-    command,
-    # "screencap -p /sdcard/screenshot.png"
+    anr,
 ]
 index = 0
 
@@ -120,25 +126,8 @@ def on_message(client, userdata, msg):
         else:
             print("---------------- execute ----------------")
             print(content)
-            if 'preference_key_admin_password' in content:
-                import re
-
-                pattern = r'\d{4}'  # 匹配4位数字的正则表达式
-
-                match = re.search(pattern, content)
-                if match:
-                    extracted_number = match.group()
-                    print("Extracted number:", extracted_number)
-                    pos_cmds = cmds(extracted_number)
-                    commands[1] = commands[1].replace(default_pos, pos_cmds)
-                    default_pos = pos_cmds
-                    print(commands[1])
-                else:
-                    print("No matching pattern found.")
-                print(f'index is: {index}')
-                send_message(client, commands[index])
-                index += 1
-                time.sleep(1)
+            if 'anr' in content:
+                print(f"Anr: {robot_id}")
                 clean_and_unsubscribe()
                 index = 0
                 return
