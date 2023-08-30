@@ -1,10 +1,11 @@
 mosquitto_sub \
--u ${name} \
--P ${password} \
- -t robot/${name}/log/cmd/send \
- -h ${ip} -p 8884 \
- --cafile ca_crt \
- --cert client_crt \
- --key client_key  \
- --insecure \
- -d
+-u EVT7-8 \
+-P 3f1a4b2f8686037c \
+-t robot/S1RMM2147C0023/log/cmd/send \
+-h ssl://device-gateway-bj.loomo.com -p 13080 \
+--cafile ca_crt \
+--cert client_crt \
+--key client_key \
+--insecure \
+-i zwx
+	

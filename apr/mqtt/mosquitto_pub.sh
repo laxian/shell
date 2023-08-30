@@ -1,11 +1,11 @@
 mosquitto_pub \
 -u ${name} \
 -P ${password} \
- -t robot/${name}/log/cmd/command \
- -h ${ip} -p 8884 \
- --cafile ca_crt \
- --cert client_crt \
- --key client_key  \
- --insecure \
- -i zwx \
- -m '{"commandId":1,"commandType":"doRSA","mCmdMessageInner":"pwd"}'
+-t robot/${name}/log/cmd/command \
+-h ${ip} -p 8884 \
+--cafile ./private/ca_crt \
+--cert ./private/client_crt \
+--key ./private/client_key \
+--insecure \
+-i zwx \
+-m '{"commandId":1,"commandType":"doRSA","mCmdMessageInner":"pwd"}'
