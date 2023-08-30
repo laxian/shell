@@ -1,0 +1,14 @@
+certifi==2023.7.22
+cffi==1.15.1
+chardet==4.0.0
+cryptography==41.0.3
+idna==2.10
+Naked==0.1.32
+paho-mqtt==1.6.1
+pycparser==2.21
+pycryptodome==3.18.0
+PyYAML==6.0.1
+requests==2.25.1
+shellescape==3.8.1
+tornado==6.3.3
+urllib3==1.26.16

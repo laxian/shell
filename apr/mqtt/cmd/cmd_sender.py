@@ -20,12 +20,23 @@ import os
 import sys
 import json
 import base64
+import time
+# import subprocess
+from get_pose_command import cmds
 
 
 sys.path.append(".")
 
-pri_key_path = os.path.join("./private", "private.pem")
-pub_key_path = os.path.join("./private", "public.pem")
+
+# 获取当前脚本所在的目录
+script_directory = os.path.dirname(os.path.abspath(__file__))
+# 获取当前脚本目录的上层目录
+parent_directory = os.path.dirname(script_directory)
+# 将当前工作目录更改为当前脚本所在的路径
+os.chdir(script_directory)
+
+pri_key_path = os.path.join(f"{script_directory}/private", "private.pem")
+pub_key_path = os.path.join(f"{script_directory}/private", "public.pem")
 pubkey = load_public_key_from_file(pub_key_path)
 prikey = load_private_key_from_file(pri_key_path)
 
@@ -37,12 +48,12 @@ broker_address = "${host}"
 broker_port = 13080
 sub_topic = "robot/{robotId}/log/cmd/send"
 pub_topic = "robot/{robotId}/log/cmd/command"
-robot_id = None
+robot_id = ""
 
 # SSL证书和密钥文件
-ca_file = "../ca_crt"
-client_cert = "../client_crt"
-client_key = "../client_key"
+ca_file = f"{script_directory}/private/ca_crt"
+client_cert = f"{script_directory}/private/client_crt"
+client_key = f"{script_directory}/private/client_key"
 
 aeskey = None
 
@@ -190,7 +201,7 @@ if __name__ == "__main__":
                 exit(0)
             if client.is_connected():
                 if robot_id is None:
-                    if cmd.startswith("S"):
+                    if cmd.startswith("S") or cmd.startswith("GXBOX-"):
                         robot_id = cmd.strip()
                         subscribe_robot(robot_id)
                     else:

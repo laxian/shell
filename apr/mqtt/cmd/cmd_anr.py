@@ -24,16 +24,19 @@ import time
 # import subprocess
 from get_pose_command import cmds
 
-import io
-
-# 实时刷新缓冲区
-sys.stdout = io.TextIOWrapper(sys.stdout.buffer, line_buffering=True)
-
 
 sys.path.append(".")
 
-pri_key_path = os.path.join("./private", "private.pem")
-pub_key_path = os.path.join("./private", "public.pem")
+
+# 获取当前脚本所在的目录
+script_directory = os.path.dirname(os.path.abspath(__file__))
+# 获取当前脚本目录的上层目录
+parent_directory = os.path.dirname(script_directory)
+# 将当前工作目录更改为当前脚本所在的路径
+os.chdir(script_directory)
+
+pri_key_path = os.path.join(f"{script_directory}/private", "private.pem")
+pub_key_path = os.path.join(f"{script_directory}/private", "public.pem")
 pubkey = load_public_key_from_file(pub_key_path)
 prikey = load_private_key_from_file(pri_key_path)
 
@@ -48,13 +51,13 @@ pub_topic = "robot/{robotId}/log/cmd/command"
 robot_id = ""
 
 # SSL证书和密钥文件
-ca_file = "../ca_crt"
-client_cert = "../client_crt"
-client_key = "../client_key"
+ca_file = f"{script_directory}/private/ca_crt"
+client_cert = f"{script_directory}/private/client_crt"
+client_key = f"{script_directory}/private/client_key"
 
 aeskey = None
 
-robots = ["S3RAM2225C0042"]
+robots = ["S3RAM2236C0136"]
 # robots = ["S3RAM2252C0020","S3RAM2320C0011","S3RAM2325C0117","S3RAM2320C0003","S3RAM2252C0028","S3RAM2236C0011","S3RAM2252C0007","S3RAM2225C0037","S3RAM2225C0060","S3RAM2212C0017","S3RAM2245C0085","S3RAM2252C0090","S3RAM2245C0032","S3RAM2252C0098"]
 # command = "settings get secure robot_id"
 # command = "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml"
@@ -69,11 +72,20 @@ input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550;input tap 70
 input tap 650 450;input tap 650 450;input tap 650 450;input tap 650 450
 """
 
+anr = 'head -n3 /data/logs/anr/`ls /data/logs/anr | head -n 1`'
 # anr = 'ls data/logs/anr'
-anr = 'grep am_anr -rI /data/logs/logcks'
+# anr = 'grep am_anr -rI /data/logs/logcks'
+# du = 'cd /sdcard/logs_folder/ && du -h -d 1'
 
 commands = [
-    anr,
+    "ls"
+    # 'pm install -r -i com.segway.robotic.app /sdcard/823_d2_th.apk',
+    # 'pm dump com.segway.robotic.app | grep version'
+    # 'ls /data/logs/anr',
+    # 'ls /data/logs1/anr',
+    # 'ls /data/logs2/anr/anr_2023-08-17-08-52-20-029',
+    # 'ls /data/logs3/anr',
+    # 'ls /data/logs34/anr',
 ]
 index = 0
 
@@ -256,10 +268,10 @@ if __name__ == "__main__":
                 try:
                     time.sleep(1)
                     print(".")
-                    cnt += 1
-                    if cnt > 10:
-                        clean_and_unsubscribe()
-                        break
+                    # cnt += 1
+                    # if cnt > 10:
+                    #     clean_and_unsubscribe()
+                    #     break
                 except KeyboardInterrupt:
                     print(f"Interrupted by user, skipping...{robot_id}")
                     clean_and_unsubscribe()

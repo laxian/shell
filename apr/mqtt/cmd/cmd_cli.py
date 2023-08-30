@@ -57,23 +57,35 @@ client_key = f"{script_directory}/private/client_key"
 
 aeskey = None
 
-robots = ["S3RAM2328C0010"]
-# robots = ["S3RAM2252C0020","S3RAM2320C0011","S3RAM2325C0117","S3RAM2320C0003","S3RAM2252C0028","S3RAM2236C0011","S3RAM2252C0007","S3RAM2225C0037","S3RAM2225C0060","S3RAM2212C0017","S3RAM2245C0085","S3RAM2252C0090","S3RAM2245C0032","S3RAM2252C0098"]
-# command = "settings get secure robot_id"
-# command = "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml"
-# command = """
-# sed -i 's#<int name="preference_key_volume" value="[0-9]\{1,3\}" />#<int name="preference_key_volume" value="66" />#' data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml 
-# """
-command = """
-sed -i 's#<int name="preference_key_volume" value="[0-9]\{1,3\}" />#<int name="preference_key_volume" value="66" />#' data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml && \
-kill -9 $(busybox awk 'NR==1 {print $3}' sdcard/logs_folder/com.segway.robotic.app/$(ls -t sdcard/logs_folder/com.segway.robotic.app/|head -n1)) && \
-sleep 3 && \
-input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550;input tap 70 550 && \
-input tap 650 450;input tap 650 450;input tap 650 450;input tap 650 450
-"""
+import argparse
+
+# 创建 ArgumentParser 对象
+parser = argparse.ArgumentParser(description='处理参数')
+
+# 添加选项参数
+parser.add_argument('-r', '--robot', help='指定一个机器')
+parser.add_argument('-c', '--command', help='指定一个命令')
+
+# 解析命令行参数
+args = parser.parse_args()
+
+# 检查并使用选项参数
+if args.robot is not None:
+    print('指定的机器:', args.robot)
+    robots = args.robot.split(',')
+else:
+    print("robot is not specified")
+    exit(1)
+
+if args.command is not None:
+    print('指定的命令:', args.command)
+    command = args.command
+else:
+    print("command is not specified")
+    exit(1)
 
 commands = [
-    "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml|grep preference_key_admin_password",
+    # "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml|grep preference_key_admin_password",
     command,
     # "screencap -p /sdcard/screenshot.png"
 ]
@@ -128,29 +140,7 @@ def on_message(client, userdata, msg):
         else:
             print("---------------- execute ----------------")
             print(content)
-            if 'preference_key_admin_password' in content:
-                import re
-
-                pattern = r'\d{4}'  # 匹配4位数字的正则表达式
-
-                match = re.search(pattern, content)
-                if match:
-                    extracted_number = match.group()
-                    print("Extracted number:", extracted_number)
-                    pos_cmds = cmds(extracted_number)
-                    commands[1] = commands[1].replace(default_pos, pos_cmds)
-                    default_pos = pos_cmds
-                    print(commands[1])
-                else:
-                    print("No matching pattern found.")
-                print(f'index is: {index}')
-                send_message(client, commands[index])
-                index += 1
-                time.sleep(1)
-                clean_and_unsubscribe()
-                index = 0
-                return
-            elif index >= len(commands):
+            if index >= len(commands):
                 clean_and_unsubscribe()
                 index = 0
             else:
