@@ -274,8 +274,6 @@ if __name__ == "__main__":
                     clean_and_unsubscribe()
                     break
         print(f"Finished!")
-        while True:
-            pass
     except KeyboardInterrupt:
         close_connection()
         print("Disconnected and stopped the loop.")

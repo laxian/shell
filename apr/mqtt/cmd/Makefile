@@ -16,3 +16,6 @@ javac:
 
 mqtt:
 	python cmd_sender.py
+
+setup:
+	scp -r ../cmd gaofeng@10.10.170.171:~/zhouweixian/script-server/scripts
