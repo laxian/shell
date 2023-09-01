@@ -27,7 +27,9 @@ from get_pose_command import cmds
 
 sys.path.append(".")
 
-
+import io
+# 实时刷新缓冲区
+sys.stdout = io.TextIOWrapper(sys.stdout.buffer, line_buffering=True)
 # 获取当前脚本所在的目录
 script_directory = os.path.dirname(os.path.abspath(__file__))
 # 获取当前脚本目录的上层目录
@@ -57,7 +59,7 @@ client_key = f"{script_directory}/private/client_key"
 
 aeskey = None
 
-robots = ["S3RAM2236C0136"]
+robots = ["S3RAM2211C0003"]
 # robots = ["S3RAM2252C0020","S3RAM2320C0011","S3RAM2325C0117","S3RAM2320C0003","S3RAM2252C0028","S3RAM2236C0011","S3RAM2252C0007","S3RAM2225C0037","S3RAM2225C0060","S3RAM2212C0017","S3RAM2245C0085","S3RAM2252C0090","S3RAM2245C0032","S3RAM2252C0098"]
 # command = "settings get secure robot_id"
 # command = "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml"
@@ -78,14 +80,17 @@ anr = 'head -n3 /data/logs/anr/`ls /data/logs/anr | head -n 1`'
 # du = 'cd /sdcard/logs_folder/ && du -h -d 1'
 
 commands = [
-    "ls"
+    # "ls"
     # 'pm install -r -i com.segway.robotic.app /sdcard/823_d2_th.apk',
     # 'pm dump com.segway.robotic.app | grep version'
-    # 'ls /data/logs/anr',
-    # 'ls /data/logs1/anr',
-    # 'ls /data/logs2/anr/anr_2023-08-17-08-52-20-029',
-    # 'ls /data/logs3/anr',
-    # 'ls /data/logs34/anr',
+    '''if [ `ls /data/logs/anr` ];then
+    for f in `ls /data/logs/anr`;do
+    cat /data/logs/anr/$f | head -n10
+    done
+    else
+    echo "no anr"
+    fi
+    '''
 ]
 index = 0
 

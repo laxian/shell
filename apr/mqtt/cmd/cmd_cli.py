@@ -79,7 +79,7 @@ else:
 
 if args.command is not None:
     print('指定的命令:', args.command)
-    command = args.command
+    command = args.command.replace("\r\n", "\n")
 else:
     print("command is not specified")
     exit(1)

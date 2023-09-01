@@ -1,0 +1,41 @@
+
+
+
+
+---> handle robot: S3RAM2211C0003
+Subscribing to robot/S3RAM2211C0003/log/cmd/send S3RAM2211C0003
+Publishing to robot/S3RAM2211C0003/log/cmd/command
+Connected with result code 0
+---------------- Subscribed <paho.mqtt.client.Client object at 0x102ddf970> None 1 (0,) robot/S3RAM2211C0003/log/cmd/send ----------------
+send message robot/S3RAM2211C0003/log/cmd/command
+---------------- VERIFIED ----------------
+aThqocvzt8+TDgI6szf0uFSvylj6T5pTr9pu2S1+nNXoUEVgFn9dsa+382Bcyne1TTierfcvWAPZ23HmJAx9Y9dqGpzuBF9nwDuPRJU30ApRtzvAbZoikpCsZl/VtHvlJuRa1c7pJHhdRgq3TH9mraZGxb54AFg6BiDEN/8PAMU=
+83c1aff5c478497f
+{"unSignedString": null, "signedString": null, "command": "if [ `ls /data/logs/anr` ];then\n    for f in `ls /data/logs/anr`;do\n    cat /data/logs/anr/$f | head -n10\n    done\n    else\n    echo \"no anr\"\n    fi\n    ", "downloadKey": null}
+-> java -cp ./bin src.Aes '{"unSignedString": null, "signedString": null, "command": "if [ `ls /data/logs/anr` ];then\n    for f in `ls /data/logs/anr`;do\n    cat /data/logs/anr/$f | head -n10\n    done\n    else\n    echo \"no anr\"\n    fi\n    ", "downloadKey": null}' '83c1aff5c478497f' encrypt
+.
+.
+.
+Encrypted inner message: cGFyYW1zdHLNej4lgV6JqLZNDHdEoIhGwiIdW46wGxPbG///1xN7APEQABKjrFdIqlpfppRhFy+Uc8RyBENJTKZL9XbfF7eHQ8C4f4WDgvkgFLKWNkj8tJnPbmDv7TTvDxoj9qNO8xdzNRb0iB/3RvXB2mACfnvQaCFYrjUUqlhDMjoLRzwwy6mIPYHPA3K41cSPyjDdnNqk3W70ZQwpUMQTKvxbbkZmSHMxLW4YlHP44lwGZx5nqj5aqISsq0KWzR88o/fCwyPsbxMX6Ty53HxaFNKA98QME5mFHXdPMjG6QEdahAPLnNQarwIIBmjrDDa/HOv0n52z7ivULQ6MavZQBVDlcwtyW4ET1wDXYsc=
+cGFyYW1zdHLNej4lgV6JqLZNDHdEoIhGwiIdW46wGxPbG///1xN7APEQABKjrFdIqlpfppRhFy+Uc8RyBENJTKZL9XbfF7eHQ8C4f4WDgvkgFLKWNkj8tJnPbmDv7TTvDxoj9qNO8xdzNRb0iB/3RvXB2mACfnvQaCFYrjUUqlhDMjoLRzwwy6mIPYHPA3K41cSPyjDdnNqk3W70ZQwpUMQTKvxbbkZmSHMxLW4YlHP44lwGZx5nqj5aqISsq0KWzR88o/fCwyPsbxMX6Ty53HxaFNKA98QME5mFHXdPMjG6QEdahAPLnNQarwIIBmjrDDa/HOv0n52z7ivULQ6MavZQBVDlcwtyW4ET1wDXYsc=
+================================ SEND S3RAM2211C0003 ===================================
+{"commandId": "65c755e8-5fe8-47a5-8dcf-43ced2373d53", "commandType": "execute", "timestamp": 1693564796872, "mCmdMessageInner": "cGFyYW1zdHLNej4lgV6JqLZNDHdEoIhGwiIdW46wGxPbG///1xN7APEQABKjrFdIqlpfppRhFy+Uc8RyBENJTKZL9XbfF7eHQ8C4f4WDgvkgFLKWNkj8tJnPbmDv7TTvDxoj9qNO8xdzNRb0iB/3RvXB2mACfnvQaCFYrjUUqlhDMjoLRzwwy6mIPYHPA3K41cSPyjDdnNqk3W70ZQwpUMQTKvxbbkZmSHMxLW4YlHP44lwGZx5nqj5aqISsq0KWzR88o/fCwyPsbxMX6Ty53HxaFNKA98QME5mFHXdPMjG6QEdahAPLnNQarwIIBmjrDDa/HOv0n52z7ivULQ6MavZQBVDlcwtyW4ET1wDXYsc=", "response": null}
+============================== SEND END =================================
+---------------- doRSA ack ----------------
+.
+---------------- execute ack ----------------
+---------------- execute ----------------
+----- pid 1613 at 2023-09-01 03:13:20 -----
+Cmd line: com.segway.robot.algo.loomogo_nav_app
+Build fingerprint: 'rockchip/rk3399_navigation/rk3399_navigation:8.1.0/OPM8.190605.003/071109:user/release-keys'
+ABI: 'arm64'
+Build type: optimized
+Zygote loaded classes=5028 post zygote classes=1215
+Intern table: 45090 strong; 135 weak
+JNI: CheckJNI is off; globals=562 (plus 26 weak)
+Libraries: /oem/bundled_persist-app/NavApp/lib/arm64/libAlgo.so /oem/bundled_persist-app/NavApp/lib/arm64/libAlgoBase.so /oem/bundled_persist-app/NavApp/lib/arm64/libbugsnag-ndk.so /oem/bundled_persist-app/NavApp/lib/arm64/libbugsnag-plugin-android-anr.so /system/lib64/libandroid.so /system/lib64/libcompiler_rt.so /system/lib64/libjavacrypto.so /system/lib64/libjnigraphics.so /system/lib64/libmedia_jni.so /system/lib64/libsoundpool.so /system/lib64/libwebviewchromium_loader.so libjavacore.so libopenjdk.so (13)
+
+Anr: S3RAM2211C0003
+---------------- UNSUB robot/S3RAM2211C0003/log/cmd/send ----------------
+.
+Finished!
