@@ -65,6 +65,7 @@ parser = argparse.ArgumentParser(description='处理参数')
 # 添加选项参数
 parser.add_argument('-r', '--robot', help='指定一个机器')
 parser.add_argument('-c', '--command', help='指定一个命令')
+parser.add_argument('-t', '--timeout', help='超时时间s')
 
 # 解析命令行参数
 args = parser.parse_args()
@@ -83,6 +84,13 @@ if args.command is not None:
 else:
     print("command is not specified")
     exit(1)
+
+if args.timeout is not None:
+    print('超时时间:', args.timeout)
+    timeout = int(args.timeout)
+else:
+    print("timeout is not specified，default：10s")
+    timeout = 10
 
 commands = [
     # "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml|grep preference_key_admin_password",
@@ -266,7 +274,7 @@ if __name__ == "__main__":
                     time.sleep(1)
                     print(".")
                     cnt += 1
-                    if cnt > 10:
+                    if cnt > timeout:
                         clean_and_unsubscribe()
                         break
                 except KeyboardInterrupt:
