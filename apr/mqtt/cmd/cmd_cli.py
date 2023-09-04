@@ -21,6 +21,7 @@ import sys
 import json
 import base64
 import time
+
 # import subprocess
 from get_pose_command import cmds
 
@@ -60,13 +61,15 @@ aeskey = None
 import argparse
 
 # 创建 ArgumentParser 对象
-parser = argparse.ArgumentParser(description='处理参数')
+parser = argparse.ArgumentParser(description="处理参数")
 
 # 添加选项参数
-parser.add_argument('-r', '--robot', help='指定一个机器')
-parser.add_argument('-c', '--command', help='指定一个命令')
-parser.add_argument('-t', '--timeout', help='超时时间s', default=10)
-parser.add_argument('-v', '--verbose', help='输出详细日志', nargs='?', const=True, default=False)
+parser.add_argument("-r", "--robot", help="指定一个机器")
+parser.add_argument("-c", "--command", help="指定一个命令")
+parser.add_argument("-t", "--timeout", help="超时时间s", default=10, type=int)
+parser.add_argument(
+    "-v", "--verbose", help="输出详细日志", nargs="?", const=True, default=False, type=bool
+)
 
 
 verbose = False
@@ -74,34 +77,36 @@ verbose = False
 # 解析命令行参数
 args = parser.parse_args()
 
+
 def log(msg, *args, **kw):
     if verbose:
         print(msg, args, kw)
 
+
 # 检查并使用选项参数
 if args.robot is not None:
-    log('指定的机器:', args.robot)
-    robots = args.robot.split(',')
+    log("指定的机器:", args.robot)
+    robots = args.robot.split(",")
 else:
     print("robot is not specified")
     exit(1)
 
 if args.command is not None:
-    log('指定的命令:', args.command)
+    log("指定的命令:", args.command)
     command = args.command.replace("\r\n", "\n")
 else:
     print("command is not specified")
     exit(1)
 
 if args.timeout is not None:
-    log('超时时间:', args.timeout)
+    log("超时时间:", args.timeout)
     timeout = int(args.timeout)
 else:
     log("timeout is not specified，default：10s")
     timeout = 10
 
 if args.verbose:
-    log('输出详细日志:', args.verbose)
+    log("输出详细日志:", args.verbose)
     verbose = True
 else:
     log("verbose is not specified，default：false")
@@ -113,7 +118,7 @@ commands = [
 ]
 index = 0
 
-default_pos =  "input tap 650 450;input tap 650 450;input tap 650 450;input tap 650 450"
+default_pos = "input tap 650 450;input tap 650 450;input tap 650 450;input tap 650 450"
 
 # 连接回调
 def on_connect(client, userdata, flags, rc):
@@ -123,7 +128,9 @@ def on_connect(client, userdata, flags, rc):
 
 
 def on_subscribe(client, userdata, mid, granted_qos):
-    log(f"---------------- Subscribed {client} {userdata} {mid} {granted_qos} {sub_topic} ----------------")
+    log(
+        f"---------------- Subscribed {client} {userdata} {mid} {granted_qos} {sub_topic} ----------------"
+    )
     send_verify()
 
 
@@ -167,10 +174,9 @@ def on_message(client, userdata, msg):
                 index = 0
             else:
                 # time.sleep(1)
-                log(f'index is: {index}')
+                log(f"index is: {index}")
                 send_message(client, commands[index])
                 index += 1
-            
 
     else:
         log(f"Received message: {json_object['commandType']}")
@@ -202,7 +208,9 @@ def make_message(cmd):
 def send_message(client, msg):
     message_payload = make_message(msg)
     payload = json.dumps(message_payload.to_dict())
-    log(f"================================ SEND {robot_id} ===================================")
+    log(
+        f"================================ SEND {robot_id} ==================================="
+    )
     log(payload)
     log("============================== SEND END =================================")
     client.publish(pub_topic, payload=payload, qos=1)
@@ -277,9 +285,9 @@ if __name__ == "__main__":
     # 持续运行，等待消息
     try:
         for robot in robots:
-            log('\n')
-            log('\n')
-            log('---> handle robot: ' + robot)
+            log("\n")
+            log("\n")
+            log("---> handle robot: " + robot)
             robot_id = robot
             subscribe_robot(robot)
             cnt = 0
