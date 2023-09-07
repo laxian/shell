@@ -80,8 +80,19 @@ args = parser.parse_args()
 
 def log(msg, *args, **kw):
     if verbose:
-        print(msg, args, kw)
+        if kw:
+            print(msg, args, kw)
+        elif args:
+            print(msg, args)
+        else:
+            print(msg)
 
+
+if args.verbose:
+    verbose = True
+    log("输出详细日志:", args.verbose)
+else:
+    log("verbose is not specified，default：false")
 
 # 检查并使用选项参数
 if args.robot is not None:
@@ -104,12 +115,6 @@ if args.timeout is not None:
 else:
     log("timeout is not specified，default：10s")
     timeout = 10
-
-if args.verbose:
-    log("输出详细日志:", args.verbose)
-    verbose = True
-else:
-    log("verbose is not specified，default：false")
 
 commands = [
     # "cat data/data/com.segway.robotic.app/shared_prefs/sp_preferences.xml|grep preference_key_admin_password",
@@ -184,6 +189,8 @@ def on_message(client, userdata, msg):
 
 def clean_and_unsubscribe():
     global sub_topic
+    if sub_topic is None:
+        return
     log(f"---------------- UNSUB {sub_topic} ----------------")
     client.unsubscribe(sub_topic)
     global robot_id, pub_topic
@@ -287,7 +294,7 @@ if __name__ == "__main__":
         for robot in robots:
             log("\n")
             log("\n")
-            log("---> handle robot: " + robot)
+            print("---> handle robot: " + robot)
             robot_id = robot
             subscribe_robot(robot)
             cnt = 0
@@ -297,6 +304,7 @@ if __name__ == "__main__":
                     cnt += 1
                     if cnt > timeout:
                         clean_and_unsubscribe()
+                        index = 0
                         break
                     log(".")
                 except KeyboardInterrupt:
@@ -306,4 +314,5 @@ if __name__ == "__main__":
         log(f"Finished!")
     except KeyboardInterrupt:
         close_connection()
+        index = 0
         print("Disconnected and stopped the loop.")

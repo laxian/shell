@@ -66,7 +66,7 @@ def derive_key_and_iv(passphrase: bytes, salt: bytes) -> tuple:
 
 
 def aes_decrypt_java(encrypted: str, passphrase: str) -> str:
-    print(f"-> java -cp ./bin src.Aes '{encrypted}' '{passphrase}' decrypt")
+    #print(f"-> java -cp ./bin src.Aes '{encrypted}' '{passphrase}' decrypt")
     # 调用命令行并执行一个简单的命令
     result = subprocess.run(
         ["java", "-cp", "./bin", "src.Aes", encrypted, passphrase, "decrypt"],
@@ -78,7 +78,7 @@ def aes_decrypt_java(encrypted: str, passphrase: str) -> str:
 
 
 def aes_encrypt_java(plaintext: str, passphrase: str) -> str:
-    print(f"-> java -cp ./bin src.Aes '{plaintext}' '{passphrase}' encrypt")
+    #print(f"-> java -cp ./bin src.Aes '{plaintext}' '{passphrase}' encrypt")
     # 调用命令行并执行一个简单的命令
     result = subprocess.run(
         ["java", "-cp", "./bin", "src.Aes", plaintext, passphrase, "encrypt"],
