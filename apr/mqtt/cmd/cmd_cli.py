@@ -184,7 +184,17 @@ def on_message(client, userdata, msg):
                 index += 1
 
     else:
-        log(f"Received message: {json_object['commandType']}")
+        command_type = json_object["commandType"]
+        log(f"Received message: {command_type}")
+        log(f"Received message: {json_object}")
+        if command_type == "uninstall":
+            if index >= len(commands):
+                clean_and_unsubscribe()
+                index = 0
+            else:
+                log(f"index is: {index}")
+                send_message(client, commands[index])
+                index += 1
 
 
 def clean_and_unsubscribe():
@@ -202,13 +212,21 @@ def clean_and_unsubscribe():
 def make_message(cmd):
     global aeskey
     inner = CmdMessageInner()
-    inner.set_command(cmd)
+    is_uninstall = cmd.startswith("uninstall ") or cmd.startswith("pm uninstall")
+    if is_uninstall:
+        # message_payload = CmdMessage(command_type="uninstall", cmd_message_inner=en_inner_str)
+        inner.set_command(cmd.replace("  ", " ").replace("pm uninstall", "").replace("uninstall ", "").strip())
+    else:
+        inner.set_command(cmd)
     inner_str = json.dumps(inner.to_dict())
     log(inner_str)
     en_inner_str = aes_encrypt_java(inner_str, aeskey)
     log(f"Encrypted inner message: {en_inner_str}")
     log(en_inner_str)
-    message_payload = CmdMessage(command_type="execute", cmd_message_inner=en_inner_str)
+    message_payload = CmdMessage(
+        command_type="uninstall" if is_uninstall else "execute",
+        cmd_message_inner=en_inner_str,
+    )
     return message_payload
 
 
@@ -306,7 +324,7 @@ if __name__ == "__main__":
                         clean_and_unsubscribe()
                         index = 0
                         break
-                    log(".")
+                    log("." * cnt)
                 except KeyboardInterrupt:
                     print(f"Interrupted by user, skipping...{robot_id}")
                     clean_and_unsubscribe()
