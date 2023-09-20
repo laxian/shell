@@ -181,7 +181,7 @@ def make_message(cmd):
     inner.set_command(cmd)
     inner_str = json.dumps(inner.to_dict())
     print(inner_str)
-    en_inner_str = aes_encrypt_java(inner_str, aeskey)
+    en_inner_str = encrypt_str(inner_str, aeskey)
     print(f"Encrypted inner message: {en_inner_str}")
     print(en_inner_str)
     message_payload = CmdMessage(command_type="execute", cmd_message_inner=en_inner_str)
