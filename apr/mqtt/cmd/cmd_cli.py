@@ -15,7 +15,7 @@ from rsa import (
 )  # 导入 CmdMessageInner 类
 
 from dec import decryption
-from aes2 import aes_decrypt_java, aes_encrypt_java
+from aesn import encrypt_str, decrypt_str
 import os
 import sys
 import json
@@ -220,7 +220,7 @@ def make_message(cmd):
         inner.set_command(cmd)
     inner_str = json.dumps(inner.to_dict())
     log(inner_str)
-    en_inner_str = aes_encrypt_java(inner_str, aeskey)
+    en_inner_str = encrypt_str(inner_str, aeskey)
     log(f"Encrypted inner message: {en_inner_str}")
     log(en_inner_str)
     message_payload = CmdMessage(
