@@ -1,6 +1,6 @@
-from Crypto.Cipher im${port} AES
-from Crypto.Util.Padding im${port} pad, unpad
-im${port} base64
+from Crypto.Cipher import AES
+from Crypto.Util.Padding import pad, unpad
+import base64
 
 key = b"1234567890abcdef"  # 16字节的密钥
 iv = b"1234567887654321"  # 16字节的初始向量

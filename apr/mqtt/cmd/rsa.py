@@ -150,7 +150,7 @@ if __name__ == '__main__':
     # 测试数据
     plaintext = "Hello, RSA!"
     encrypted_data = rsa_encrypt(public_key, plaintext)
-    decrypted_text = rsa_decrypt(private_key, base64.b64decode('JAFS20JOIgvw63R+7CmfhHK3fe/0H2xBXSEwaaHAbQMzKEiqArPydJ+SFEWqT9tf3RyULJZy2h1Abtt83U7/4o6ewHVSWd6gVYqN3clcwvfDND8Fvrc/nbIfbnR/jBRexzp49KxybTmae8GUkGb2JJ3q+bsrt2UA3fauaCwog8g='))
+    decrypted_text = rsa_decrypt(private_key, encrypted_data)
 
     signature = rsa_sign(private_key, plaintext)
     is_valid_signature = rsa_verify(public_key, plaintext, signature)

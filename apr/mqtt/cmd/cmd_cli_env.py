@@ -12,7 +12,7 @@ from rsa import (
     rsa_sign_sha1,
     load_private_key_from_file,
     load_public_key_from_file,
-)  # 导入 CmdMessageInner 类
+)
 
 from dec import decryption
 from aesn import encrypt_str, decrypt_str
@@ -55,6 +55,9 @@ envs = {
     "oregon": "device-gateway-oregon.${lcom}",
     "fra": "device-gateway-fra.${scom}",
     "release": "${host}",
+    "internal": "${host}",
+    "dev": "${host}",
+    "alpha": "${host}",
 }
 
 # SSL证书和密钥文件
@@ -106,8 +109,14 @@ if args.env:
     env = args.env
     broker_address = envs[env]
     log("mqtt环境:", args.env)
+    if env == 'dev':
+        broker_port = 13041
+    if env == 'internal':
+        broker_port = 13071
+    if env == 'alpha':
+        broker_port = 13011
 else:
-    log("env is not specified，default：release 【oregon/fra/release】")
+    log("env is not specified，default：release 【oregon/fra/release/internal/dev】")
 
 
 # 检查并使用选项参数
